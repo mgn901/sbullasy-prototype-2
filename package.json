@@ -1,0 +1,56 @@
+{
+  "name": "@mgn901/sbullasy",
+  "version": "0.0.0",
+  "description": "",
+  "main": "./src/index.ts",
+  "scripts": {
+    "build": "NODE_ENV=production node --require esbuild-register ./scripts/build.ts",
+    "start": "NODE_ENV=development node --require esbuild-register ./scripts/build.ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "type-check": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mgn901/sbullasy.git"
+  },
+  "author": "mgn901 <mgn901+dev@gmail.com> (https://mgn901.pages.dev/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mgn901/sbullasy/issues"
+  },
+  "homepage": "https://sbullasy.mgn901.com",
+  "dependencies": {
+    "@fastify/etag": "^4.2.0",
+    "@fastify/helmet": "^10.1.0",
+    "@fastify/static": "^6.9.0",
+    "@k-vyn/coloralgorithm": "^1.0.0",
+    "@material-design-icons/font": "^0.14.3",
+    "@mgn901/mgn901-utils-ts": "^0.6.0",
+    "@progfay/scrapbox-parser": "^8.1.0",
+    "argon2": "^0.30.3",
+    "fastify": "^4.14.1",
+    "fuse.js": "^6.6.2",
+    "inter-ui": "^3.19.3",
+    "pg": "^8.10.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.9.0",
+    "react-transition-group": "^4.4.5",
+    "typeorm": "^0.3.12"
+  },
+  "devDependencies": {
+    "@types/node": "^18.15.3",
+    "@types/react": "^18.0.28",
+    "@types/react-dom": "^18.0.11",
+    "@types/react-transition-group": "^4.4.5",
+    "autoprefixer": "^10.4.14",
+    "esbuild": "^0.17.11",
+    "esbuild-copy-static-files": "^0.1.0",
+    "esbuild-plugin-inline-worker": "^0.1.1",
+    "esbuild-register": "^3.4.2",
+    "esbuild-style-plugin": "^1.6.1",
+    "postcss": "^8.4.21",
+    "tailwindcss": "^3.2.7",
+    "typescript": "^4.9.5"
+  }
+}
