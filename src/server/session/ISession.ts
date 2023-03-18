@@ -1,4 +1,4 @@
-import { IUser } from './IUser';
+import { IUser } from '../user/IUser';
 
 export interface ISession {
 	id: string;

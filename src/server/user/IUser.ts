@@ -1,6 +1,6 @@
-import { IGroup } from './IGroup';
-import { IPage } from './IPage';
-import { ISession } from './ISession';
+import { IGroup } from '../group/IGroup';
+import { IPage } from '../page/IPage';
+import { ISession } from '../session/ISession';
 import { IUserTag } from './IUserTag';
 
 export interface IUser {

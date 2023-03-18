@@ -1,8 +1,8 @@
-import { IGroup } from './IGroup';
+import { IGroup } from '../group/IGroup';
 import { IPageTag } from './IPageTag';
-import { IPlace } from './IPlace';
-import { IProperty } from './IProperty';
-import { IUser } from './IUser';
+import { IPlace } from '../common/IPlace';
+import { IProperty } from '../common/IProperty';
+import { IUser } from '../user/IUser';
 
 export interface IPage {
 	id: string;

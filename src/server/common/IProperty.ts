@@ -1,5 +1,5 @@
-import { IGroup } from './IGroup';
-import { IPage } from './IPage';
+import { IGroup } from '../group/IGroup';
+import { IPage } from '../page/IPage';
 
 export interface IProperty<Key = string, Value = string> {
 	id: string;

@@ -1,7 +1,7 @@
 import { IGroupTag } from './IGroupTag';
-import { IPage } from './IPage';
-import { IProperty } from './IProperty';
-import { IUser } from './IUser';
+import { IPage } from '../page/IPage';
+import { IProperty } from '../common/IProperty';
+import { IUser } from '../user/IUser';
 
 export interface IGroup {
 	id: string;

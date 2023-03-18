@@ -1,5 +1,5 @@
 import { IGroupTag } from './IGroupTag';
-import { IUserTag } from './IUserTag';
+import { IUserTag } from '../user/IUserTag';
 
 export interface IGroupTagPermission {
 	id: string;
