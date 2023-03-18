@@ -15,7 +15,7 @@ export interface IPage {
 	createdByGroup?: IGroup;
 	startsAt?: number;
 	endsAt?: number;
-	place?: IPlace;
+	places: IPlace[];
 	tags: IPageTag[];
 	properties: IProperty[];
 }
