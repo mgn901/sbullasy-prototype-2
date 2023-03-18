@@ -1,7 +1,7 @@
 import { IGroup } from '../group/IGroup';
-import { IPageTag } from './IPageTag';
-import { IPlace } from '../common/IPlace';
-import { IProperty } from '../common/IProperty';
+import { IPageTag } from '../page-tag/IPageTag';
+import { IPlace } from '../place/IPlace';
+import { IProperty } from '../property/IProperty';
 import { IUser } from '../user/IUser';
 
 export interface IPage {

@@ -1,6 +1,6 @@
-import { IGroupTag } from './IGroupTag';
+import { IGroupTag } from '../group-tag/IGroupTag';
 import { IPage } from '../page/IPage';
-import { IProperty } from '../common/IProperty';
+import { IProperty } from '../property/IProperty';
 import { IUser } from '../user/IUser';
 
 export interface IGroup {
