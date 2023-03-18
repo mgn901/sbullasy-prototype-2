@@ -1,10 +1,12 @@
 import { IGroup } from '../group/IGroup';
 import { IPage } from '../page/IPage';
+import { IUser } from '../user/IUser';
 
-export interface IProperty<Key = string, Value = string> {
+export interface IProperty<Key extends string = string, Value extends string = string> {
 	id: string;
 	key: Key;
 	value: Value;
-	group: IGroup | undefined;
-	page: IPage | undefined;
+	user?: IUser;
+	group?: IGroup;
+	page?: IPage;
 }
