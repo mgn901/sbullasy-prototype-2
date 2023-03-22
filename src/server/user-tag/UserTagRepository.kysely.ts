@@ -21,6 +21,12 @@ export class UserTagRepository implements IUserTagRepository {
 		return tags;
 	}
 
+	public async findByID(id: string): Promise<EntityAsync<IUserTag>> {
+		const tags = await this.findByIDs(id);
+		const tag = tags[0];
+		return tag;
+	}
+
 	public async save(userTag: IUserTag | EntityAsync<IUserTag>): Promise<void> {
 		const grantableBy = await userTag.grantableBy;
 		const grantableByIDs = grantableBy.map(grantableByItem => grantableByItem.id);

@@ -21,6 +21,12 @@ export class GroupRepository implements IGroupRepository {
 		return groups;
 	}
 
+	public async findByID(id: string): Promise<EntityAsync<IGroup>> {
+		const groups = await this.findByIDs(id);
+		const group = groups[0];
+		return group;
+	}
+
 	public async save(group: EntityAsync<IGroup> | IGroup): Promise<void> {
 		const { id, name, createdAt, updatedAt, invitationToken } = group;
 		const groupPartial = { id, name, createdAt, updatedAt, invitationToken };

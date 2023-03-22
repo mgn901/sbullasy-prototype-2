@@ -16,6 +16,12 @@ export class LoginFailureRepository implements ILoginFailureRepository {
 		return loginFailures;
 	}
 
+	public async findByID(id: string): Promise<EntityAsync<ILoginFailure>> {
+		const loginFailures = await this.findByIDs(id);
+		const loginFailure = loginFailures[0];
+		return loginFailure;
+	}
+
 	public async save(loginFailure: ILoginFailure | EntityAsync<ILoginFailure>): Promise<void> {
 		await db
 			.insertInto('loginfailures')

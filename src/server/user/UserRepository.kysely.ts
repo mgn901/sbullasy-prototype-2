@@ -21,6 +21,12 @@ export class UserRepository implements IUserRepository {
 		return users;
 	}
 
+	public async findByID(id: string): Promise<EntityAsync<IUser>> {
+		const users = await this.findByIDs(id);
+		const user = users[0];
+		return user;
+	}
+
 	public async findByEmail(email: string): Promise<EntityAsync<IUser>> {
 		const usersPartial = await db
 			.selectFrom('users')

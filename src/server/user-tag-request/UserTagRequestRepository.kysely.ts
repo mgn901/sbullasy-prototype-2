@@ -21,6 +21,12 @@ export class UserTagRequestRepository implements IUserTagRequestRepository {
 		return requests;
 	}
 
+	public async findByID(id: string): Promise<EntityAsync<IUserTagRequest>> {
+		const requests = await this.findByIDs(id);
+		const request = requests[0];
+		return request;
+	}
+
 	public async save(request: IUserTagRequest | EntityAsync<IUserTagRequest>): Promise<void> {
 		const user = await request.user;
 		const tag = await request.tag;

@@ -21,6 +21,12 @@ export class PageTagRepository implements IPageTagRepository {
 		return tags;
 	}
 
+	public async findByID(id: string): Promise<EntityAsync<IPageTag>> {
+		const tags = await this.findByIDs(id);
+		const tag = tags[0];
+		return tag;
+	}
+
 	public async save(pageTag: IPageTag | EntityAsync<IPageTag>): Promise<void> {
 		const { id, name, displayName } = pageTag;
 		const grantableBy = await (pageTag.grantableBy)

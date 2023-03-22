@@ -21,6 +21,12 @@ export class GroupTagRepository implements IGroupTagRepository {
 		return tags;
 	}
 
+	public async findByID(id: string): Promise<EntityAsync<IGroupTag>> {
+		const tags = await this.findByIDs(id);
+		const tag = tags[0];
+		return tag;
+	}
+
 	public async save(groupTag: IGroupTag | EntityAsync<IGroupTag>): Promise<void> {
 		const { id, name, displayName } = groupTag;
 		const grantableBy = await (groupTag.grantableBy)

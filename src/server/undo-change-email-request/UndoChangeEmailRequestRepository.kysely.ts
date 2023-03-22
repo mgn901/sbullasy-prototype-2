@@ -5,9 +5,9 @@ import { IUndoChangeEmailRequestRepository } from './IUndoChangeEmailRequestRepo
 import { UndoChangeEmailRequest } from './UndoChangeEmailRequest.kysely';
 
 export class UndoChangeEmailRequestRepository implements IUndoChangeEmailRequestRepository {
-	
-	public constructor() {}
-	
+
+	public constructor() { }
+
 	public async findByIDs(...ids: string[]): Promise<EntityAsync<IUndoChangeEmailRequest>[]> {
 		const requestsPartial = await db
 			.selectFrom('undochangeemailrequests')
@@ -20,7 +20,13 @@ export class UndoChangeEmailRequestRepository implements IUndoChangeEmailRequest
 		});
 		return requests;
 	}
-	
+
+	public async findByID(id: string): Promise<EntityAsync<IUndoChangeEmailRequest>> {
+		const requests = await this.findByIDs(id);
+		const request = requests[0];
+		return request;
+	}
+
 	public async save(request: IUndoChangeEmailRequest | EntityAsync<IUndoChangeEmailRequest>): Promise<void> {
 		const user = await request.user;
 		const requestPartial = {
@@ -40,7 +46,7 @@ export class UndoChangeEmailRequestRepository implements IUndoChangeEmailRequest
 			.executeTakeFirst();
 		return;
 	}
-	
+
 	public async deleteByID(id: string): Promise<void> {
 		await db
 			.deleteFrom('undochangeemailrequests')

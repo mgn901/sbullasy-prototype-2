@@ -19,6 +19,12 @@ export class PageRepository implements IPageRepository {
 		return pages;
 	}
 
+	public async findByID(id: string): Promise<EntityAsync<IPage>> {
+		const pages = await this.findByIDs(id);
+		const page = pages[0];
+		return page;
+	}
+
 	public async save(page: IPage | EntityAsync<IPage>): Promise<void> {
 		const { id, name, type, body, createdAt, updatedAt, startsAt, endsAt } = page;
 		const pagePartial = { id, name, type, body, createdAt, updatedAt, startsAt, endsAt };
