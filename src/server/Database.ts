@@ -50,6 +50,7 @@ export interface Database {
 	resetpasswordrequests: EntityWithoutEntityKey<IResetPasswordRequest>;
 	loginfailures: EntityWithoutEntityKey<ILoginFailure>;
 	users_tags: Junction<IUser, IUser['tags'], 'user_id', 'tag_id'>;
+	user_properties: Junction<IUser, IUser['properties'], 'user_id', 'property_id'>;
 	user_owns_groups: Junction<IGroup['owner'], IUser['owns'], 'user_id', 'group_id'>;
 	users_belongs_groups: Junction<IGroup['members'], IUser['belongs'], 'user_id', 'group_id'>;
 	users_watches_groups: Junction<IUser, IUser['watchesGroups'], 'user_id', 'group_id'>;

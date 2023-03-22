@@ -24,6 +24,7 @@ export class UserRepository implements IUserRepository {
 	public async save(user: IUser | EntityAsync<IUser>): Promise<void> {
 		const { id, email, password, displayName } = user;
 		const userPartial = { id, email, password, displayName };
+		const properties = await user.properties;
 		const tags = await user.tags;
 		const sessions = await user.sessions;
 		const owns = await user.owns;
@@ -31,6 +32,7 @@ export class UserRepository implements IUserRepository {
 		const watchesGroups = await user.watchesGroups;
 		const watchesPages = await user.watchesPages;
 		const pages = await user.pages;
+		const propertyIDs = properties.map(property => property.id);
 		const tagIDs = tags.map(tag => tag.id);
 		const sessionIDs = sessions.map(session => session.id);
 		const ownsIDs = owns.map(group => group.id);
@@ -38,6 +40,50 @@ export class UserRepository implements IUserRepository {
 		const watchesGroupIDs = watchesGroups.map(group => group.id);
 		const watchesPageIDs = watchesPages.map(page => page.id);
 		const pageIDs = pages.map(page => page.id);
+
+		await db
+			.deleteFrom('user_properties')
+			.where('user_id', '==', id)
+			.where('property_id', 'not in', propertyIDs)
+			.executeTakeFirst();
+		await db
+			.deleteFrom('properties')
+			.where('id', 'not in', propertyIDs)
+			.executeTakeFirst();
+		properties.forEach(async (property) => {
+			const user = await property.user;
+			const group = await property.group;
+			const page = await property.page;
+			const propertyPartial = {
+				id: property.id,
+				key: property.key,
+				value: property.value,
+				user: user?.id,
+				group: group?.id,
+				page: page?.id,
+			};
+			const userPropertiesItem = {
+				user_id: id,
+				property_id: property.id,
+			};
+			await db
+				.insertInto('properties')
+				.values(propertyPartial)
+				.onConflict(oc => {
+					return oc
+						.column('id')
+						.doUpdateSet(propertyPartial)
+				})
+				.executeTakeFirst();
+			await db
+				.insertInto('user_properties')
+				.values(userPropertiesItem)
+				.onConflict(oc => oc
+					.columns(['user_id', 'property_id'])
+					.doNothing())
+				.executeTakeFirst();
+			return;
+		});
 
 		await db
 			.deleteFrom('users_tags')
@@ -71,6 +117,7 @@ export class UserRepository implements IUserRepository {
 				user: user.id,
 				name: session.name,
 				loggedInAt: session.loggedInAt,
+				expiresAt: session.expiresAt,
 				ipAddress: session.ipAddress,
 			};
 			await db
@@ -199,9 +246,24 @@ export class UserRepository implements IUserRepository {
 	}
 
 	public async deleteByID(id: string): Promise<void> {
+		const users = await this.findByIDs(id);
+		const user = users[0];
+		const properties = await user.properties;
+		const propertyIDs = properties.map(property => property.id);
+
 		await db
 			.deleteFrom('users_tags')
 			.where('user_id', '==', id)
+			.executeTakeFirst();
+
+		await db
+			.deleteFrom('user_properties')
+			.where('user_id', '==', id)
+			.executeTakeFirst();
+
+		await db
+			.deleteFrom('properties')
+			.where('id', 'in', propertyIDs)
 			.executeTakeFirst();
 
 		await db

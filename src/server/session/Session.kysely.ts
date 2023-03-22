@@ -11,6 +11,7 @@ export class Session implements EntityAsync<ISession> {
 		this.db = db;
 		this.id = session.id;
 		this.loggedInAt = session.loggedInAt;
+		this.expiresAt = session.expiresAt;
 		this.ipAddress = session.ipAddress;
 		this.name = session.name;
 		this._user = session.user;
@@ -19,6 +20,7 @@ export class Session implements EntityAsync<ISession> {
 	private db: Kysely<Database>;
 	public id: string;
 	public loggedInAt: number;
+	public expiresAt: number;
 	public ipAddress: string;
 	public name: string;
 	private _user: string;

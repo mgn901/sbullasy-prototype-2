@@ -1,5 +1,6 @@
 import { IGroup } from '../group/IGroup';
 import { IPage } from '../page/IPage';
+import { IProperty } from '../property/IProperty';
 import { ISession } from '../session/ISession';
 import { IUserTag } from '../user-tag/IUserTag';
 
@@ -9,6 +10,7 @@ export interface IUser {
 	password: string;
 	displayName: string;
 	tags: IUserTag[];
+	properties: IProperty[];
 	sessions: ISession[];
 	owns: IGroup[];
 	belongs: IGroup[];
