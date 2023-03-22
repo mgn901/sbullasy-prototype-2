@@ -21,6 +21,17 @@ export class UserRepository implements IUserRepository {
 		return users;
 	}
 
+	public async findByEmail(email: string): Promise<EntityAsync<IUser>> {
+		const usersPartial = await db
+			.selectFrom('users')
+			.where('email', '==', email)
+			.selectAll()
+			.execute();
+		const userPartial = usersPartial[0];
+		const user = new User(userPartial, db);
+		return user;
+	}
+
 	public async save(user: IUser | EntityAsync<IUser>): Promise<void> {
 		const { id, email, password, displayName } = user;
 		const userPartial = { id, email, password, displayName };
