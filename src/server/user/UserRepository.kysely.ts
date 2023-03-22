@@ -42,7 +42,7 @@ export class UserRepository implements IUserRepository {
 		const { id, email, password, displayName } = user;
 		const userPartial = { id, email, password, displayName };
 		const properties = await user.properties;
-		const tags = await user.tags;
+		const registrations = await user.tagRegistrations;
 		const sessions = await user.sessions;
 		const owns = await user.owns;
 		const belongs = await user.belongs;
@@ -50,7 +50,7 @@ export class UserRepository implements IUserRepository {
 		const watchesPages = await user.watchesPages;
 		const pages = await user.pages;
 		const propertyIDs = properties.map(property => property.id);
-		const tagIDs = tags.map(tag => tag.id);
+		const registrationIDs = registrations.map(tag => tag.id);
 		const sessionIDs = sessions.map(session => session.id);
 		const ownsIDs = owns.map(group => group.id);
 		const belongsIDs = belongs.map(group => group.id);
@@ -103,20 +103,20 @@ export class UserRepository implements IUserRepository {
 		});
 
 		await db
-			.deleteFrom('users_tags')
+			.deleteFrom('user_usertagregistrations')
 			.where('user_id', '==', id)
-			.where('tag_id', 'not in', tagIDs)
+			.where('registration_id', 'not in', registrationIDs)
 			.executeTakeFirst();
-		tagIDs.forEach(async (tagID) => {
-			const usersTagsItem = {
+		registrationIDs.forEach(async (tagID) => {
+			const usersUserTagRegistrationsItem = {
 				user_id: id,
-				tag_id: tagID,
-			}
+				registration_id: tagID,
+			};
 			await db
-				.insertInto('users_tags')
-				.values(usersTagsItem)
+				.insertInto('user_usertagregistrations')
+				.values(usersUserTagRegistrationsItem)
 				.onConflict(oc => oc
-					.columns(['user_id', 'tag_id'])
+					.columns(['user_id', 'registration_id'])
 					.doNothing())
 				.executeTakeFirst();
 			return;
@@ -267,10 +267,17 @@ export class UserRepository implements IUserRepository {
 		const user = users[0];
 		const properties = await user.properties;
 		const propertyIDs = properties.map(property => property.id);
+		const registrations = await user.tagRegistrations;
+		const registrationIDs = registrations.map(registration => registration.id);
 
 		await db
-			.deleteFrom('users_tags')
+			.deleteFrom('user_usertagregistrations')
 			.where('user_id', '==', id)
+			.executeTakeFirst();
+
+		await db
+			.deleteFrom('usertagregistrations')
+			.where('id', 'in', registrationIDs)
 			.executeTakeFirst();
 
 		await db

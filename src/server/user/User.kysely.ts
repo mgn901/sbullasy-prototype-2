@@ -9,9 +9,9 @@ import { IProperty } from '../property/IProperty';
 import { Property } from '../property/Property.kysely';
 import { ISession } from '../session/ISession';
 import { Session } from '../session/Session.kysely';
-import { IUserTag } from '../user-tag/IUserTag';
-import { UserTag } from '../user-tag/UserTag.kysely';
 import { IUser } from './IUser';
+import { IUserTagRegistration } from './IUserTagRegistration';
+import { UserTagRegistration } from './UserTagRegistration.kysely';
 
 export class User implements EntityAsync<IUser> {
 
@@ -29,19 +29,19 @@ export class User implements EntityAsync<IUser> {
 	public password: string;
 	public displayName: string;
 
-	public get tags(): Promise<EntityAsync<IUserTag>[]> {
+	public get tagRegistrations(): Promise<EntityAsync<IUserTagRegistration>[]> {
 		const promise = (async () => {
-			const tagsPartial = await this.db
-				.selectFrom('users_tags')
+			const registrationsPartial = await this.db
+				.selectFrom('user_usertagregistrations')
 				.where('user_id', '==', this.id)
-				.innerJoin('usertags', 'usertags.id', 'users_tags.tag_id')
+				.innerJoin('usertagregistrations', 'usertagregistrations.id', 'usertagregistrations.id')
 				.selectAll()
 				.execute();
-			const tags = tagsPartial.map((tagPartial) => {
-				const tag = new UserTag(tagPartial, this.db);
-				return tag;
+			const registrations = registrationsPartial.map((registrationPartial) => {
+				const registration = new UserTagRegistration(registrationPartial, this.db);
+				return registration;
 			})
-			return tags;
+			return registrations;
 		})();
 		return promise;
 	}

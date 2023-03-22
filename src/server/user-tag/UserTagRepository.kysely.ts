@@ -70,6 +70,23 @@ export class UserTagRepository implements IUserTagRepository {
 	}
 
 	public async deleteByID(id: string): Promise<void> {
+		const registrations = await db
+			.selectFrom('usertagregistrations')
+			.where('tag', '==', id)
+			.selectAll()
+			.execute();
+		const registrationIDs = registrations.map(registration => registration.id);
+
+		await db
+			.deleteFrom('user_usertagregistrations')
+			.where('registration_id', 'in', registrationIDs)
+			.executeTakeFirst();
+
+		await db
+			.deleteFrom('usertagregistrations')
+			.where('tag', '==', id)
+			.executeTakeFirst();
+
 		await db
 			.deleteFrom('usertag_grantableby_usertaggrantabilities')
 			.where('usertag_id', '==', id)

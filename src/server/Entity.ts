@@ -12,11 +12,13 @@ import { IUserTagRequest } from './user-tag-request/IUserTagRequest';
 import { IUserTag } from './user-tag/IUserTag';
 import { IUserTagGrantability } from './user-tag/IUserTagGrantability';
 import { IUser } from './user/IUser';
+import { IUserTagRegistration } from './user/IUserTagRegistration';
 
 export type Entity = IUser
 	| IGroup
 	| IPage
 	| IUserTag
+	| IUserTagRegistration
 	| IGroupTag
 	| IPageTag
 	| IUserTagGrantability

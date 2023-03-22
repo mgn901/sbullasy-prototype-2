@@ -2,14 +2,14 @@ import { IGroup } from '../group/IGroup';
 import { IPage } from '../page/IPage';
 import { IProperty } from '../property/IProperty';
 import { ISession } from '../session/ISession';
-import { IUserTag } from '../user-tag/IUserTag';
+import { IUserTagRegistration } from './IUserTagRegistration';
 
 export interface IUser {
 	id: string;
 	email: string;
 	password: string;
 	displayName: string;
-	tags: IUserTag[];
+	tagRegistrations: IUserTagRegistration[];
 	properties: IProperty[];
 	sessions: ISession[];
 	owns: IGroup[];

@@ -14,6 +14,7 @@ import { IUserTagRequest } from './user-tag-request/IUserTagRequest';
 import { IUserTag } from './user-tag/IUserTag';
 import { IUserTagGrantability } from './user-tag/IUserTagGrantability';
 import { IUser } from './user/IUser';
+import { IUserTagRegistration } from './user/IUserTagRegistration';
 
 type Junction<
 	I extends (Entity | Entity[] | undefined),
@@ -38,6 +39,7 @@ export interface Database {
 	users: EntityWithoutEntityKey<IUser>;
 	groups: Omit<EntityWithoutEntityKey<IGroup>, 'owner'>;
 	pages: Omit<EntityWithoutEntityKey<IPage>, 'createdByUser' | 'createdByGroup'>;
+	usertagregistrations:EntityWithoutEntityKey<IUserTagRegistration>;
 	usertags: EntityWithoutEntityKey<IUserTag>;
 	grouptags: EntityWithoutEntityKey<IGroupTag>;
 	pagetags: EntityWithoutEntityKey<IPageTag>;
@@ -49,7 +51,7 @@ export interface Database {
 	undochangeemailrequests: EntityWithoutEntityKey<IUndoChangeEmailRequest>;
 	resetpasswordrequests: EntityWithoutEntityKey<IResetPasswordRequest>;
 	loginfailures: EntityWithoutEntityKey<ILoginFailure>;
-	users_tags: Junction<IUser, IUser['tags'], 'user_id', 'tag_id'>;
+	user_usertagregistrations: Junction<IUser, IUser['tagRegistrations'], 'user_id', 'registration_id'>;
 	user_properties: Junction<IUser, IUser['properties'], 'user_id', 'property_id'>;
 	user_owns_groups: Junction<IGroup['owner'], IUser['owns'], 'user_id', 'group_id'>;
 	users_belongs_groups: Junction<IGroup['members'], IUser['belongs'], 'user_id', 'group_id'>;
