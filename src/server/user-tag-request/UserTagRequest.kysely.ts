@@ -2,7 +2,9 @@ import { Kysely } from 'kysely';
 import { Database } from '../Database';
 import { EntityAsync } from '../EntityAsync';
 import { IUserTag } from '../user-tag/IUserTag';
+import { IUserTagGrantability } from '../user-tag/IUserTagGrantability';
 import { UserTag } from '../user-tag/UserTag.kysely';
+import { UserTagGrantability } from '../user-tag/UserTagGrantability.kysely';
 import { IUser } from '../user/IUser';
 import { User } from '../user/User.kysely';
 import { IUserTagRequest } from './IUserTagRequest';
@@ -18,6 +20,7 @@ export class UserTagRequest implements EntityAsync<IUserTagRequest> {
 		this.token = userTagRequest.token;
 		this._user = userTagRequest.user;
 		this._tag = userTagRequest.tag;
+		this._grantability = userTagRequest.grantability;
 	}
 
 	private db: Kysely<Database>;
@@ -28,6 +31,7 @@ export class UserTagRequest implements EntityAsync<IUserTagRequest> {
 	public token: string;
 	private _user: string;
 	private _tag: string;
+	private _grantability: string;
 
 	public get user(): Promise<EntityAsync<IUser>> {
 		const promise = (async () => {
@@ -53,6 +57,20 @@ export class UserTagRequest implements EntityAsync<IUserTagRequest> {
 			const tagPartial = tagsPartial[0];
 			const tag = new UserTag(tagPartial, this.db);
 			return tag;
+		})();
+		return promise;
+	}
+
+	public get grantability(): Promise<EntityAsync<IUserTagGrantability>> {
+		const promise = (async () => {
+			const grantabilitiesPartial = await this.db
+				.selectFrom('usertaggrantabilities')
+				.where('id', '==', this._grantability)
+				.selectAll()
+				.execute();
+			const grantabilityPartial = grantabilitiesPartial[0];
+			const grantability = new UserTagGrantability(grantabilityPartial, this.db);
+			return grantability;
 		})();
 		return promise;
 	}
