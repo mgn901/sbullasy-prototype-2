@@ -6,4 +6,5 @@ export interface IUserTagGrantability {
 	grantableByUserTag?: IUserTag;
 	grantableByEmailRegex?: string;
 	expires?: number;
+	expiresAt?: number;
 }

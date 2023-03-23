@@ -39,7 +39,7 @@ export interface Database {
 	users: EntityWithoutEntityKey<IUser>;
 	groups: Omit<EntityWithoutEntityKey<IGroup>, 'owner'>;
 	pages: Omit<EntityWithoutEntityKey<IPage>, 'createdByUser' | 'createdByGroup'>;
-	usertagregistrations:EntityWithoutEntityKey<IUserTagRegistration>;
+	usertagregistrations: EntityWithoutEntityKey<IUserTagRegistration>;
 	usertags: EntityWithoutEntityKey<IUserTag>;
 	grouptags: EntityWithoutEntityKey<IGroupTag>;
 	pagetags: EntityWithoutEntityKey<IPageTag>;
@@ -64,7 +64,6 @@ export interface Database {
 	pages_places: Junction<IPage, IPage['places'], 'page_id', 'place_id'>;
 	pages_tags: Junction<IPage, IPage['tags'], 'page_id', 'tag_id'>;
 	page_properties: Junction<IPage, IProperty['page'], 'page_id', 'property_id'>;
-	usertag_grantableby_usertaggrantabilities: Junction<IUserTag, IUserTag['grantableBy'], 'usertag_id', 'grantability_id'>;
 	grouptag_grantableby_usertags: Junction<IGroupTag, IGroupTag['grantableBy'], 'grouptag_id', 'usertag_id'>;
 	pagetag_grantableby_usertags: Junction<IPageTag, IPageTag['grantableBy'], 'pagetag_id', 'usertag_id'>;
 }

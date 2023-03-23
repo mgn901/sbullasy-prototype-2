@@ -22,9 +22,8 @@ export class UserTag implements EntityAsync<IUserTag> {
 	public get grantableBy(): Promise<EntityAsync<IUserTagGrantability>[]> {
 		const promise = (async () => {
 			const grantableByPartial = await this.db
-				.selectFrom('usertag_grantableby_usertaggrantabilities')
-				.where('usertag_id', '==', this.id)
-				.innerJoin('usertaggrantabilities', 'usertaggrantabilities.id', 'usertag_grantableby_usertaggrantabilities.grantability_id')
+				.selectFrom('usertaggrantabilities')
+				.where('tag', '==', this.id)
 				.selectAll()
 				.execute();
 			const grantableBy = grantableByPartial.map((grantableByPartialItem) => {

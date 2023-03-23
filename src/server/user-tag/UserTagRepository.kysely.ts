@@ -37,21 +37,27 @@ export class UserTagRepository implements IUserTagRepository {
 		};
 
 		await db
-			.deleteFrom('usertag_grantableby_usertaggrantabilities')
-			.where('usertag_id', '==', userTag.id)
-			.where('grantability_id', 'not in', grantableByIDs)
+			.deleteFrom('usertaggrantabilities')
+			.where('tag', '==', userTag.id)
+			.where('id', 'not in', grantableByIDs)
 			.executeTakeFirst();
-		grantableByIDs.forEach(async (grantabilityID) => {
-			const userTagGrantableBUserTagGrantabilitiesItem = {
-				usertag_id: userTag.id,
-				grantability_id: grantabilityID,
+		grantableBy.forEach(async (grantability) => {
+			const tag = await grantability.tag;
+			const grantableByUserTag = await grantability.grantableByUserTag;
+			const grantabilityPartial = {
+				id: grantability.id,
+				tag: tag.id,
+				expires: grantability.expires,
+				expiresAt: grantability.expiresAt,
+				grantableByEmailRegex: grantability.grantableByEmailRegex,
+				grantableByUserTag: grantableByUserTag?.id,
 			};
 			await db
-				.insertInto('usertag_grantableby_usertaggrantabilities')
-				.values(userTagGrantableBUserTagGrantabilitiesItem)
+				.insertInto('usertaggrantabilities')
+				.values(grantabilityPartial)
 				.onConflict(oc => oc
-					.columns(['usertag_id', 'grantability_id'])
-					.doNothing())
+					.column('id')
+					.doUpdateSet(grantabilityPartial))
 				.executeTakeFirst();
 			return;
 		});
@@ -88,8 +94,9 @@ export class UserTagRepository implements IUserTagRepository {
 			.executeTakeFirst();
 
 		await db
-			.deleteFrom('usertag_grantableby_usertaggrantabilities')
-			.where('usertag_id', '==', id)
+			.deleteFrom('usertaggrantabilities')
+			.where('tag', '==', id)
+			.orWhere('grantableByUserTag', '==', id)
 			.executeTakeFirst();
 
 		await db
