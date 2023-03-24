@@ -41,10 +41,12 @@ export class UserTagRequestRepository implements IUserTagRequestRepository {
 	public async save(request: IUserTagRequest | EntityAsync<IUserTagRequest>): Promise<void> {
 		const user = await request.user;
 		const tag = await request.tag;
+		const grantability = await request.grantability;
 		const requestPartial = {
 			id: request.id,
 			user: user.id,
 			tag: tag.id,
+			grantability: grantability.id,
 			email: request.email,
 			createdAt: request.createdAt,
 			isDisposed: request.isDisposed,
