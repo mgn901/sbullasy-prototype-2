@@ -86,4 +86,13 @@ export class UserTagRequestRepository implements IUserTagRequestRepository {
 		return;
 	}
 
+	public async deleteByUserAndTag(user: string, tag: string): Promise<void> {
+		await db
+			.deleteFrom('usertagrequests')
+			.where('user', '==', user)
+			.where('tag', '==', tag)
+			.executeTakeFirst();
+		return;
+	}
+
 }

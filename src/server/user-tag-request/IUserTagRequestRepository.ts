@@ -7,4 +7,5 @@ import { IUserTagRequest } from './IUserTagRequest';
 export type IUserTagRequestRepository = IRepository<IUserTagRequest> & {
 	findByToken(token: IUserTagRequest['token']): Promise<EntityAsync<IUserTagRequest>>;
 	findByUserAndTag(user: IUser['id'], tag: IUserTag['id']): Promise<EntityAsync<IUserTagRequest>[]>;
+	deleteByUserAndTag(user: IUser['id'], tag: IUserTag['id']): Promise<void>;
 };
