@@ -16,7 +16,7 @@ export class UserTagRegistration implements EntityAsync<IUserTagRegistration> {
 
 	private db: Kysely<Database>;
 	public id: string;
-	public expiresAt: number;
+	public expiresAt?: number;
 	private _tag: string;
 
 	public get tag(): Promise<EntityAsync<IUserTag>> {
