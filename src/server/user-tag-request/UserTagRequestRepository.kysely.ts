@@ -38,6 +38,20 @@ export class UserTagRequestRepository implements IUserTagRequestRepository {
 		return request;
 	}
 
+	public async findByUserAndTag(user: string, tag: string): Promise<EntityAsync<IUserTagRequest>[]> {
+		const requestsPartial = await db
+			.selectFrom('usertagrequests')
+			.where('user', '==', user)
+			.where('tag', '==', tag)
+			.selectAll()
+			.execute();
+		const requests = requestsPartial.map((requestPartial) => {
+			const request = new UserTagRequest(requestPartial, db);
+			return request;
+		});
+		return requests;
+	}
+
 	public async save(request: IUserTagRequest | EntityAsync<IUserTagRequest>): Promise<void> {
 		const user = await request.user;
 		const tag = await request.tag;
