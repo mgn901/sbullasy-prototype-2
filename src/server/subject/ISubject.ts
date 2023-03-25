@@ -1,7 +1,7 @@
 import { IPlace } from '../place/IPlace';
 import { IProperty } from '../property/IProperty';
-import { ISubjectCategory } from '../subject-categories/ISubjectCategory';
-import { ITeacher } from '../teachers/ITeacher';
+import { ISubjectCategory } from '../subject-category/ISubjectCategory';
+import { ITeacher } from '../teacher/ITeacher';
 
 export interface ISubject {
 	readonly id: string;

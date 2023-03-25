@@ -4,8 +4,8 @@ import { EntityAsync } from '../EntityAsync';
 import { IPlace } from '../place/IPlace';
 import { IProperty } from '../property/IProperty';
 import { Property } from '../property/Property.kysely';
-import { ISubjectCategory } from '../subject-categories/ISubjectCategory';
-import { ITeacher } from '../teachers/ITeacher';
+import { ISubjectCategory } from '../subject-category/ISubjectCategory';
+import { ITeacher } from '../teacher/ITeacher';
 import { ISubject } from './ISubject';
 
 export class Subject implements EntityAsync<ISubject> {
