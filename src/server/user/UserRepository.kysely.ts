@@ -44,10 +44,10 @@ export class UserRepository implements IUserRepository {
 		const { id, email, password, displayName } = user;
 		const userPartial = { id, email, password, displayName };
 		const oldProperties = await db
-		.selectFrom('user_properties')
-		.where('user_id', '==', id)
-		.select('property_id')
-		.execute();
+			.selectFrom('user_properties')
+			.where('user_id', '==', id)
+			.select('property_id')
+			.execute();
 		const properties = await user.properties;
 		const registrations = await user.tagRegistrations;
 		const sessions = await user.sessions;

@@ -12,20 +12,20 @@ export class UndoChangeEmailRequest implements EntityAsync<IUndoChangeEmailReque
 		this.id = undoChangeEmailRequest.id;
 		this.email = undoChangeEmailRequest.email;
 		this.createdAt = undoChangeEmailRequest.createdAt;
-		this._user = undoChangeEmailRequest.user;
+		this.userID = undoChangeEmailRequest.user;
 	}
 
-	private db: Kysely<Database>;
-	public id: string;
-	public email: string;
-	public createdAt: number;
-	private _user: string;
+	private readonly db: Kysely<Database>;
+	public readonly id: string;
+	public readonly email: string;
+	public readonly createdAt: number;
+	private readonly userID: string;
 
 	public get user(): Promise<EntityAsync<IUser>> {
 		const promise = (async () => {
 			const usersPartial = await this.db
 				.selectFrom('users')
-				.where('id', '==', this._user)
+				.where('id', '==', this.userID)
 				.selectAll()
 				.execute();
 			const userPartial = usersPartial[0];

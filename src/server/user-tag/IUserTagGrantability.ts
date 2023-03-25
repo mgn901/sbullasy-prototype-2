@@ -1,8 +1,8 @@
 import { IUserTag } from './IUserTag';
 
 export interface IUserTagGrantability {
-	id: string;
-	tag: IUserTag;
+	readonly id: string;
+	readonly tag: IUserTag;
 	grantableByUserTag?: IUserTag;
 	grantableByEmailRegex?: string;
 	expires?: number;

@@ -5,7 +5,7 @@ import { ISession } from '../session/ISession';
 import { IUserTagRegistration } from './IUserTagRegistration';
 
 export interface IUser {
-	id: string;
+	readonly id: string;
 	email: string;
 	password: string;
 	displayName: string;

@@ -1,5 +1,5 @@
 export interface ICategory {
-	id: string;
+	readonly id: string;
 	name: string;
 	studentIDRegex?: string[];
 }

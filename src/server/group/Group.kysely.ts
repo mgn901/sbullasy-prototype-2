@@ -22,14 +22,22 @@ export class Group implements EntityAsync<IGroup> {
 		this.invitationToken = group.invitationToken;
 	}
 
-	private db: Kysely<Database>;
-	public id: string;
+	private readonly db: Kysely<Database>;
+	public readonly id: string;
 	public name: string;
-	public createdAt: number;
+	public readonly createdAt: number;
 	public updatedAt: number;
 	public invitationToken: string;
+	private _tags?: Promise<EntityAsync<IGroupTag>[]>;
+	private _properties?: Promise<EntityAsync<IProperty>[]>;
+	private _owner?: Promise<EntityAsync<IUser>>;
+	private _members?: Promise<EntityAsync<IUser>[]>;
+	private _pages?: Promise<EntityAsync<IPage>[]>;
 
 	public get tags(): Promise<EntityAsync<IGroupTag>[]> {
+		if (this._tags) {
+			return this._tags;
+		}
 		const promise = (async () => {
 			const tagsPartial = await this.db
 				.selectFrom('groups_tags')
@@ -47,6 +55,9 @@ export class Group implements EntityAsync<IGroup> {
 	}
 
 	public get properties(): Promise<EntityAsync<IProperty<string, string>>[]> {
+		if (this._properties) {
+			return this._properties;
+		}
 		const promise = (async () => {
 			const propertiesPartial = await this.db
 				.selectFrom('group_properties')
@@ -64,6 +75,9 @@ export class Group implements EntityAsync<IGroup> {
 	}
 
 	public get owner(): Promise<EntityAsync<IUser>> {
+		if (this._owner) {
+			return this._owner;
+		}
 		const promise = (async () => {
 			const usersPartial = await
 				this.db.selectFrom('user_owns_groups')
@@ -79,6 +93,9 @@ export class Group implements EntityAsync<IGroup> {
 	}
 
 	public get members(): Promise<EntityAsync<IUser>[]> {
+		if (this._members) {
+			return this._members;
+		}
 		const promise = (async () => {
 			const usersPartial = await
 				this.db.selectFrom('users_belongs_groups')
@@ -96,6 +113,9 @@ export class Group implements EntityAsync<IGroup> {
 	}
 
 	public get pages(): Promise<EntityAsync<IPage>[]> {
+		if (this._pages) {
+			return this._pages;
+		}
 		const promise = (async () => {
 			const pagesPartial = await this.db
 				.selectFrom('group_pages')
@@ -110,6 +130,26 @@ export class Group implements EntityAsync<IGroup> {
 			return pages;
 		})();
 		return promise;
+	}
+
+	public set tags(tags) {
+		this._tags = tags;
+	}
+
+	public set properties(properties) {
+		this._properties = properties;
+	}
+
+	public set owner(owner) {
+		this._owner = owner;
+	}
+
+	public set members(members) {
+		this._members = members;
+	}
+
+	public set pages(pages) {
+		this._pages = pages;
 	}
 
 }

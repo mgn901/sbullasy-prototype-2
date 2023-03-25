@@ -1,9 +1,9 @@
 import { IUser } from '../user/IUser';
 
 export interface IResetPasswordRequest {
-	id: string;
-	user: IUser;
-	email: string;
-	createdAt: number;
+	readonly id: string;
+	readonly user: IUser;
+	readonly email: string;
+	readonly createdAt: number;
 	isDisposed: boolean;
 }

@@ -23,13 +23,24 @@ export class User implements EntityAsync<IUser> {
 		this.displayName = user.displayName;
 	}
 
-	private db: Kysely<Database>;
-	public id: string;
+	private readonly db: Kysely<Database>;
+	public readonly id: string;
 	public email: string;
 	public password: string;
 	public displayName: string;
+	private _tagRegistrations?: Promise<EntityAsync<IUserTagRegistration>[]>;
+	private _properties?: Promise<EntityAsync<IProperty>[]>;
+	private _sessions?: Promise<EntityAsync<ISession>[]>;
+	private _owns?: Promise<EntityAsync<IGroup>[]>;
+	private _belongs?: Promise<EntityAsync<IGroup>[]>;
+	private _watchesGroups?: Promise<EntityAsync<IGroup>[]>;
+	private _watchesPages?: Promise<EntityAsync<IPage>[]>;
+	private _pages?: Promise<EntityAsync<IPage>[]>;
 
 	public get tagRegistrations(): Promise<EntityAsync<IUserTagRegistration>[]> {
+		if (this._tagRegistrations) {
+			return this._tagRegistrations;
+		}
 		const promise = (async () => {
 			const registrationsPartial = await this.db
 				.selectFrom('user_usertagregistrations')
@@ -47,6 +58,9 @@ export class User implements EntityAsync<IUser> {
 	}
 
 	public get properties(): Promise<EntityAsync<IProperty<string, string>>[]> {
+		if (this._properties) {
+			return this._properties;
+		}
 		const promise = (async () => {
 			const propertiesPartial = await this.db
 				.selectFrom('user_properties')
@@ -64,6 +78,9 @@ export class User implements EntityAsync<IUser> {
 	}
 
 	public get sessions(): Promise<EntityAsync<ISession>[]> {
+		if (this._sessions) {
+			return this._sessions;
+		}
 		const promise = (async () => {
 			const sessionsPartial = await this.db
 				.selectFrom('sessions')
@@ -80,6 +97,9 @@ export class User implements EntityAsync<IUser> {
 	}
 
 	public get owns(): Promise<EntityAsync<IGroup>[]> {
+		if (this._owns) {
+			return this._owns;
+		}
 		const promise = (async () => {
 			const groupsPartial = await this.db
 				.selectFrom('user_owns_groups')
@@ -97,6 +117,9 @@ export class User implements EntityAsync<IUser> {
 	}
 
 	public get belongs(): Promise<EntityAsync<IGroup>[]> {
+		if (this._belongs) {
+			return this._belongs;
+		}
 		const promise = (async () => {
 			const groupsPartial = await this.db
 				.selectFrom('users_belongs_groups')
@@ -114,6 +137,9 @@ export class User implements EntityAsync<IUser> {
 	}
 
 	public get watchesGroups(): Promise<EntityAsync<IGroup>[]> {
+		if (this._watchesGroups) {
+			return this._watchesGroups;
+		}
 		const promise = (async () => {
 			const groupsPartial = await this.db
 				.selectFrom('users_watches_groups')
@@ -131,6 +157,9 @@ export class User implements EntityAsync<IUser> {
 	}
 
 	public get watchesPages(): Promise<EntityAsync<IPage>[]> {
+		if (this._watchesPages) {
+			return this._watchesPages;
+		}
 		const promise = (async () => {
 			const pagesPartial = await this.db
 				.selectFrom('users_watches_pages')
@@ -148,6 +177,9 @@ export class User implements EntityAsync<IUser> {
 	}
 
 	public get pages(): Promise<EntityAsync<IPage>[]> {
+		if (this._pages) {
+			return this._pages;
+		}
 		const promise = (async () => {
 			const pagesPartial = await this.db
 				.selectFrom('user_pages')
@@ -162,6 +194,38 @@ export class User implements EntityAsync<IUser> {
 			return pages;
 		})();
 		return promise;
+	}
+
+	public set tagRegistrations(tagRegistrations) {
+		this._tagRegistrations = tagRegistrations;
+	}
+
+	public set properties(properties) {
+		this._properties = properties;
+	}
+
+	public set sessions(sessions) {
+		this._sessions = sessions;
+	}
+
+	public set owns(owns) {
+		this._owns = owns;
+	}
+
+	public set belongs(belongs) {
+		this._belongs = belongs;
+	}
+
+	public set watchesGroups(watchesGroups) {
+		this._watchesGroups = watchesGroups;
+	}
+
+	public set watchesPages(watchesPages) {
+		this._watchesPages = watchesPages;
+	}
+
+	public set pages(pages) {
+		this._pages = pages;
 	}
 
 }

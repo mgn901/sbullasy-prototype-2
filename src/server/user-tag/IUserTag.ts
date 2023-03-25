@@ -1,7 +1,7 @@
 import { IUserTagGrantability } from './IUserTagGrantability';
 
 export interface IUserTag {
-	id: string;
+	readonly id: string;
 	name: string;
 	displayName: string;
 	grantableBy: IUserTagGrantability[];

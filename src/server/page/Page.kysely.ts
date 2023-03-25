@@ -26,15 +26,18 @@ export class Page implements EntityAsync<IPage> {
 		this.endsAt = page.endsAt;
 	}
 
-	private db: Kysely<Database>;
-	public id: string;
+	private readonly db: Kysely<Database>;
+	public readonly id: string;
 	public name: string;
-	public type: 'page' | 'event' | 'image';
+	public readonly type: 'page' | 'event' | 'image';
 	public body: string;
-	public createdAt: number;
+	public readonly createdAt: number;
 	public updatedAt: number;
 	public startsAt?: number | undefined;
 	public endsAt?: number | undefined;
+	private _places?: Promise<EntityAsync<IPlace>[]>;
+	private _tags?: Promise<EntityAsync<IPageTag>[]>;
+	private _properties?: Promise<EntityAsync<IProperty>[]>;
 
 	public get createdByUser(): Promise<EntityAsync<IUser>> | undefined {
 		const promise = (async () => {
@@ -67,6 +70,9 @@ export class Page implements EntityAsync<IPage> {
 	}
 
 	public get places(): Promise<EntityAsync<IPlace>[]> {
+		if (this._places) {
+			return this._places;
+		}
 		const promise = (async () => {
 			const places = await this.db
 				.selectFrom('pages_places')
@@ -80,6 +86,9 @@ export class Page implements EntityAsync<IPage> {
 	}
 
 	public get tags(): Promise<EntityAsync<IPageTag>[]> {
+		if (this._tags) {
+			return this._tags;
+		}
 		const promise = (async () => {
 			const tagsPartial = await this.db
 				.selectFrom('pages_tags')
@@ -97,6 +106,9 @@ export class Page implements EntityAsync<IPage> {
 	}
 
 	public get properties(): Promise<EntityAsync<IProperty<string, string>>[]> {
+		if (this._properties) {
+			return this._properties;
+		}
 		const promise = (async () => {
 			const propertiesPartial = await this.db
 				.selectFrom('page_properties')
@@ -112,4 +124,17 @@ export class Page implements EntityAsync<IPage> {
 		})();
 		return promise;
 	}
+
+	public set places(places) {
+		this._places = places;
+	}
+
+	public set tags(tags) {
+		this._tags = tags;
+	}
+
+	public set properties(properties) {
+		this._properties = properties;
+	}
+
 }

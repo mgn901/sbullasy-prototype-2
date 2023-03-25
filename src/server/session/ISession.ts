@@ -1,10 +1,10 @@
 import { IUser } from '../user/IUser';
 
 export interface ISession {
-	id: string;
-	user: IUser;
-	loggedInAt: number;
-	expiresAt: number;
-	ipAddress: string;
-	name: string;
+	readonly id: string;
+	readonly user: IUser;
+	readonly loggedInAt: number;
+	readonly expiresAt: number;
+	readonly ipAddress: string;
+	readonly name: string;
 }

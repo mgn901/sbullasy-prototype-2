@@ -23,15 +23,15 @@ export class UserTagRequest implements EntityAsync<IUserTagRequest> {
 		this._grantability = userTagRequest.grantability;
 	}
 
-	private db: Kysely<Database>;
-	public id: string;
-	public email: string;
-	public createdAt: number;
+	private readonly db: Kysely<Database>;
+	public readonly id: string;
+	public readonly email: string;
+	public readonly createdAt: number;
 	public isDisposed: boolean;
-	public token: string;
-	private _user: string;
-	private _tag: string;
-	private _grantability: string;
+	public readonly token: string;
+	private readonly _user: string;
+	private readonly _tag: string;
+	private readonly _grantability: string;
 
 	public get user(): Promise<EntityAsync<IUser>> {
 		const promise = (async () => {

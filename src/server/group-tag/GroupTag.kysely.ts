@@ -7,19 +7,23 @@ import { IGroupTag } from './IGroupTag';
 
 export class GroupTag implements EntityAsync<IGroupTag> {
 
-	constructor(groupTag: Database['grouptags'], db: Kysely<Database>) {
+	public constructor(groupTag: Database['grouptags'], db: Kysely<Database>) {
 		this.db = db;
 		this.id = groupTag.id;
 		this.name = groupTag.name;
 		this.displayName = groupTag.displayName;
 	}
 
-	private db: Kysely<Database>;
-	public id: string;
+	private readonly db: Kysely<Database>;
+	public readonly id: string;
 	public name: string;
 	public displayName: string;
+	private _grantableBy?: Promise<EntityAsync<IUserTag>[]>;
 
 	public get grantableBy(): Promise<EntityAsync<IUserTag>[]> {
+		if (this._grantableBy) {
+			return this._grantableBy;
+		}
 		const promise = (async () => {
 			const tagsPartial = await this.db
 				.selectFrom('grouptag_grantableby_usertags')
@@ -34,6 +38,10 @@ export class GroupTag implements EntityAsync<IGroupTag> {
 			return tags;
 		})();
 		return promise;
+	}
+
+	public set grantableBy(grantableBy) {
+		this._grantableBy = grantableBy;
 	}
 
 }

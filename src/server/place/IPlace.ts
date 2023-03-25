@@ -1,5 +1,5 @@
 export interface IPlace {
-	id: string;
+	readonly id: string;
 	name: string;
 	numbering: string;
 }

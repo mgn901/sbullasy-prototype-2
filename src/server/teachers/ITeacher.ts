@@ -1,5 +1,5 @@
 export interface ITeacher {
-	id: string;
+	readonly id: string;
 	name: string;
 	nameRuby: string;
 }

@@ -19,17 +19,29 @@ export class Property implements EntityAsync<IProperty> {
 		this.user_id = property.user;
 		this.group_id = property.group;
 		this.page_id = property.page;
+		this.isUserSet = false;
+		this.isGroupSet = false;
+		this.isPageSet = false;
 	}
 
-	private db: Kysely<Database>;
+	private readonly db: Kysely<Database>;
+	public readonly id: string;
+	public readonly key: string;
+	public value: string;
 	private user_id: Database['properties']['user'];
 	private group_id: Database['properties']['group'];
 	private page_id: Database['properties']['page'];
-	public id: string;
-	public key: string;
-	public value: string;
+	private _user?: Promise<EntityAsync<IUser>> | undefined;
+	private _group?: Promise<EntityAsync<IGroup>> | undefined;
+	private _page?: Promise<EntityAsync<IPage>> | undefined;
+	private isUserSet: boolean;
+	private isGroupSet: boolean;
+	private isPageSet: boolean;
 
 	public get user(): Promise<EntityAsync<IUser>> | undefined {
+		if (this.isUserSet) {
+			return this._user;
+		}
 		const user_id = this.user_id;
 		if (!user_id) {
 			return undefined;
@@ -48,6 +60,9 @@ export class Property implements EntityAsync<IProperty> {
 	}
 
 	public get group(): Promise<EntityAsync<IGroup>> | undefined {
+		if (this.isGroupSet) {
+			return this._group;
+		}
 		const group_id = this.group_id;
 		if (!group_id) {
 			return undefined;
@@ -66,6 +81,9 @@ export class Property implements EntityAsync<IProperty> {
 	}
 
 	public get page(): Promise<EntityAsync<IPage>> | undefined {
+		if (this.isPageSet) {
+			return this._page;
+		}
 		const page_id = this.page_id;
 		if (!page_id) {
 			return undefined;
@@ -81,6 +99,21 @@ export class Property implements EntityAsync<IProperty> {
 			return page;
 		})();
 		return promise;
+	}
+
+	public set user(user) {
+		this._user = user;
+		this.isUserSet = true;
+	}
+
+	public set group(group) {
+		this._group = group;
+		this.isGroupSet = true;
+	}
+
+	public set page(page) {
+		this._page = page;
+		this.isPageSet = true;
 	}
 
 }

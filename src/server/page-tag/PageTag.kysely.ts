@@ -7,19 +7,23 @@ import { IPageTag } from './IPageTag';
 
 export class PageTag implements EntityAsync<IPageTag> {
 
-	constructor(pageTag: Database['pagetags'], db: Kysely<Database>) {
+	public constructor(pageTag: Database['pagetags'], db: Kysely<Database>) {
 		this.db = db;
 		this.id = pageTag.id;
 		this.name = pageTag.name;
 		this.displayName = pageTag.displayName;
 	}
 
-	private db: Kysely<Database>;
-	public id: string;
+	private readonly db: Kysely<Database>;
+	public readonly id: string;
 	public name: string;
 	public displayName: string;
+	private _grantableBy?: Promise<EntityAsync<IUserTag>[]>;
 
 	public get grantableBy(): Promise<EntityAsync<IUserTag>[]> {
+		if (this._grantableBy) {
+			return this._grantableBy;
+		}
 		const promise = (async () => {
 			const tagsPartial = await this.db
 				.selectFrom('pagetag_grantableby_usertags')
@@ -34,6 +38,10 @@ export class PageTag implements EntityAsync<IPageTag> {
 			return tags;
 		})();
 		return promise;
+	}
+
+	public set grantableBy(grantableBy) {
+		this._grantableBy = grantableBy;
 	}
 
 }

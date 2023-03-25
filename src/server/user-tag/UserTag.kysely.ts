@@ -14,12 +14,16 @@ export class UserTag implements EntityAsync<IUserTag> {
 		this.displayName = userTag.displayName;
 	}
 
-	private db: Kysely<Database>;
-	public id: string;
+	private readonly db: Kysely<Database>;
+	public readonly id: string;
 	public name: string;
 	public displayName: string;
+	private _grantablyBy?: Promise<EntityAsync<IUserTagGrantability>[]>;
 
 	public get grantableBy(): Promise<EntityAsync<IUserTagGrantability>[]> {
+		if (this._grantablyBy) {
+			return this._grantablyBy;
+		}
 		const promise = (async () => {
 			const grantableByPartial = await this.db
 				.selectFrom('usertaggrantabilities')
@@ -33,6 +37,10 @@ export class UserTag implements EntityAsync<IUserTag> {
 			return grantableBy;
 		})();
 		return promise;
+	}
+
+	public set grantableBy(grantableBy) {
+		this._grantablyBy = grantableBy;
 	}
 
 }

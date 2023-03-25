@@ -3,12 +3,12 @@ import { IUserTag } from '../user-tag/IUserTag';
 import { IUserTagGrantability } from '../user-tag/IUserTagGrantability';
 
 export interface IUserTagRequest {
-	id: string;
-	user: IUser;
-	tag: IUserTag;
-	grantability: IUserTagGrantability;
-	email: string;
-	createdAt: number;
+	readonly id: string;
+	readonly user: IUser;
+	readonly tag: IUserTag;
+	readonly grantability: IUserTagGrantability;
+	readonly email: string;
+	readonly createdAt: number;
 	isDisposed: boolean;
-	token: string;
+	readonly token: string;
 }

@@ -3,8 +3,8 @@ import { IPage } from '../page/IPage';
 import { IUser } from '../user/IUser';
 
 export interface IProperty<Key extends string = string, Value extends string = string> {
-	id: string;
-	key: Key;
+	readonly id: string;
+	readonly key: Key;
 	value: Value;
 	user?: IUser;
 	group?: IGroup;

@@ -4,9 +4,9 @@ import { IProperty } from '../property/IProperty';
 import { IUser } from '../user/IUser';
 
 export interface IGroup {
-	id: string;
+	readonly id: string;
 	name: string;
-	createdAt: number;
+	readonly createdAt: number;
 	updatedAt: number;
 	invitationToken: string;
 	tags: IGroupTag[];

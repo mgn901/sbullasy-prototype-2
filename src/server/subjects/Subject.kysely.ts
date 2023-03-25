@@ -10,7 +10,7 @@ import { ISubject } from './ISubject';
 
 export class Subject implements EntityAsync<ISubject> {
 
-	constructor(subject: Database['subjects'], db: Kysely<Database>) {
+	public constructor(subject: Database['subjects'], db: Kysely<Database>) {
 		this.db = db;
 		this.id = subject.id;
 		this.code = subject.code;
@@ -24,8 +24,8 @@ export class Subject implements EntityAsync<ISubject> {
 		this.units = subject.units;
 	}
 
-	private db: Kysely<Database>;
-	public id: string;
+	private readonly db: Kysely<Database>;
+	public readonly id: string;
 	public code: string;
 	public name: string;
 	public nameRuby: string;
@@ -35,8 +35,15 @@ export class Subject implements EntityAsync<ISubject> {
 	public semester: string[];
 	public week: string[];
 	public units: number;
+	private _teachers?: Promise<EntityAsync<ITeacher>[]>;
+	private _categories?: Promise<EntityAsync<ICategory>[]>;
+	private _places?: Promise<EntityAsync<IPlace>[]>;
+	private _properties?: Promise<EntityAsync<IProperty>[]>;
 
-	public get teachers(): EntityAsync<ITeacher>[] | Promise<EntityAsync<ITeacher>[]> {
+	public get teachers(): Promise<EntityAsync<ITeacher>[]> {
+		if (this._teachers) {
+			return this._teachers;
+		}
 		const promise = (async () => {
 			const teachers = await this.db
 				.selectFrom('subjects_teachers')
@@ -49,7 +56,10 @@ export class Subject implements EntityAsync<ISubject> {
 		return promise;
 	}
 
-	public get categories(): EntityAsync<ICategory>[] | Promise<EntityAsync<ICategory>[]> {
+	public get categories(): Promise<EntityAsync<ICategory>[]> {
+		if (this._categories) {
+			return this._categories;
+		}
 		const promise = (async () => {
 			const categories = await this.db
 				.selectFrom('subjects_categories')
@@ -62,7 +72,10 @@ export class Subject implements EntityAsync<ISubject> {
 		return promise;
 	}
 
-	public get places(): EntityAsync<IPlace>[] | Promise<EntityAsync<IPlace>[]> {
+	public get places(): Promise<EntityAsync<IPlace>[]> {
+		if (this._places) {
+			return this._places;
+		}
 		const promise = (async () => {
 			const places = await this.db
 				.selectFrom('subjects_places')
@@ -75,7 +88,10 @@ export class Subject implements EntityAsync<ISubject> {
 		return promise;
 	}
 
-	public get properties(): EntityAsync<IProperty<string, string>>[] | Promise<EntityAsync<IProperty<string, string>>[]> {
+	public get properties(): Promise<EntityAsync<IProperty<string, string>>[]> {
+		if (this._properties) {
+			return this._properties;
+		}
 		const promise = (async () => {
 			const propertiesPartial = await this.db
 				.selectFrom('subjects_properties')
@@ -90,6 +106,22 @@ export class Subject implements EntityAsync<ISubject> {
 			return properties;
 		})();
 		return promise;
+	}
+
+	public set teachers(teachers) {
+		this._teachers = teachers;
+	}
+
+	public set categories(categories) {
+		this._categories = categories;
+	}
+
+	public set places(places) {
+		this._places = places;
+	}
+
+	public set properties(properties) {
+		this._properties = properties;
 	}
 
 }

@@ -5,14 +5,14 @@ import { IProperty } from '../property/IProperty';
 import { IUser } from '../user/IUser';
 
 export interface IPage {
-	id: string;
+	readonly id: string;
 	name: string;
-	type: 'page' | 'event' | 'image';
+	readonly type: 'page' | 'event' | 'image';
 	body: string;
-	createdAt: number;
+	readonly createdAt: number;
 	updatedAt: number;
-	createdByUser?: IUser;
-	createdByGroup?: IGroup;
+	readonly createdByUser?: IUser;
+	readonly createdByGroup?: IGroup;
 	startsAt?: number;
 	endsAt?: number;
 	places: IPlace[];

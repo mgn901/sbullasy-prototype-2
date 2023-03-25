@@ -4,7 +4,7 @@ import { IProperty } from '../property/IProperty';
 import { ITeacher } from '../teachers/ITeacher';
 
 export interface ISubject {
-	id: string;
+	readonly id: string;
 	code: string;
 	name: string;
 	nameRuby: string;
