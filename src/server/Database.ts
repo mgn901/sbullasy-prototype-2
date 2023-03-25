@@ -1,3 +1,4 @@
+import { ICategory } from './categories/ICategory';
 import { Entity } from './Entity';
 import { EntityWithoutEntityKey } from './EntityWithoutEntityKey';
 import { IGroupTag } from './group-tag/IGroupTag';
@@ -9,6 +10,8 @@ import { IPlace } from './place/IPlace';
 import { IProperty } from './property/IProperty';
 import { IResetPasswordRequest } from './reset-password-request/IResetPasswordRequest';
 import { ISession } from './session/ISession';
+import { ISubject } from './subjects/ISubject';
+import { ITeacher } from './teachers/ITeacher';
 import { IUndoChangeEmailRequest } from './undo-change-email-request/IUndoChangeEmailRequest';
 import { IUserTagRequest } from './user-tag-request/IUserTagRequest';
 import { IUserTag } from './user-tag/IUserTag';
@@ -44,6 +47,9 @@ export interface Database {
 	grouptags: EntityWithoutEntityKey<IGroupTag>;
 	pagetags: EntityWithoutEntityKey<IPageTag>;
 	usertaggrantabilities: EntityWithoutEntityKey<IUserTagGrantability>;
+	subjects: EntityWithoutEntityKey<ISubject>;
+	categories: EntityWithoutEntityKey<ICategory>;
+	teachers: EntityWithoutEntityKey<ITeacher>;
 	places: EntityWithoutEntityKey<IPlace>;
 	properties: EntityWithoutEntityKey<IProperty>;
 	sessions: EntityWithoutEntityKey<ISession>;
@@ -66,4 +72,8 @@ export interface Database {
 	page_properties: Junction<IPage, IProperty['page'], 'page_id', 'property_id'>;
 	grouptag_grantableby_usertags: Junction<IGroupTag, IGroupTag['grantableBy'], 'grouptag_id', 'usertag_id'>;
 	pagetag_grantableby_usertags: Junction<IPageTag, IPageTag['grantableBy'], 'pagetag_id', 'usertag_id'>;
+	subjects_places: Junction<ISubject, ISubject['places'], 'subject_id', 'place_id'>;
+	subjects_categories: Junction<ISubject, ISubject['categories'], 'subject_id', 'category_id'>;
+	subjects_teachers: Junction<ISubject, ISubject['teachers'], 'subject_id', 'teacher_id'>;
+	subjects_properties: Junction<ISubject, ISubject['properties'], 'subject_id', 'property_id'>;
 }

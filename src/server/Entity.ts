@@ -1,3 +1,4 @@
+import { ICategory } from './categories/ICategory';
 import { IGroupTag } from './group-tag/IGroupTag';
 import { IGroup } from './group/IGroup';
 import { ILoginFailure } from './login-failure/ILoginFailure';
@@ -7,6 +8,8 @@ import { IPlace } from './place/IPlace';
 import { IProperty } from './property/IProperty';
 import { IResetPasswordRequest } from './reset-password-request/IResetPasswordRequest';
 import { ISession } from './session/ISession';
+import { ISubject } from './subjects/ISubject';
+import { ITeacher } from './teachers/ITeacher';
 import { IUndoChangeEmailRequest } from './undo-change-email-request/IUndoChangeEmailRequest';
 import { IUserTagRequest } from './user-tag-request/IUserTagRequest';
 import { IUserTag } from './user-tag/IUserTag';
@@ -22,6 +25,9 @@ export type Entity = IUser
 	| IGroupTag
 	| IPageTag
 	| IUserTagGrantability
+	| ISubject
+	| ICategory
+	| ITeacher
 	| IPlace
 	| IProperty
 	| ISession
