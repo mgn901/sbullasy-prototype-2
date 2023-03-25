@@ -34,13 +34,8 @@ export class TeacherRepository implements ITeacherRepository {
 
 	public async deleteByID(id: string): Promise<void> {
 		await db
-			.deleteFrom('subjects_teachers')
-			.where('teacher_id', '==', id)
-			.executeTakeFirst();
-
-		await db
 			.deleteFrom('teachers')
-			.where('id', 'in', id)
+			.where('id', '==', id)
 			.executeTakeFirst();
 
 		return;

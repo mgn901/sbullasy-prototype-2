@@ -183,33 +183,9 @@ export class SubjectRepository implements ISubjectRepository {
 	}
 
 	public async deleteByID(id: string): Promise<void> {
-		const subject = await this.findByID(id);
-		const properties = await subject?.properties ?? [];
-		const propertyIDs = properties.map(property => property.id);
-
 		await db
-			.deleteFrom('subjects_teachers')
-			.where('subject_id', '==', id)
-			.executeTakeFirst();
-
-		await db
-			.deleteFrom('subjects_categories')
-			.where('subject_id', '==', id)
-			.executeTakeFirst();
-
-		await db
-			.deleteFrom('subjects_places')
-			.where('subject_id', '==', id)
-			.executeTakeFirst();
-
-		await db
-			.deleteFrom('subjects_properties')
-			.where('subject_id', '==', id)
-			.executeTakeFirst();
-
-		await db
-			.deleteFrom('properties')
-			.where('id', 'in', propertyIDs)
+			.deleteFrom('subjects')
+			.where('id', '==', id)
 			.executeTakeFirst();
 
 		return;

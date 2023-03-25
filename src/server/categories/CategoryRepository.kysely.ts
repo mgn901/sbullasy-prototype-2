@@ -34,11 +34,6 @@ export class CategoryRepository implements ICategoryRepository {
 
 	public async deleteByID(id: string): Promise<void> {
 		await db
-			.deleteFrom('subjects_categories')
-			.where('category_id', '==', id)
-			.executeTakeFirst();
-
-		await db
 			.deleteFrom('categories')
 			.where('id', 'in', id)
 			.executeTakeFirst();

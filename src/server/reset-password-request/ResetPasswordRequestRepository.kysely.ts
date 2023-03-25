@@ -19,7 +19,7 @@ export class ResetPasswordRequestRepository implements IResetPasswordRequestRepo
 		return requests;
 	}
 
-	public async findByID(id: string): Promise<EntityAsync<IResetPasswordRequest>> {
+	public async findByID(id: string): Promise<EntityAsync<IResetPasswordRequest> | undefined> {
 		const requests = await this.findByIDs(id);
 		const request = requests[0];
 		return request;

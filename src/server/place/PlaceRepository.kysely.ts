@@ -14,7 +14,7 @@ export class PlaceRepository implements IPlaceRepository {
 		return places;
 	}
 
-	public async findByID(id: string): Promise<EntityAsync<IPlace>> {
+	public async findByID(id: string): Promise<EntityAsync<IPlace> | undefined> {
 		const places = await this.findByIDs(id);
 		const place = places[0];
 		return place;
@@ -32,11 +32,6 @@ export class PlaceRepository implements IPlaceRepository {
 	}
 
 	public async deleteByID(id: string): Promise<void> {
-		await db
-			.deleteFrom('pages_places')
-			.where('place_id', '==', id)
-			.executeTakeFirst();
-
 		await db
 			.deleteFrom('places')
 			.where('id', '==', id)

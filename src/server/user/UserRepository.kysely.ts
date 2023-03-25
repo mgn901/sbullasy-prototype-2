@@ -1,5 +1,7 @@
 import { EntityAsync } from '../EntityAsync';
+import { EntityWithoutEntityKey } from '../EntityWithoutEntityKey';
 import { db } from '../kysely/db';
+import { IPage } from '../page/IPage';
 import { IUser } from './IUser';
 import { IUserRepository } from './IUserRepository';
 import { User } from './User.kysely';
@@ -21,13 +23,13 @@ export class UserRepository implements IUserRepository {
 		return users;
 	}
 
-	public async findByID(id: string): Promise<EntityAsync<IUser>> {
+	public async findByID(id: string): Promise<EntityAsync<IUser> | undefined> {
 		const users = await this.findByIDs(id);
 		const user = users[0];
 		return user;
 	}
 
-	public async findByEmail(email: string): Promise<EntityAsync<IUser>> {
+	public async findByEmail(email: string): Promise<EntityAsync<IUser> | undefined> {
 		const usersPartial = await db
 			.selectFrom('users')
 			.where('email', '==', email)
@@ -41,6 +43,11 @@ export class UserRepository implements IUserRepository {
 	public async save(user: IUser | EntityAsync<IUser>): Promise<void> {
 		const { id, email, password, displayName } = user;
 		const userPartial = { id, email, password, displayName };
+		const oldProperties = await db
+		.selectFrom('user_properties')
+		.where('user_id', '==', id)
+		.select('property_id')
+		.execute();
 		const properties = await user.properties;
 		const registrations = await user.tagRegistrations;
 		const sessions = await user.sessions;
@@ -49,6 +56,7 @@ export class UserRepository implements IUserRepository {
 		const watchesGroups = await user.watchesGroups;
 		const watchesPages = await user.watchesPages;
 		const pages = await user.pages;
+		const oldPropertyIDs = oldProperties.map(oldProperty => oldProperty.property_id);
 		const propertyIDs = properties.map(property => property.id);
 		const registrationIDs = registrations.map(tag => tag.id);
 		const sessionIDs = sessions.map(session => session.id);
@@ -65,6 +73,7 @@ export class UserRepository implements IUserRepository {
 			.executeTakeFirst();
 		await db
 			.deleteFrom('properties')
+			.where('id', 'in', oldPropertyIDs)
 			.where('id', 'not in', propertyIDs)
 			.executeTakeFirst();
 		properties.forEach(async (property) => {
@@ -86,11 +95,9 @@ export class UserRepository implements IUserRepository {
 			await db
 				.insertInto('properties')
 				.values(propertyPartial)
-				.onConflict(oc => {
-					return oc
-						.column('id')
-						.doUpdateSet(propertyPartial)
-				})
+				.onConflict(oc => oc
+					.column('id')
+					.doUpdateSet(propertyPartial))
 				.executeTakeFirst();
 			await db
 				.insertInto('user_properties')
@@ -140,11 +147,9 @@ export class UserRepository implements IUserRepository {
 			await db
 				.insertInto('sessions')
 				.values(sessionPartial)
-				.onConflict(oc => {
-					return oc
-						.column('id')
-						.doUpdateSet(sessionPartial)
-				})
+				.onConflict(oc => oc
+					.column('id')
+					.doUpdateSet(sessionPartial))
 				.executeTakeFirst();
 			return;
 		});
@@ -234,11 +239,28 @@ export class UserRepository implements IUserRepository {
 			.where('user_id', '==', id)
 			.where('page_id', 'not in', pageIDs)
 			.executeTakeFirst();
-		pageIDs.forEach(async (pageID) => {
+		pages.forEach(async (page) => {
+			const pagePartial: EntityWithoutEntityKey<IPage> = {
+				id: page.id,
+				name: page.name,
+				type: page.type,
+				body: page.body,
+				createdAt: page.createdAt,
+				updatedAt: page.updatedAt,
+				startsAt: page.startsAt,
+				endsAt: page.endsAt,
+			};
 			const userPagesItem = {
 				user_id: id,
-				page_id: pageID,
+				page_id: page.id,
 			};
+			await db
+				.insertInto('pages')
+				.values(pagePartial)
+				.onConflict(oc => oc
+					.column('id')
+					.doUpdateSet(pagePartial))
+				.executeTakeFirst();
 			await db
 				.insertInto('user_pages')
 				.values(userPagesItem)
@@ -252,77 +274,18 @@ export class UserRepository implements IUserRepository {
 		await db
 			.insertInto('users')
 			.values(userPartial)
-			.onConflict(oc => {
-				return oc
-					.column('id')
-					.doUpdateSet(userPartial)
-			})
+			.onConflict(oc => oc
+				.column('id')
+				.doUpdateSet(userPartial))
 			.executeTakeFirst();
 
 		return;
 	}
 
 	public async deleteByID(id: string): Promise<void> {
-		const users = await this.findByIDs(id);
-		const user = users[0];
-		const properties = await user.properties;
-		const propertyIDs = properties.map(property => property.id);
-		const registrations = await user.tagRegistrations;
-		const registrationIDs = registrations.map(registration => registration.id);
-
 		await db
-			.deleteFrom('user_usertagregistrations')
-			.where('user_id', '==', id)
-			.executeTakeFirst();
-
-		await db
-			.deleteFrom('usertagregistrations')
-			.where('id', 'in', registrationIDs)
-			.executeTakeFirst();
-
-		await db
-			.deleteFrom('user_properties')
-			.where('user_id', '==', id)
-			.executeTakeFirst();
-
-		await db
-			.deleteFrom('properties')
-			.where('id', 'in', propertyIDs)
-			.executeTakeFirst();
-
-		await db
-			.deleteFrom('sessions')
-			.where('user', '==', id)
-			.executeTakeFirst();
-
-		await db
-			.deleteFrom('user_owns_groups')
-			.where('user_id', '==', id)
-			.executeTakeFirst();
-
-		await db
-			.deleteFrom('users_belongs_groups')
-			.where('user_id', '==', id)
-			.executeTakeFirst();
-
-		await db
-			.deleteFrom('users_watches_groups')
-			.where('user_id', '==', id)
-			.executeTakeFirst();
-
-		await db
-			.deleteFrom('users_watches_pages')
-			.where('user_id', '==', id)
-			.executeTakeFirst();
-
-		await db
-			.deleteFrom('properties')
-			.where('user', '==', id)
-			.executeTakeFirst();
-
-		await db
-			.deleteFrom('user_pages')
-			.where('user_id', '==', id)
+			.deleteFrom('users')
+			.where('id', '==', id)
 			.executeTakeFirst();
 
 		return;

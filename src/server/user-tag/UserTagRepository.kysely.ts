@@ -21,7 +21,7 @@ export class UserTagRepository implements IUserTagRepository {
 		return tags;
 	}
 
-	public async findByID(id: string): Promise<EntityAsync<IUserTag>> {
+	public async findByID(id: string): Promise<EntityAsync<IUserTag> | undefined> {
 		const tags = await this.findByIDs(id);
 		const tag = tags[0];
 		return tag;
@@ -35,6 +35,14 @@ export class UserTagRepository implements IUserTagRepository {
 			name: userTag.name,
 			displayName: userTag.displayName,
 		};
+
+		await db
+			.insertInto('usertags')
+			.values(userTagPartial)
+			.onConflict(oc => oc
+				.column('id')
+				.doUpdateSet(userTagPartial))
+			.executeTakeFirst();
 
 		await db
 			.deleteFrom('usertaggrantabilities')
@@ -62,43 +70,10 @@ export class UserTagRepository implements IUserTagRepository {
 			return;
 		});
 
-		await db
-			.insertInto('usertags')
-			.values(userTagPartial)
-			.onConflict(oc => {
-				return oc
-					.column('id')
-					.doUpdateSet(userTagPartial)
-			})
-			.executeTakeFirst();
-
 		return;
 	}
 
 	public async deleteByID(id: string): Promise<void> {
-		const registrations = await db
-			.selectFrom('usertagregistrations')
-			.where('tag', '==', id)
-			.selectAll()
-			.execute();
-		const registrationIDs = registrations.map(registration => registration.id);
-
-		await db
-			.deleteFrom('user_usertagregistrations')
-			.where('registration_id', 'in', registrationIDs)
-			.executeTakeFirst();
-
-		await db
-			.deleteFrom('usertagregistrations')
-			.where('tag', '==', id)
-			.executeTakeFirst();
-
-		await db
-			.deleteFrom('usertaggrantabilities')
-			.where('tag', '==', id)
-			.orWhere('grantableByUserTag', '==', id)
-			.executeTakeFirst();
-
 		await db
 			.deleteFrom('usertags')
 			.where('id', 'in', id)

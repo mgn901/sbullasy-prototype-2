@@ -19,7 +19,7 @@ export class PageRepository implements IPageRepository {
 		return pages;
 	}
 
-	public async findByID(id: string): Promise<EntityAsync<IPage>> {
+	public async findByID(id: string): Promise<EntityAsync<IPage> | undefined> {
 		const pages = await this.findByIDs(id);
 		const page = pages[0];
 		return page;
@@ -32,12 +32,26 @@ export class PageRepository implements IPageRepository {
 		const createdByGroup = await page.createdByGroup;
 		const places = await page.places;
 		const tags = await page.tags;
+		const oldProperties = await db
+		.selectFrom('page_properties')
+		.where('page_id', '==', id)
+		.select('property_id')
+		.execute();
 		const properties = await page.properties;
 		const createdByUserID = createdByUser?.id;
 		const createdByGroupID = createdByGroup?.id;
 		const placeIDs = places.map(place => place.id);
 		const tagIDs = tags.map(tag => tag.id);
+		const oldPropertyIDs = oldProperties.map(oldProperty => oldProperty.property_id);
 		const propertyIDs = properties.map(property => property.id);
+
+		await db
+			.insertInto('pages')
+			.values(pagePartial)
+			.onConflict(oc => oc
+				.column('id')
+				.doUpdateSet(pagePartial))
+			.executeTakeFirst();
 
 		if (createdByUserID) {
 			const userPagesItem = {
@@ -114,6 +128,7 @@ export class PageRepository implements IPageRepository {
 			.executeTakeFirst();
 		await db
 			.deleteFrom('properties')
+			.where('id', 'in', oldPropertyIDs)
 			.where('id', 'not in', propertyIDs)
 			.executeTakeFirst();
 		properties.forEach(async (property) => {
@@ -149,43 +164,10 @@ export class PageRepository implements IPageRepository {
 			return;
 		});
 
-		await db
-			.insertInto('pages')
-			.values(pagePartial)
-			.onConflict(oc => oc
-				.column('id')
-				.doUpdateSet(pagePartial))
-			.executeTakeFirst();
-
 		return;
 	}
 
 	public async deleteByID(id: string): Promise<void> {
-		await db
-			.deleteFrom('user_pages')
-			.where('page_id', '==', id)
-			.executeTakeFirst();
-
-		await db
-			.deleteFrom('group_pages')
-			.where('page_id', '==', id)
-			.executeTakeFirst();
-
-		await db
-			.deleteFrom('pages_places')
-			.where('page_id', '==', id)
-			.executeTakeFirst();
-
-		await db
-			.deleteFrom('pages_tags')
-			.where('page_id', '==', id)
-			.executeTakeFirst();
-
-		await db
-			.deleteFrom('users_watches_pages')
-			.where('page_id', '==', id)
-			.executeTakeFirst();
-
 		await db
 			.deleteFrom('pages')
 			.where('id', '==', id)

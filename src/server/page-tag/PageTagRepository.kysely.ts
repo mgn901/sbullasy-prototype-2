@@ -21,7 +21,7 @@ export class PageTagRepository implements IPageTagRepository {
 		return tags;
 	}
 
-	public async findByID(id: string): Promise<EntityAsync<IPageTag>> {
+	public async findByID(id: string): Promise<EntityAsync<IPageTag> | undefined> {
 		const tags = await this.findByIDs(id);
 		const tag = tags[0];
 		return tag;
@@ -41,6 +41,11 @@ export class PageTagRepository implements IPageTagRepository {
 				.doUpdateSet(tagPartial))
 			.executeTakeFirst();
 
+		await db
+			.deleteFrom('pagetag_grantableby_usertags')
+			.where('pagetag_id', '==', id)
+			.where('usertag_id', 'not in', grantableByIDs)
+			.executeTakeFirst();
 		grantableByIDs.forEach(async (grantableByID) => {
 			const pageTagGrantableByUserTagsItem = {
 				usertag_id: grantableByID,
@@ -59,16 +64,6 @@ export class PageTagRepository implements IPageTagRepository {
 	}
 
 	public async deleteByID(id: string): Promise<void> {
-		await db
-			.deleteFrom('pages_tags')
-			.where('tag_id', '==', id)
-			.executeTakeFirst();
-
-		await db
-			.deleteFrom('pagetag_grantableby_usertags')
-			.where('pagetag_id', '==', id)
-			.executeTakeFirst();
-
 		await db
 			.deleteFrom('pagetags')
 			.where('id', '==', id)

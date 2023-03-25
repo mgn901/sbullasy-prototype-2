@@ -21,7 +21,7 @@ export class UndoChangeEmailRequestRepository implements IUndoChangeEmailRequest
 		return requests;
 	}
 
-	public async findByID(id: string): Promise<EntityAsync<IUndoChangeEmailRequest>> {
+	public async findByID(id: string): Promise<EntityAsync<IUndoChangeEmailRequest> | undefined> {
 		const requests = await this.findByIDs(id);
 		const request = requests[0];
 		return request;
@@ -38,11 +38,9 @@ export class UndoChangeEmailRequestRepository implements IUndoChangeEmailRequest
 		await db
 			.insertInto('undochangeemailrequests')
 			.values(requestPartial)
-			.onConflict(oc => {
-				return oc
-					.column('id')
-					.doUpdateSet(requestPartial)
-			})
+			.onConflict(oc => oc
+				.column('id')
+				.doUpdateSet(requestPartial))
 			.executeTakeFirst();
 		return;
 	}
@@ -50,7 +48,7 @@ export class UndoChangeEmailRequestRepository implements IUndoChangeEmailRequest
 	public async deleteByID(id: string): Promise<void> {
 		await db
 			.deleteFrom('undochangeemailrequests')
-			.where('id', 'in', id)
+			.where('id', '==', id)
 			.executeTakeFirst();
 		return;
 	}

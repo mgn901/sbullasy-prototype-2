@@ -16,7 +16,7 @@ export class LoginFailureRepository implements ILoginFailureRepository {
 		return loginFailures;
 	}
 
-	public async findByID(id: string): Promise<EntityAsync<ILoginFailure>> {
+	public async findByID(id: string): Promise<EntityAsync<ILoginFailure> | undefined> {
 		const loginFailures = await this.findByIDs(id);
 		const loginFailure = loginFailures[0];
 		return loginFailure;

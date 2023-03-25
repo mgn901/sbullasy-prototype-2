@@ -21,7 +21,7 @@ export class GroupTagRepository implements IGroupTagRepository {
 		return tags;
 	}
 
-	public async findByID(id: string): Promise<EntityAsync<IGroupTag>> {
+	public async findByID(id: string): Promise<EntityAsync<IGroupTag> | undefined> {
 		const tags = await this.findByIDs(id);
 		const tag = tags[0];
 		return tag;
@@ -41,6 +41,11 @@ export class GroupTagRepository implements IGroupTagRepository {
 				.doUpdateSet(tagPartial))
 			.executeTakeFirst();
 
+		await db
+			.deleteFrom('grouptag_grantableby_usertags')
+			.where('grouptag_id', '==', id)
+			.where('usertag_id', 'not in', grantableByIDs)
+			.executeTakeFirst();
 		grantableByIDs.forEach(async (grantableByID) => {
 			const groupTagGrantableByUserTagsItem = {
 				usertag_id: grantableByID,
@@ -59,16 +64,6 @@ export class GroupTagRepository implements IGroupTagRepository {
 	}
 
 	public async deleteByID(id: string): Promise<void> {
-		await db
-			.deleteFrom('groups_tags')
-			.where('tag_id', '==', id)
-			.executeTakeFirst();
-
-		await db
-			.deleteFrom('grouptag_grantableby_usertags')
-			.where('grouptag_id', '==', id)
-			.executeTakeFirst();
-
 		await db
 			.deleteFrom('grouptags')
 			.where('id', '==', id)

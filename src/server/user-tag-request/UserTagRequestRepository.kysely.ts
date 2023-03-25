@@ -21,13 +21,13 @@ export class UserTagRequestRepository implements IUserTagRequestRepository {
 		return requests;
 	}
 
-	public async findByID(id: string): Promise<EntityAsync<IUserTagRequest>> {
+	public async findByID(id: string): Promise<EntityAsync<IUserTagRequest> | undefined> {
 		const requests = await this.findByIDs(id);
 		const request = requests[0];
 		return request;
 	}
 
-	public async findByToken(token: string): Promise<EntityAsync<IUserTagRequest>> {
+	public async findByToken(token: string): Promise<EntityAsync<IUserTagRequest> | undefined> {
 		const requestsPartial = await db
 			.selectFrom('usertagrequests')
 			.where('token', '==', token)
@@ -69,11 +69,9 @@ export class UserTagRequestRepository implements IUserTagRequestRepository {
 		await db
 			.insertInto('usertagrequests')
 			.values(requestPartial)
-			.onConflict(oc => {
-				return oc
-					.column('id')
-					.doUpdateSet(requestPartial)
-			})
+			.onConflict(oc => oc
+				.column('id')
+				.doUpdateSet(requestPartial))
 			.executeTakeFirst();
 		return;
 	}
