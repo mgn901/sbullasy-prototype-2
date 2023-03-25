@@ -1,4 +1,6 @@
 import { Kysely } from 'kysely';
+import { APIToken } from '../api-token/APIToken.kysely';
+import { IAPIToken } from '../api-token/IAPIToken';
 import { Database } from '../Database';
 import { EntityAsync } from '../EntityAsync';
 import { Group } from '../group/Group.kysely';
@@ -36,6 +38,7 @@ export class User implements EntityAsync<IUser> {
 	private _watchesGroups?: Promise<EntityAsync<IGroup>[]>;
 	private _watchesPages?: Promise<EntityAsync<IPage>[]>;
 	private _pages?: Promise<EntityAsync<IPage>[]>;
+	private _apiTokens?: Promise<EntityAsync<IAPIToken>[]>;
 
 	public get tagRegistrations(): Promise<EntityAsync<IUserTagRegistration>[]> {
 		if (this._tagRegistrations) {
@@ -192,6 +195,25 @@ export class User implements EntityAsync<IUser> {
 				return page;
 			});
 			return pages;
+		})();
+		return promise;
+	}
+
+	public get apiTokens(): Promise<EntityAsync<IAPIToken>[]> {
+		if (this._apiTokens) {
+			return this._apiTokens;
+		}
+		const promise = (async () => {
+			const tokensPartial = await this.db
+				.selectFrom('apitokens')
+				.where('user', '==', this.id)
+				.selectAll()
+				.execute();
+			const tokens = tokensPartial.map((tokenPartial) => {
+				const token = new APIToken(tokenPartial, this.db);
+				return token;
+			});
+			return tokens;
 		})();
 		return promise;
 	}

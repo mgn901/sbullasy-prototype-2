@@ -37,6 +37,7 @@ export const userCreateInteractor = async (params: IUserCreateInteractorParams):
 		watchesGroups: [],
 		watchesPages: [],
 		pages: [],
+		apiTokens: [],
 	};
 	const session: ISession = {
 		id: sessionID,

@@ -1,3 +1,4 @@
+import { IAPIToken } from './api-token/IAPIToken';
 import { IGroupTag } from './group-tag/IGroupTag';
 import { IGroup } from './group/IGroup';
 import { ILoginFailure } from './login-failure/ILoginFailure';
@@ -25,6 +26,7 @@ export type Entity = IUser
 	| IGroupTag
 	| IPageTag
 	| IUserTagGrantability
+	| IAPIToken
 	| ISubject
 	| ISubjectCategory
 	| ITeacher

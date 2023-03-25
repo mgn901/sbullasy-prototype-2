@@ -1,3 +1,4 @@
+import { IAPIToken } from './api-token/IAPIToken';
 import { Entity } from './Entity';
 import { EntityWithoutEntityKey } from './EntityWithoutEntityKey';
 import { IGroupTag } from './group-tag/IGroupTag';
@@ -47,6 +48,7 @@ export interface Database {
 	grouptags: EntityWithoutEntityKey<IGroupTag>;
 	pagetags: EntityWithoutEntityKey<IPageTag>;
 	usertaggrantabilities: EntityWithoutEntityKey<IUserTagGrantability>;
+	apitokens: EntityWithoutEntityKey<IAPIToken>;
 	subjects: EntityWithoutEntityKey<ISubject>;
 	categories: EntityWithoutEntityKey<ISubjectCategory>;
 	teachers: EntityWithoutEntityKey<ITeacher>;

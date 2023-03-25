@@ -1,3 +1,4 @@
+import { IAPIToken } from '../api-token/IAPIToken';
 import { IGroup } from '../group/IGroup';
 import { IPage } from '../page/IPage';
 import { IProperty } from '../property/IProperty';
@@ -17,4 +18,5 @@ export interface IUser {
 	watchesGroups: IGroup[];
 	watchesPages: IPage[];
 	pages: IPage[];
+	apiTokens: IAPIToken[];
 }

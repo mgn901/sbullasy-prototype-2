@@ -1,3 +1,4 @@
+import { IAPIToken } from '../api-token/IAPIToken';
 import { EntityAsync } from '../EntityAsync';
 import { EntityWithoutEntityKey } from '../EntityWithoutEntityKey';
 import { db } from '../kysely/db';
@@ -56,6 +57,7 @@ export class UserRepository implements IUserRepository {
 		const watchesGroups = await user.watchesGroups;
 		const watchesPages = await user.watchesPages;
 		const pages = await user.pages;
+		const apiTokens = await user.apiTokens;
 		const oldPropertyIDs = oldProperties.map(oldProperty => oldProperty.property_id);
 		const propertyIDs = properties.map(property => property.id);
 		const registrationIDs = registrations.map(tag => tag.id);
@@ -65,6 +67,15 @@ export class UserRepository implements IUserRepository {
 		const watchesGroupIDs = watchesGroups.map(group => group.id);
 		const watchesPageIDs = watchesPages.map(page => page.id);
 		const pageIDs = pages.map(page => page.id);
+		const tokenIDs = apiTokens.map(token => token.id);
+
+		await db
+			.insertInto('users')
+			.values(userPartial)
+			.onConflict(oc => oc
+				.column('id')
+				.doUpdateSet(userPartial))
+			.executeTakeFirst();
 
 		await db
 			.deleteFrom('user_properties')
@@ -272,12 +283,25 @@ export class UserRepository implements IUserRepository {
 		});
 
 		await db
-			.insertInto('users')
-			.values(userPartial)
-			.onConflict(oc => oc
-				.column('id')
-				.doUpdateSet(userPartial))
+			.deleteFrom('apitokens')
+			.where('user', '==', id)
+			.where('id', 'not in', tokenIDs)
 			.executeTakeFirst();
+		apiTokens.forEach(async (token) => {
+			const user = await token.user;
+			const tokenPartial: EntityWithoutEntityKey<IAPIToken> = {
+				id: token.id,
+				createdAt: token.createdAt,
+				token: token.token,
+				permission: token.permission,
+				user: user.id,
+			};
+			await db
+				.insertInto('apitokens')
+				.values(tokenPartial)
+				.executeTakeFirst();
+			return;
+		});
 
 		return;
 	}
