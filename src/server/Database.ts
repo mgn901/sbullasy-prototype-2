@@ -10,9 +10,11 @@ import { IPlace } from './place/IPlace';
 import { IProperty } from './property/IProperty';
 import { IResetPasswordRequest } from './reset-password-request/IResetPasswordRequest';
 import { ISession } from './session/ISession';
-import { ISubjectCategory } from './subject-categories/ISubjectCategory';
-import { ISubject } from './subjects/ISubject';
-import { ITeacher } from './teachers/ITeacher';
+import { ISubjectCategory } from './subject-category/ISubjectCategory';
+import { ISubjectSemester } from './subject-semester/ISubjectSemester';
+import { ISubjectWeek } from './subject-week/ISubjectWeek';
+import { ISubject } from './subject/ISubject';
+import { ITeacher } from './teacher/ITeacher';
 import { IUndoChangeEmailRequest } from './undo-change-email-request/IUndoChangeEmailRequest';
 import { IUserTagRequest } from './user-tag-request/IUserTagRequest';
 import { IUserTag } from './user-tag/IUserTag';
@@ -51,6 +53,8 @@ export interface Database {
 	apitokens: EntityWithoutEntityKey<IAPIToken>;
 	subjects: EntityWithoutEntityKey<ISubject>;
 	categories: EntityWithoutEntityKey<ISubjectCategory>;
+	subjectsemesters: EntityWithoutEntityKey<ISubjectSemester>;
+	subjectweeks: EntityWithoutEntityKey<ISubjectWeek>;
 	teachers: EntityWithoutEntityKey<ITeacher>;
 	places: EntityWithoutEntityKey<IPlace>;
 	properties: EntityWithoutEntityKey<IProperty>;
@@ -76,6 +80,8 @@ export interface Database {
 	pagetag_grantableby_usertags: Junction<IPageTag, IPageTag['grantableBy'], 'pagetag_id', 'usertag_id'>;
 	subjects_places: Junction<ISubject, ISubject['places'], 'subject_id', 'place_id'>;
 	subjects_categories: Junction<ISubject, ISubject['categories'], 'subject_id', 'category_id'>;
+	subjects_semesters: Junction<ISubject, ISubject['semesters'], 'subject_id', 'semester_id'>;
+	subjects_weeks: Junction<ISubject, ISubject['weeks'], 'subject_id', 'week_id'>;
 	subjects_teachers: Junction<ISubject, ISubject['teachers'], 'subject_id', 'teacher_id'>;
 	subjects_properties: Junction<ISubject, ISubject['properties'], 'subject_id', 'property_id'>;
 }

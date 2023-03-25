@@ -5,6 +5,8 @@ import { IPlace } from '../place/IPlace';
 import { IProperty } from '../property/IProperty';
 import { Property } from '../property/Property.kysely';
 import { ISubjectCategory } from '../subject-category/ISubjectCategory';
+import { ISubjectSemester } from '../subject-semester/ISubjectSemester';
+import { ISubjectWeek } from '../subject-week/ISubjectWeek';
 import { ITeacher } from '../teacher/ITeacher';
 import { ISubject } from './ISubject';
 
@@ -16,27 +18,25 @@ export class Subject implements EntityAsync<ISubject> {
 		this.code = subject.code;
 		this.name = subject.name;
 		this.nameRuby = subject.nameRuby;
-		this.class = subject.class;
+		this.classes = subject.classes;
 		this.updatedAt = subject.updatedAt;
-		this.grade = subject.grade;
-		this.semester = subject.semester;
-		this.week = subject.week;
+		this.grades = subject.grades;
 		this.units = subject.units;
 	}
 
 	private readonly db: Kysely<Database>;
 	public readonly id: string;
-	public code: string;
+	public code?: string;
 	public name: string;
-	public nameRuby: string;
-	public class: string[];
+	public nameRuby?: string;
+	public classes: string[];
 	public updatedAt: number;
-	public grade: number[];
-	public semester: string[];
-	public week: string[];
-	public units: number;
+	public grades: number[];
+	public units?: number;
 	private _teachers?: Promise<EntityAsync<ITeacher>[]>;
 	private _categories?: Promise<EntityAsync<ISubjectCategory>[]>;
+	private _semesters?: Promise<EntityAsync<ISubjectSemester>[]>;
+	private _weeks?: Promise<EntityAsync<ISubjectWeek>[]>;
 	private _places?: Promise<EntityAsync<IPlace>[]>;
 	private _properties?: Promise<EntityAsync<IProperty>[]>;
 
@@ -68,6 +68,38 @@ export class Subject implements EntityAsync<ISubject> {
 				.selectAll()
 				.execute();
 			return categories;
+		})();
+		return promise;
+	}
+
+	public get semesters(): Promise<EntityAsync<ISubjectSemester>[]> {
+		if (this._semesters) {
+			return this._semesters;
+		}
+		const promise = (async () => {
+			const semesters = await this.db
+				.selectFrom('subjects_semesters')
+				.where('subject_id', '==', this.id)
+				.innerJoin('subjectsemesters', 'subjectsemesters.id', 'subjects_semesters.semester_id')
+				.selectAll()
+				.execute();
+			return semesters;
+		})();
+		return promise;
+	}
+
+	public get weeks(): Promise<EntityAsync<ISubjectWeek>[]> {
+		if (this._weeks) {
+			return this._weeks;
+		}
+		const promise = (async () => {
+			const weeks = await this.db
+				.selectFrom('subjects_weeks')
+				.where('subject_id', '==', this.id)
+				.innerJoin('subjectweeks', 'subjectweeks.id', 'subjects_weeks.week_id')
+				.selectAll()
+				.execute();
+			return weeks;
 		})();
 		return promise;
 	}
@@ -114,6 +146,14 @@ export class Subject implements EntityAsync<ISubject> {
 
 	public set categories(categories) {
 		this._categories = categories;
+	}
+
+	public set semesters(semesters) {
+		this._semesters = semesters;
+	}
+
+	public set weeks(weeks) {
+		this._weeks = weeks;
 	}
 
 	public set places(places) {

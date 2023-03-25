@@ -1,21 +1,23 @@
 import { IPlace } from '../place/IPlace';
 import { IProperty } from '../property/IProperty';
 import { ISubjectCategory } from '../subject-category/ISubjectCategory';
+import { ISubjectSemester } from '../subject-semester/ISubjectSemester';
+import { ISubjectWeek } from '../subject-week/ISubjectWeek';
 import { ITeacher } from '../teacher/ITeacher';
 
 export interface ISubject {
 	readonly id: string;
-	code: string;
+	code?: string;
 	name: string;
-	nameRuby: string;
+	nameRuby?: string;
 	teachers: ITeacher[];
 	categories: ISubjectCategory[];
-	class: string[];
+	classes: string[];
 	updatedAt: number;
-	grade: number[];
-	semester: string[];
-	week: string[];
+	grades: number[];
+	semesters: ISubjectSemester[];
+	weeks: ISubjectWeek[];
 	places: IPlace[];
-	units: number;
+	units?: number;
 	properties: IProperty[];
 }

@@ -42,6 +42,8 @@ export class SubjectRepository implements ISubjectRepository {
 	public async save(subject: ISubject | EntityAsync<ISubject>): Promise<void> {
 		const teachers = await subject.teachers;
 		const categories = await subject.categories;
+		const semesters = await subject.semesters;
+		const weeks = await subject.weeks;
 		const places = await subject.places;
 		const properties = await subject.properties;
 		const oldProperties = await db
@@ -51,6 +53,8 @@ export class SubjectRepository implements ISubjectRepository {
 			.execute();
 		const teacherIDs = teachers.map(teacher => teacher.id);
 		const categoryIDs = categories.map(category => category.id);
+		const semesterIDs = semesters.map(semester => semester.id);
+		const weekIDs = weeks.map(week => week.id);
 		const placeIDs = places.map(place => place.id);
 		const propertyIDs = properties.map(property => property.id);
 		const oldPropertyIDs = oldProperties.map(oldProperty => oldProperty.property_id);
@@ -59,10 +63,8 @@ export class SubjectRepository implements ISubjectRepository {
 			code: subject.code,
 			name: subject.name,
 			nameRuby: subject.nameRuby,
-			class: subject.class,
-			grade: subject.grade,
-			semester: subject.semester,
-			week: subject.week,
+			classes: subject.classes,
+			grades: subject.grades,
 			units: subject.units,
 			updatedAt: subject.updatedAt,
 		};
@@ -106,6 +108,46 @@ export class SubjectRepository implements ISubjectRepository {
 				.executeTakeFirst();
 			return;
 		});
+
+		await db
+			.deleteFrom('subjects_semesters')
+			.where('subject_id', '==', subject.id)
+			.where('semester_id', 'not in', semesterIDs)
+			.executeTakeFirst();
+		semesterIDs.forEach(async (semesterID) => {
+			const subjectsSemestersItem = {
+				subject_id: subject.id,
+				semester_id: semesterID,
+			};
+			await db
+				.insertInto('subjects_semesters')
+				.values(subjectsSemestersItem)
+				.onConflict(oc => oc
+					.columns(['subject_id', 'semester_id'])
+					.doNothing())
+				.executeTakeFirst();
+			return;
+		});
+
+		await db
+			.deleteFrom('subjects_weeks')
+			.where('subject_id', '==', subject.id)
+			.where('week_id', 'not in', weekIDs)
+			.executeTakeFirst();
+		weekIDs.forEach(async (weekID) => {
+			const semestersWeeksItem = {
+				subject_id: subject.id,
+				week_id: weekID,
+			};
+			await db
+				.insertInto('subjects_weeks')
+				.values(semestersWeeksItem)
+				.onConflict(oc => oc
+					.columns(['subject_id', 'week_id'])
+					.doNothing())
+				.executeTakeFirst();
+			return;
+		})
 
 		await db
 			.deleteFrom('subjects_places')

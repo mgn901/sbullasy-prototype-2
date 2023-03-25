@@ -8,9 +8,11 @@ import { IPlace } from './place/IPlace';
 import { IProperty } from './property/IProperty';
 import { IResetPasswordRequest } from './reset-password-request/IResetPasswordRequest';
 import { ISession } from './session/ISession';
-import { ISubjectCategory } from './subject-categories/ISubjectCategory';
-import { ISubject } from './subjects/ISubject';
-import { ITeacher } from './teachers/ITeacher';
+import { ISubjectCategory } from './subject-category/ISubjectCategory';
+import { ISubjectSemester } from './subject-semester/ISubjectSemester';
+import { ISubjectWeek } from './subject-week/ISubjectWeek';
+import { ISubject } from './subject/ISubject';
+import { ITeacher } from './teacher/ITeacher';
 import { IUndoChangeEmailRequest } from './undo-change-email-request/IUndoChangeEmailRequest';
 import { IUserTagRequest } from './user-tag-request/IUserTagRequest';
 import { IUserTag } from './user-tag/IUserTag';
@@ -29,6 +31,8 @@ export type Entity = IUser
 	| IAPIToken
 	| ISubject
 	| ISubjectCategory
+	| ISubjectSemester
+	| ISubjectWeek
 	| ITeacher
 	| IPlace
 	| IProperty
