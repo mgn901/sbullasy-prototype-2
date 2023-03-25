@@ -1,6 +1,6 @@
-import { ICategory } from '../categories/ICategory';
 import { IPlace } from '../place/IPlace';
 import { IProperty } from '../property/IProperty';
+import { ISubjectCategory } from '../subject-categories/ISubjectCategory';
 import { ITeacher } from '../teachers/ITeacher';
 
 export interface ISubject {
@@ -9,7 +9,7 @@ export interface ISubject {
 	name: string;
 	nameRuby: string;
 	teachers: ITeacher[];
-	categories: ICategory[];
+	categories: ISubjectCategory[];
 	class: string[];
 	updatedAt: number;
 	grade: number[];

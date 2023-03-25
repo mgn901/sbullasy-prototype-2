@@ -1,4 +1,3 @@
-import { ICategory } from './categories/ICategory';
 import { Entity } from './Entity';
 import { EntityWithoutEntityKey } from './EntityWithoutEntityKey';
 import { IGroupTag } from './group-tag/IGroupTag';
@@ -10,6 +9,7 @@ import { IPlace } from './place/IPlace';
 import { IProperty } from './property/IProperty';
 import { IResetPasswordRequest } from './reset-password-request/IResetPasswordRequest';
 import { ISession } from './session/ISession';
+import { ISubjectCategory } from './subject-categories/ISubjectCategory';
 import { ISubject } from './subjects/ISubject';
 import { ITeacher } from './teachers/ITeacher';
 import { IUndoChangeEmailRequest } from './undo-change-email-request/IUndoChangeEmailRequest';
@@ -48,7 +48,7 @@ export interface Database {
 	pagetags: EntityWithoutEntityKey<IPageTag>;
 	usertaggrantabilities: EntityWithoutEntityKey<IUserTagGrantability>;
 	subjects: EntityWithoutEntityKey<ISubject>;
-	categories: EntityWithoutEntityKey<ICategory>;
+	categories: EntityWithoutEntityKey<ISubjectCategory>;
 	teachers: EntityWithoutEntityKey<ITeacher>;
 	places: EntityWithoutEntityKey<IPlace>;
 	properties: EntityWithoutEntityKey<IProperty>;

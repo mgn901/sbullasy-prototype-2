@@ -1,10 +1,10 @@
 import { Kysely } from 'kysely';
-import { ICategory } from '../categories/ICategory';
 import { Database } from '../Database';
 import { EntityAsync } from '../EntityAsync';
 import { IPlace } from '../place/IPlace';
 import { IProperty } from '../property/IProperty';
 import { Property } from '../property/Property.kysely';
+import { ISubjectCategory } from '../subject-categories/ISubjectCategory';
 import { ITeacher } from '../teachers/ITeacher';
 import { ISubject } from './ISubject';
 
@@ -36,7 +36,7 @@ export class Subject implements EntityAsync<ISubject> {
 	public week: string[];
 	public units: number;
 	private _teachers?: Promise<EntityAsync<ITeacher>[]>;
-	private _categories?: Promise<EntityAsync<ICategory>[]>;
+	private _categories?: Promise<EntityAsync<ISubjectCategory>[]>;
 	private _places?: Promise<EntityAsync<IPlace>[]>;
 	private _properties?: Promise<EntityAsync<IProperty>[]>;
 
@@ -56,7 +56,7 @@ export class Subject implements EntityAsync<ISubject> {
 		return promise;
 	}
 
-	public get categories(): Promise<EntityAsync<ICategory>[]> {
+	public get categories(): Promise<EntityAsync<ISubjectCategory>[]> {
 		if (this._categories) {
 			return this._categories;
 		}

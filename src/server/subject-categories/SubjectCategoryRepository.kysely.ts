@@ -1,17 +1,17 @@
 import { EntityAsync } from '../EntityAsync';
 import { db } from '../kysely/db';
-import { ICategory } from './ICategory';
-import { ICategoryRepository } from './ICategoryRepository';
+import { ISubjectCategory } from './ISubjectCategory';
+import { ISubjectCategoryRepository } from './ISubjectCategoryRepository';
 
-export class CategoryRepository implements ICategoryRepository {
+export class SubjectCategoryRepository implements ISubjectCategoryRepository {
 
-	public async findByID(id: string): Promise<EntityAsync<ICategory> | undefined> {
+	public async findByID(id: string): Promise<EntityAsync<ISubjectCategory> | undefined> {
 		const subjects = await this.findByIDs(id);
 		const subject = subjects[0];
 		return subject;
 	}
 
-	public async findByIDs(...ids: string[]): Promise<EntityAsync<ICategory>[]> {
+	public async findByIDs(...ids: string[]): Promise<EntityAsync<ISubjectCategory>[]> {
 		const category = await db
 			.selectFrom('categories')
 			.where('id', 'in', ids)
@@ -20,7 +20,7 @@ export class CategoryRepository implements ICategoryRepository {
 		return category;
 	}
 
-	public async save(item: ICategory | EntityAsync<ICategory>): Promise<void> {
+	public async save(item: ISubjectCategory | EntityAsync<ISubjectCategory>): Promise<void> {
 		await db
 			.insertInto('categories')
 			.values(item)
