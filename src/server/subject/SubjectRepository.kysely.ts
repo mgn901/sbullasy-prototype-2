@@ -1,7 +1,7 @@
 import { EntityAsync } from '../EntityAsync';
 import { EntityWithoutEntityKey } from '../EntityWithoutEntityKey';
 import { db } from '../kysely/db';
-import { IProperty } from '../property/IProperty';
+import { TProperty } from '../property/TProperty';
 import { ISubject } from './ISubject';
 import { ISubjectRepository } from './ISubjectRepository';
 import { Subject } from './Subject.kysely';
@@ -180,16 +180,12 @@ export class SubjectRepository implements ISubjectRepository {
 			.where('id', 'not in', propertyIDs)
 			.executeTakeFirst();
 		properties.map(async (property) => {
-			const user = await property.user;
-			const group = await property.group;
-			const page = await property.page;
-			const propertyPartial: EntityWithoutEntityKey<IProperty> = {
+			const value = await property.value;
+			const propertyPartial: EntityWithoutEntityKey<TProperty> = {
 				id: property.id,
 				key: property.key,
-				value: property.value,
-				user: user?.id,
-				group: group?.id,
-				page: page?.id,
+				type: property.type,
+				value: typeof value === 'string' ? value : value?.id,
 			};
 			const subjectsPropertiesItem = {
 				subject_id: subject.id,

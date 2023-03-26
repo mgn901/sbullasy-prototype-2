@@ -1,5 +1,5 @@
 import { IPlace } from '../place/IPlace';
-import { IProperty } from '../property/IProperty';
+import { TProperty } from '../property/TProperty';
 import { ISubjectCategory } from '../subject-category/ISubjectCategory';
 import { ISubjectSemester } from '../subject-semester/ISubjectSemester';
 import { ISubjectWeek } from '../subject-week/ISubjectWeek';
@@ -19,5 +19,5 @@ export interface ISubject {
 	weeks: ISubjectWeek[];
 	places: IPlace[];
 	units?: number;
-	properties: IProperty[];
+	properties: TProperty[];
 }

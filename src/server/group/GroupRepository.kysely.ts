@@ -95,16 +95,12 @@ export class GroupRepository implements IGroupRepository {
 			.where('id', 'not in', propertyIDs)
 			.executeTakeFirst();
 		properties.forEach(async (property) => {
-			const user = await property.user;
-			const group = await property.group;
-			const page = await property.page;
+			const value = await property.value;
 			const propertyPartial = {
 				id: property.id,
 				key: property.key,
-				value: property.value,
-				user: user?.id,
-				group: group?.id,
-				page: page?.id,
+				type: property.type,
+				value: typeof value === 'string' ? value : value?.id,
 			};
 			const groupPropertiesItem = {
 				group_id: id,

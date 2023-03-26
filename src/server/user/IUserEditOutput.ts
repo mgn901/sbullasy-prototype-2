@@ -1,5 +1,5 @@
 import { EntityWithoutEntityKey } from '../EntityWithoutEntityKey';
-import { IProperty } from '../property/IProperty';
+import { TProperty } from '../property/TProperty';
 import { IUser } from './IUser';
 import { TUserTagWithExpiresAt } from './TUserTagWithExpiresAt';
 
@@ -8,5 +8,5 @@ export interface IUserEditOutput {
 	email: IUser['email'];
 	displayName: IUser['displayName'];
 	tags: TUserTagWithExpiresAt[];
-	properties: EntityWithoutEntityKey<IProperty>[];
+	properties: EntityWithoutEntityKey<TProperty>[];
 }

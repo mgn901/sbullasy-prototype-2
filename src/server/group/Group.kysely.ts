@@ -3,10 +3,10 @@ import { Database } from '../Database';
 import { EntityAsync } from '../EntityAsync';
 import { GroupTag } from '../group-tag/GroupTag.kysely';
 import { IGroupTag } from '../group-tag/IGroupTag';
+import { createProperty } from '../kysely/createProperty.kysely';
 import { IPage } from '../page/IPage';
 import { Page } from '../page/Page.kysely';
-import { IProperty } from '../property/IProperty';
-import { Property } from '../property/Property.kysely';
+import { TProperty } from '../property/TProperty';
 import { IUser } from '../user/IUser';
 import { User } from '../user/User.kysely';
 import { IGroup } from './IGroup';
@@ -29,7 +29,7 @@ export class Group implements EntityAsync<IGroup> {
 	public updatedAt: number;
 	public invitationToken: string;
 	private _tags?: Promise<EntityAsync<IGroupTag>[]>;
-	private _properties?: Promise<EntityAsync<IProperty>[]>;
+	private _properties?: Promise<EntityAsync<TProperty>[]>;
 	private _owner?: Promise<EntityAsync<IUser>>;
 	private _members?: Promise<EntityAsync<IUser>[]>;
 	private _pages?: Promise<EntityAsync<IPage>[]>;
@@ -54,7 +54,7 @@ export class Group implements EntityAsync<IGroup> {
 		return promise;
 	}
 
-	public get properties(): Promise<EntityAsync<IProperty<string, string>>[]> {
+	public get properties(): Promise<EntityAsync<TProperty>[]> {
 		if (this._properties) {
 			return this._properties;
 		}
@@ -66,7 +66,7 @@ export class Group implements EntityAsync<IGroup> {
 				.selectAll()
 				.execute();
 			const properties = propertiesPartial.map((propertyPartial) => {
-				const property = new Property(propertyPartial, this.db);
+				const property = createProperty(propertyPartial, this.db);
 				return property;
 			});
 			return properties;

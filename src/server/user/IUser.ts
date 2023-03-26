@@ -1,7 +1,7 @@
 import { IAPIToken } from '../api-token/IAPIToken';
 import { IGroup } from '../group/IGroup';
 import { IPage } from '../page/IPage';
-import { IProperty } from '../property/IProperty';
+import { TProperty } from '../property/TProperty';
 import { ISession } from '../session/ISession';
 import { IUserTagRegistration } from './IUserTagRegistration';
 
@@ -11,7 +11,7 @@ export interface IUser {
 	password: string;
 	displayName: string;
 	tagRegistrations: IUserTagRegistration[];
-	properties: IProperty[];
+	properties: TProperty[];
 	sessions: ISession[];
 	owns: IGroup[];
 	belongs: IGroup[];

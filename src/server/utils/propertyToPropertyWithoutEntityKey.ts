@@ -1,21 +1,14 @@
 import { EntityAsync } from '../EntityAsync';
 import { EntityWithoutEntityKey } from '../EntityWithoutEntityKey';
-import { IProperty } from '../property/IProperty';
+import { TProperty } from '../property/TProperty';
 
-export const propertyToPropertyWithoutEntityKey = async (property: EntityAsync<IProperty>): Promise<EntityWithoutEntityKey<IProperty>> => {
-	const user = await property.user;
-	const group = await property.group;
-	const page = await property.page;
-	const userID = user?.id;
-	const groupID = group?.id;
-	const pageID = page?.id;
+export const propertyToPropertyWithoutEntityKey = async (property: EntityAsync<TProperty>): Promise<EntityWithoutEntityKey<TProperty>> => {
+	const value = await property.value;
 	const propertyForOutput = {
 		id: property.id,
 		key: property.key,
-		value: property.value,
-		user: userID,
-		group: groupID,
-		page: pageID,
+		type: property.type,
+		value: typeof value === 'string' ? value : value?.id,
 	};
 	return propertyForOutput;
 }

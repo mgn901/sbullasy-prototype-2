@@ -5,7 +5,10 @@ import { ILoginFailure } from './login-failure/ILoginFailure';
 import { IPageTag } from './page-tag/IPageTag';
 import { IPage } from './page/IPage';
 import { IPlace } from './place/IPlace';
-import { IProperty } from './property/IProperty';
+import { IPropertyPlain } from './property/IPropertyPlain';
+import { IPropertyWithGroup } from './property/IPropertyWithGroup';
+import { IPropertyWithPage } from './property/IPropertyWithPage';
+import { IPropertyWithUser } from './property/IPropertyWithUser';
 import { IResetPasswordRequest } from './reset-password-request/IResetPasswordRequest';
 import { ISession } from './session/ISession';
 import { ISubjectCategory } from './subject-category/ISubjectCategory';
@@ -35,7 +38,10 @@ export type Entity = IUser
 	| ISubjectWeek
 	| ITeacher
 	| IPlace
-	| IProperty
+	| IPropertyPlain
+	| IPropertyWithUser
+	| IPropertyWithGroup
+	| IPropertyWithPage
 	| ISession
 	| IUserTagRequest
 	| IUndoChangeEmailRequest

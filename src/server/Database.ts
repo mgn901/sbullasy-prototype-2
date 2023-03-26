@@ -7,7 +7,7 @@ import { ILoginFailure } from './login-failure/ILoginFailure';
 import { IPageTag } from './page-tag/IPageTag';
 import { IPage } from './page/IPage';
 import { IPlace } from './place/IPlace';
-import { IProperty } from './property/IProperty';
+import { TProperty } from './property/TProperty';
 import { IResetPasswordRequest } from './reset-password-request/IResetPasswordRequest';
 import { ISession } from './session/ISession';
 import { ISubjectCategory } from './subject-category/ISubjectCategory';
@@ -57,7 +57,7 @@ export interface Database {
 	subjectweeks: EntityWithoutEntityKey<ISubjectWeek>;
 	teachers: EntityWithoutEntityKey<ITeacher>;
 	places: EntityWithoutEntityKey<IPlace>;
-	properties: EntityWithoutEntityKey<IProperty>;
+	properties: EntityWithoutEntityKey<TProperty>;
 	sessions: EntityWithoutEntityKey<ISession>;
 	usertagrequests: EntityWithoutEntityKey<IUserTagRequest>;
 	undochangeemailrequests: EntityWithoutEntityKey<IUndoChangeEmailRequest>;
@@ -75,7 +75,7 @@ export interface Database {
 	group_pages: Junction<IPage['createdByGroup'], IGroup['pages'], 'group_id', 'page_id'>;
 	pages_places: Junction<IPage, IPage['places'], 'page_id', 'place_id'>;
 	pages_tags: Junction<IPage, IPage['tags'], 'page_id', 'tag_id'>;
-	page_properties: Junction<IPage, IProperty['page'], 'page_id', 'property_id'>;
+	page_properties: Junction<IPage, IPage['properties'], 'page_id', 'property_id'>;
 	grouptag_grantableby_usertags: Junction<IGroupTag, IGroupTag['grantableBy'], 'grouptag_id', 'usertag_id'>;
 	pagetag_grantableby_usertags: Junction<IPageTag, IPageTag['grantableBy'], 'pagetag_id', 'usertag_id'>;
 	subjects_places: Junction<ISubject, ISubject['places'], 'subject_id', 'place_id'>;

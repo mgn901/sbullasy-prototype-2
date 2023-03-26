@@ -8,6 +8,6 @@ export type EntityAsync<Interface extends Entity> = {
 	: Interface[K] extends Entity[]
 	? PromiseOptional<EntityAsync<Interface[K][number]>[]>
 	: Required<Interface>[K] extends Entity
-	? PromiseOptional<EntityAsync<Required<Interface>[K]>>
+	? PromiseOptional<EntityAsync<Required<Interface>[K]> | undefined>
 	: Interface[K];
 }

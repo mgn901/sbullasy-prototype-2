@@ -1,6 +1,6 @@
 import { IGroupTag } from '../group-tag/IGroupTag';
 import { IPage } from '../page/IPage';
-import { IProperty } from '../property/IProperty';
+import { TProperty } from '../property/TProperty';
 import { IUser } from '../user/IUser';
 
 export interface IGroup {
@@ -10,7 +10,7 @@ export interface IGroup {
 	updatedAt: number;
 	invitationToken: string;
 	tags: IGroupTag[];
-	properties: IProperty[];
+	properties: TProperty[];
 	owner: IUser;
 	members: IUser[];
 	pages: IPage[];

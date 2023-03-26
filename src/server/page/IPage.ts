@@ -1,7 +1,7 @@
 import { IGroup } from '../group/IGroup';
 import { IPageTag } from '../page-tag/IPageTag';
 import { IPlace } from '../place/IPlace';
-import { IProperty } from '../property/IProperty';
+import { TProperty } from '../property/TProperty';
 import { IUser } from '../user/IUser';
 
 export interface IPage {
@@ -17,5 +17,5 @@ export interface IPage {
 	endsAt?: number;
 	places: IPlace[];
 	tags: IPageTag[];
-	properties: IProperty[];
+	properties: TProperty[];
 }

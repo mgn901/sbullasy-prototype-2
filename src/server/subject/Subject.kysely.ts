@@ -1,9 +1,9 @@
 import { Kysely } from 'kysely';
 import { Database } from '../Database';
 import { EntityAsync } from '../EntityAsync';
+import { createProperty } from '../kysely/createProperty.kysely';
 import { IPlace } from '../place/IPlace';
-import { IProperty } from '../property/IProperty';
-import { Property } from '../property/Property.kysely';
+import { TProperty } from '../property/TProperty';
 import { ISubjectCategory } from '../subject-category/ISubjectCategory';
 import { ISubjectSemester } from '../subject-semester/ISubjectSemester';
 import { ISubjectWeek } from '../subject-week/ISubjectWeek';
@@ -38,7 +38,7 @@ export class Subject implements EntityAsync<ISubject> {
 	private _semesters?: Promise<EntityAsync<ISubjectSemester>[]>;
 	private _weeks?: Promise<EntityAsync<ISubjectWeek>[]>;
 	private _places?: Promise<EntityAsync<IPlace>[]>;
-	private _properties?: Promise<EntityAsync<IProperty>[]>;
+	private _properties?: Promise<EntityAsync<TProperty>[]>;
 
 	public get teachers(): Promise<EntityAsync<ITeacher>[]> {
 		if (this._teachers) {
@@ -120,7 +120,7 @@ export class Subject implements EntityAsync<ISubject> {
 		return promise;
 	}
 
-	public get properties(): Promise<EntityAsync<IProperty<string, string>>[]> {
+	public get properties(): Promise<EntityAsync<TProperty>[]> {
 		if (this._properties) {
 			return this._properties;
 		}
@@ -132,7 +132,7 @@ export class Subject implements EntityAsync<ISubject> {
 				.selectAll()
 				.execute();
 			const properties = propertiesPartial.map((propertyPartial) => {
-				const property = new Property(propertyPartial, this.db);
+				const property = createProperty(propertyPartial, this.db);
 				return property;
 			});
 			return properties;
