@@ -39,7 +39,7 @@ export class Page implements EntityAsync<IPage> {
 	private _tags?: Promise<EntityAsync<IPageTag>[]>;
 	private _properties?: Promise<EntityAsync<TProperty>[]>;
 
-	public get createdByUser(): Promise<EntityAsync<IUser>> | undefined {
+	public get createdByUser(): Promise<EntityAsync<IUser> | undefined> | undefined {
 		const promise = (async () => {
 			const usersPartial = await this.db
 				.selectFrom('user_pages')
@@ -48,13 +48,16 @@ export class Page implements EntityAsync<IPage> {
 				.selectAll()
 				.execute();
 			const userPartial = usersPartial[0];
+			if (!userPartial) {
+				return undefined;
+			}
 			const user = new User(userPartial, this.db);
 			return user;
 		})();
 		return promise;
 	}
 
-	public get createdByGroup(): Promise<EntityAsync<IGroup>> | undefined {
+	public get createdByGroup(): Promise<EntityAsync<IGroup> | undefined> | undefined {
 		const promise = (async () => {
 			const groupsPartial = await this.db
 				.selectFrom('group_pages')
@@ -63,6 +66,9 @@ export class Page implements EntityAsync<IPage> {
 				.selectAll()
 				.execute();
 			const groupPartial = groupsPartial[0];
+			if (!groupPartial) {
+				return undefined;
+			}
 			const group = new Group(groupPartial, this.db);
 			return group;
 		})();
