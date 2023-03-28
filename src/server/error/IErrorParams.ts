@@ -1,4 +1,4 @@
 export interface IErrorParams {
-	message?: string;
-	originalError?: Error;
+	readonly message?: string;
+	readonly originalError?: Error;
 }

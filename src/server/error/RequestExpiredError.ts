@@ -1,5 +1,5 @@
 import { SbullasyError } from './SbullasyError';
 
 export class RequestExpiredError extends SbullasyError {
-	public name = 'RequestExpiredError';
+	public readonly name = 'RequestExpiredError';
 }
