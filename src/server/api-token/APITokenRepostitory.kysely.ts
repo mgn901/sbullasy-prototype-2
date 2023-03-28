@@ -19,6 +19,7 @@ export class APITokenRepostitory implements IAPITokenRepository {
 		const tokensPartial = await db
 			.selectFrom('apitokens')
 			.where('id', 'in', ids)
+			.where('user', 'is not', null)
 			.selectAll()
 			.execute();
 		const tokens = tokensPartial.map((tokenPartial) => {

@@ -42,6 +42,7 @@ export class Group implements EntityAsync<IGroup> {
 			const tagsPartial = await this.db
 				.selectFrom('groups_tags')
 				.where('group_id', '==', this.id)
+				.where('tag_id', 'is not', null)
 				.innerJoin('grouptags', 'grouptags.id', 'groups_tags.tag_id')
 				.selectAll()
 				.execute();
@@ -62,6 +63,7 @@ export class Group implements EntityAsync<IGroup> {
 			const propertiesPartial = await this.db
 				.selectFrom('group_properties')
 				.where('group_id', '==', this.id)
+				.where('property_id', 'is not', null)
 				.innerJoin('properties', 'properties.id', 'group_properties.property_id')
 				.selectAll()
 				.execute();
@@ -82,6 +84,7 @@ export class Group implements EntityAsync<IGroup> {
 			const usersPartial = await
 				this.db.selectFrom('user_owns_groups')
 					.where('group_id', '==', this.id)
+					.where('user_id', 'is not', null)
 					.innerJoin('users', 'users.id', 'user_owns_groups.user_id')
 					.selectAll()
 					.execute();
@@ -100,6 +103,7 @@ export class Group implements EntityAsync<IGroup> {
 			const usersPartial = await
 				this.db.selectFrom('users_belongs_groups')
 					.where('group_id', '==', this.id)
+					.where('user_id', 'is not', null)
 					.innerJoin('users', 'users.id', 'users_belongs_groups.user_id')
 					.selectAll()
 					.execute();
@@ -120,6 +124,7 @@ export class Group implements EntityAsync<IGroup> {
 			const pagesPartial = await this.db
 				.selectFrom('group_pages')
 				.where('group_id', '==', this.id)
+				.where('page_id', 'is not', null)
 				.innerJoin('pages', 'pages.id', 'group_pages.page_id')
 				.selectAll()
 				.execute();

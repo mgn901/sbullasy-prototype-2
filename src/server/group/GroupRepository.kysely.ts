@@ -35,6 +35,7 @@ export class GroupRepository implements IGroupRepository {
 		const oldProperties = await db
 			.selectFrom('group_properties')
 			.where('group_id', '==', id)
+			.where('property_id', 'is not', null)
 			.select('property_id')
 			.execute();
 		const properties = await group.properties;
@@ -42,6 +43,7 @@ export class GroupRepository implements IGroupRepository {
 		const oldPages = await db
 			.selectFrom('group_pages')
 			.where('group_id', '==', id)
+			.where('page_id', 'is not', null)
 			.select('group_id')
 			.execute();
 		const pages = await group.pages;

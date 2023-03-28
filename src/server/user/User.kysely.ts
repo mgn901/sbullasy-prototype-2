@@ -48,6 +48,7 @@ export class User implements EntityAsync<IUser> {
 			const registrationsPartial = await this.db
 				.selectFrom('user_usertagregistrations')
 				.where('user_id', '==', this.id)
+				.where('registration_id', 'is not', null)
 				.innerJoin('usertagregistrations', 'usertagregistrations.id', 'usertagregistrations.id')
 				.selectAll()
 				.execute();
@@ -68,6 +69,7 @@ export class User implements EntityAsync<IUser> {
 			const propertiesPartial = await this.db
 				.selectFrom('user_properties')
 				.where('user_id', '==', this.id)
+				.where('property_id', 'is not', null)
 				.innerJoin('properties', 'properties.id', 'user_properties.property_id')
 				.selectAll()
 				.execute();
@@ -107,6 +109,7 @@ export class User implements EntityAsync<IUser> {
 			const groupsPartial = await this.db
 				.selectFrom('user_owns_groups')
 				.where('user_id', '==', this.id)
+				.where('group_id', 'is not', null)
 				.innerJoin('groups', 'groups.id', 'user_owns_groups.group_id')
 				.selectAll()
 				.execute();
@@ -127,6 +130,7 @@ export class User implements EntityAsync<IUser> {
 			const groupsPartial = await this.db
 				.selectFrom('users_belongs_groups')
 				.where('user_id', '==', this.id)
+				.where('group_id', 'is not', null)
 				.innerJoin('groups', 'groups.id', 'users_belongs_groups.group_id')
 				.selectAll()
 				.execute();
@@ -147,6 +151,7 @@ export class User implements EntityAsync<IUser> {
 			const groupsPartial = await this.db
 				.selectFrom('users_watches_groups')
 				.where('user_id', '==', this.id)
+				.where('group_id', 'is not', null)
 				.innerJoin('groups', 'groups.id', 'users_watches_groups.group_id')
 				.selectAll()
 				.execute();
@@ -167,6 +172,7 @@ export class User implements EntityAsync<IUser> {
 			const pagesPartial = await this.db
 				.selectFrom('users_watches_pages')
 				.where('user_id', '==', this.id)
+				.where('page_id', 'is not', null)
 				.innerJoin('pages', 'pages.id', 'users_watches_pages.page_id')
 				.selectAll()
 				.execute();
@@ -187,6 +193,7 @@ export class User implements EntityAsync<IUser> {
 			const pagesPartial = await this.db
 				.selectFrom('user_pages')
 				.where('user_id', '==', this.id)
+				.where('page_id', 'is not', null)
 				.innerJoin('pages', 'pages.id', 'user_pages.page_id')
 				.selectAll()
 				.execute();

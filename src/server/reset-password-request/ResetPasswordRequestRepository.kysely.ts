@@ -10,6 +10,7 @@ export class ResetPasswordRequestRepository implements IResetPasswordRequestRepo
 		const requestsPartial = await db
 			.selectFrom('resetpasswordrequests')
 			.where('id', 'in', ids)
+			.where('user', 'is not', null)
 			.selectAll()
 			.execute();
 		const requests = requestsPartial.map((requestPartial) => {

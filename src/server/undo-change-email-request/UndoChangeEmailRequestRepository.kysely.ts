@@ -12,6 +12,7 @@ export class UndoChangeEmailRequestRepository implements IUndoChangeEmailRequest
 		const requestsPartial = await db
 			.selectFrom('undochangeemailrequests')
 			.where('id', 'in', ids)
+			.where('user', 'is not', null)
 			.selectAll()
 			.execute();
 		const requests = requestsPartial.map((requestPartial) => {

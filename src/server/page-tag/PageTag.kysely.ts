@@ -28,6 +28,7 @@ export class PageTag implements EntityAsync<IPageTag> {
 			const tagsPartial = await this.db
 				.selectFrom('pagetag_grantableby_usertags')
 				.where('pagetag_id', '==', this.id)
+				.where('usertag_id', 'is not', null)
 				.innerJoin('usertags', 'usertags.id', 'pagetag_grantableby_usertags.usertag_id')
 				.selectAll()
 				.execute();

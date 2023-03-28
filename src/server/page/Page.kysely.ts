@@ -44,6 +44,7 @@ export class Page implements EntityAsync<IPage> {
 			const usersPartial = await this.db
 				.selectFrom('user_pages')
 				.where('page_id', '==', this.id)
+				.where('user_id', 'is not', null)
 				.innerJoin('users', 'users.id', 'user_pages.user_id')
 				.selectAll()
 				.execute();
@@ -62,6 +63,7 @@ export class Page implements EntityAsync<IPage> {
 			const groupsPartial = await this.db
 				.selectFrom('group_pages')
 				.where('page_id', '==', this.id)
+				.where('group_id', 'is not', null)
 				.innerJoin('groups', 'groups.id', 'group_pages.group_id')
 				.selectAll()
 				.execute();
@@ -83,6 +85,7 @@ export class Page implements EntityAsync<IPage> {
 			const places = await this.db
 				.selectFrom('pages_places')
 				.where('page_id', '==', this.id)
+				.where('place_id', 'is not', null)
 				.innerJoin('places', 'places.id', 'pages_places.place_id')
 				.selectAll()
 				.execute();
@@ -99,6 +102,7 @@ export class Page implements EntityAsync<IPage> {
 			const tagsPartial = await this.db
 				.selectFrom('pages_tags')
 				.where('page_id', '==', this.id)
+				.where('tag_id', 'is not', null)
 				.innerJoin('pagetags', 'pagetags.id', 'pages_tags.tag_id')
 				.selectAll()
 				.execute();
@@ -119,6 +123,7 @@ export class Page implements EntityAsync<IPage> {
 			const propertiesPartial = await this.db
 				.selectFrom('page_properties')
 				.where('page_id', '==', this.id)
+				.where('property_id', 'is not', null)
 				.innerJoin('properties', 'properties.id', 'page_properties.property_id')
 				.selectAll()
 				.execute();

@@ -12,6 +12,9 @@ export class UserTagRequestRepository implements IUserTagRequestRepository {
 		const requestsPartial = await db
 			.selectFrom('usertagrequests')
 			.where('id', 'in', ids)
+			.where('user', 'is not', null)
+			.where('tag', 'is not', null)
+			.where('grantability', 'is not', null)
 			.selectAll()
 			.execute();
 		const requests = requestsPartial.map((requestPartial) => {
@@ -31,6 +34,9 @@ export class UserTagRequestRepository implements IUserTagRequestRepository {
 		const requestsPartial = await db
 			.selectFrom('usertagrequests')
 			.where('token', '==', token)
+			.where('user', 'is not', null)
+			.where('tag', 'is not', null)
+			.where('grantability', 'is not', null)
 			.selectAll()
 			.execute();
 		const requestPartial = requestsPartial[0];
@@ -43,6 +49,7 @@ export class UserTagRequestRepository implements IUserTagRequestRepository {
 			.selectFrom('usertagrequests')
 			.where('user', '==', user)
 			.where('tag', '==', tag)
+			.where('grantability', 'is not', null)
 			.selectAll()
 			.execute();
 		const requests = requestsPartial.map((requestPartial) => {

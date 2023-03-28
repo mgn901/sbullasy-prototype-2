@@ -49,6 +49,7 @@ export class SubjectRepository implements ISubjectRepository {
 		const oldProperties = await db
 			.selectFrom('subjects_properties')
 			.where('subject_id', '==', subject.id)
+			.where('property_id', 'is not', null)
 			.select('property_id')
 			.execute();
 		const teacherIDs = teachers.map(teacher => teacher.id);

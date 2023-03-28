@@ -48,6 +48,7 @@ export class Subject implements EntityAsync<ISubject> {
 			const teachers = await this.db
 				.selectFrom('subjects_teachers')
 				.where('subject_id', '==', this.id)
+				.where('teacher_id', 'is not', null)
 				.innerJoin('teachers', 'teachers.id', 'subjects_teachers.teacher_id')
 				.selectAll()
 				.execute();
@@ -64,6 +65,7 @@ export class Subject implements EntityAsync<ISubject> {
 			const categories = await this.db
 				.selectFrom('subjects_categories')
 				.where('subject_id', '==', this.id)
+				.where('category_id', 'is not', null)
 				.innerJoin('categories', 'categories.id', 'subjects_categories.category_id')
 				.selectAll()
 				.execute();
@@ -80,6 +82,7 @@ export class Subject implements EntityAsync<ISubject> {
 			const semesters = await this.db
 				.selectFrom('subjects_semesters')
 				.where('subject_id', '==', this.id)
+				.where('semester_id', 'is not', null)
 				.innerJoin('subjectsemesters', 'subjectsemesters.id', 'subjects_semesters.semester_id')
 				.selectAll()
 				.execute();
@@ -96,6 +99,7 @@ export class Subject implements EntityAsync<ISubject> {
 			const weeks = await this.db
 				.selectFrom('subjects_weeks')
 				.where('subject_id', '==', this.id)
+				.where('week_id', 'is not', null)
 				.innerJoin('subjectweeks', 'subjectweeks.id', 'subjects_weeks.week_id')
 				.selectAll()
 				.execute();
@@ -112,6 +116,7 @@ export class Subject implements EntityAsync<ISubject> {
 			const places = await this.db
 				.selectFrom('subjects_places')
 				.where('subject_id', '==', this.id)
+				.where('place_id', 'is not', null)
 				.innerJoin('places', 'places.id', 'subjects_places.place_id')
 				.selectAll()
 				.execute();
@@ -128,6 +133,7 @@ export class Subject implements EntityAsync<ISubject> {
 			const propertiesPartial = await this.db
 				.selectFrom('subjects_properties')
 				.where('subject_id', '==', this.id)
+				.where('property_id', 'is not', null)
 				.innerJoin('properties', 'properties.id', 'subjects_properties.property_id')
 				.selectAll()
 				.execute();

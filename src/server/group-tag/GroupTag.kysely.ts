@@ -28,6 +28,7 @@ export class GroupTag implements EntityAsync<IGroupTag> {
 			const tagsPartial = await this.db
 				.selectFrom('grouptag_grantableby_usertags')
 				.where('grouptag_id', '==', this.id)
+				.where('usertag_id', 'is not', null)
 				.innerJoin('usertags', 'usertags.id', 'grouptag_grantableby_usertags.usertag_id')
 				.selectAll()
 				.execute();

@@ -47,6 +47,7 @@ export class UserRepository implements IUserRepository {
 		const oldProperties = await db
 			.selectFrom('user_properties')
 			.where('user_id', '==', id)
+			.where('property_id', 'is not', null)
 			.select('property_id')
 			.execute();
 		const properties = await user.properties;

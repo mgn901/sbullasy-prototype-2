@@ -33,10 +33,11 @@ export class PageRepository implements IPageRepository {
 		const places = await page.places;
 		const tags = await page.tags;
 		const oldProperties = await db
-		.selectFrom('page_properties')
-		.where('page_id', '==', id)
-		.select('property_id')
-		.execute();
+			.selectFrom('page_properties')
+			.where('page_id', '==', id)
+			.where('property_id', 'is not', null)
+			.select('property_id')
+			.execute();
 		const properties = await page.properties;
 		const createdByUserID = createdByUser?.id;
 		const createdByGroupID = createdByGroup?.id;
