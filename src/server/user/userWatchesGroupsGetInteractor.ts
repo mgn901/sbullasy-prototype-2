@@ -1,4 +1,5 @@
 import { NotFoundError } from '../error/NotFoundError';
+import { PermissionError } from '../error/PermissionError';
 import { IInteractorParams } from '../IInteractorParams';
 import { groupToGroupForPublic } from '../utils/groupToGroupForPublic';
 import { promisedMap } from '../utils/promisedMap';
@@ -18,12 +19,17 @@ export const userWatchesGroupsGetInteractor = async (params: IUserWatchesGroupsG
 	const { repository, input } = params;
 
 	const verifySessionResult = await verifySession({
-		userID: input.userID,
 		sessionID: input.sessionID,
 		userRepository: repository,
 	});
 	if (!verifySessionResult.status) {
 		throw verifySessionResult.error;
+	}
+	if (verifySessionResult.user.id !== input.userID) {
+		const error = new PermissionError({
+			message: `You are not allowed to edit the specified user (userID: ${input.userID}).`,
+		});
+		throw error;
 	}
 
 	const user = await repository.findByID(input.userID);

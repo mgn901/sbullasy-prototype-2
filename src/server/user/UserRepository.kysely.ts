@@ -37,6 +37,41 @@ export class UserRepository implements IUserRepository {
 			.selectAll()
 			.execute();
 		const userPartial = usersPartial[0];
+		if (!userPartial) {
+			return undefined;
+		}
+		const user = new User(userPartial, db);
+		return user;
+	}
+
+	public async findBySessionID(sessionID: string): Promise<EntityAsync<IUser> | undefined> {
+		const usersPartial = await db
+			.selectFrom('sessions')
+			.where('id', '==', sessionID)
+			.where('user', 'is not', null)
+			.innerJoin('users', 'users.id', 'sessions.user')
+			.selectAll()
+			.execute();
+		const userPartial = usersPartial[0];
+		if (!userPartial) {
+			return undefined;
+		}
+		const user = new User(userPartial, db);
+		return user;
+	}
+
+	public async findByAPIToken(token: string): Promise<EntityAsync<IUser> | undefined> {
+		const usersPartial = await db
+			.selectFrom('apitokens')
+			.where('token', '==', token)
+			.where('user', 'is not', null)
+			.innerJoin('users', 'users.id', 'apitokens.user')
+			.selectAll()
+			.execute();
+		const userPartial = usersPartial[0];
+		if (!userPartial) {
+			return undefined;
+		}
 		const user = new User(userPartial, db);
 		return user;
 	}

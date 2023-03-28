@@ -1,4 +1,5 @@
 import { NotFoundError } from '../error/NotFoundError';
+import { PermissionError } from '../error/PermissionError';
 import { IInteractorParams } from '../IInteractorParams';
 import { IPageRepository } from '../page/IPageRepository';
 import { verifySession } from '../utils/verifySession';
@@ -19,12 +20,17 @@ export const userWatchesPagesPutInteractor = async (params: IUserWatchesPagesPut
 	const { repository, input, pageRepository } = params;
 
 	const verifySessionResult = await verifySession({
-		userID: input.userID,
 		sessionID: input.sessionID,
 		userRepository: repository,
 	});
 	if (!verifySessionResult.status) {
 		throw verifySessionResult.error;
+	}
+	if (verifySessionResult.user.id !== input.userID) {
+		const error = new PermissionError({
+			message: `You are not allowed to edit the specified user (userID: ${input.userID}).`,
+		});
+		throw error;
 	}
 
 	const user = await repository.findByID(input.userID);

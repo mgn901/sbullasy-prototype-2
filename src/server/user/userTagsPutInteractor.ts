@@ -1,6 +1,7 @@
 import { dateToUnixTimeMillis } from '@mgn901/mgn901-utils-ts';
 import { EntityAsync } from '../EntityAsync';
 import { NotFoundError } from '../error/NotFoundError';
+import { PermissionError } from '../error/PermissionError';
 import { RequestExpiredError } from '../error/RequestExpiredError';
 import { WrongParamsError } from '../error/WrongParamsError';
 import { IInteractorParams } from '../IInteractorParams';
@@ -27,12 +28,17 @@ export const userTagsPutInteractor = async (params: IUserTagsPutInteractorParams
 	const { repository, input, requestRepository, tagRepository } = params;
 
 	const verifySessionResult = await verifySession({
-		userID: input.userID,
 		sessionID: input.sessionID,
 		userRepository: repository,
 	});
 	if (!verifySessionResult.status) {
 		throw verifySessionResult.error;
+	}
+	if (verifySessionResult.user.id !== input.userID) {
+		const error = new PermissionError({
+			message: `You are not allowed to edit the specified user (userID: ${input.userID}).`,
+		});
+		throw error;
 	}
 
 	const user = await repository.findByID(input.userID);

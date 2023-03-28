@@ -1,3 +1,5 @@
+import { PermissionError } from '../error/PermissionError';
+import { SessionInvalidError } from '../error/SessionInvalidError';
 import { IInteractorParams } from '../IInteractorParams';
 import { verifyPassword } from '../utils/verifyPassword.argon2';
 import { verifySession } from '../utils/verifySession';
@@ -19,12 +21,17 @@ export const userDeleteInteractor = async (params: IUserDeleteInteractorParams):
 	const password = input.password;
 
 	const verifySessionResult = await verifySession({
-		userID: userID,
 		sessionID: sessionID,
 		userRepository: repository,
 	});
 	if (!verifySessionResult.status) {
 		throw verifySessionResult.error;
+	}
+	if (verifySessionResult.user.id !== input.userID) {
+		const error = new PermissionError({
+			message: `You are not allowed to delete the specified user (userID: ${userID}).`,
+		});
+		throw error;
 	}
 
 	const verifyPasswordResult = await verifyPassword({

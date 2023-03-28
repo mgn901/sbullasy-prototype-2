@@ -1,22 +1,35 @@
 import { dateToUnixTimeMillis } from '@mgn901/mgn901-utils-ts';
-import { NotFoundError } from '../error/NotFoundError';
+import { EntityAsync } from '../EntityAsync';
 import { SbullasyError } from '../error/SbullasyError';
-import { SessionExpiredError } from '../error/SessionExpiredError';
-import { WrongParamsError } from '../error/WrongParamsError';
+import { SessionInvalidError } from '../error/SessionInvalidError';
+import { IUser } from '../user/IUser';
 import { IUserRepository } from '../user/IUserRepository';
 
 interface IVerifySessionParams {
-	userID: string;
 	sessionID: string;
 	userRepository: IUserRepository;
 }
 
 type TVerifySessionResult = {
 	status: true;
+	user: EntityAsync<IUser>;
 	error: undefined;
 } | {
 	status: false;
+	user: undefined;
 	error: SbullasyError;
+}
+
+const createVerifySessionErrorResult = (message: string): TVerifySessionResult => {
+	const error = new SessionInvalidError({
+		message: message,
+	});
+	const result = {
+		status: false as const,
+		user: undefined,
+		error: error,
+	}
+	return result;
 }
 
 /**
@@ -25,45 +38,35 @@ type TVerifySessionResult = {
  * @returns `ISessionValidationResult`
  */
 export const verifySession = async (param: IVerifySessionParams): Promise<TVerifySessionResult> => {
-	const { userID, sessionID, userRepository } = param;
-	const user = await userRepository.findByID(userID);
+	const { sessionID, userRepository } = param;
+	const user = await userRepository.findBySessionID(sessionID);
+	const now = dateToUnixTimeMillis(new Date());
+
 	if (!user) {
-		const error = new NotFoundError({
-			message: `The user ${userID} is not found.`,
-		});
-		throw error;
+		const result = createVerifySessionErrorResult(`The session you've attached (sessionID: ${sessionID}) is invalid.`);
+		return result;
 	}
+
 	const sessions = await user.sessions;
 	const session = sessions.find((session) => {
 		return session.id === sessionID;
 	});
-	const now = dateToUnixTimeMillis(new Date());
 
 	if (!session) {
-		const error = new WrongParamsError({
-			message: '"userID" or "sessionID" is wrong.',
-		});
-		const result = {
-			status: false as const,
-			error: error,
-		};
+		const result = createVerifySessionErrorResult(`The session you've attached (sessionID: ${sessionID}) is invalid.`);
 		return result;
 	}
 
 	const isExpired = session.expiresAt < now;
+
 	if (isExpired) {
-		const error = new SessionExpiredError({
-			message: 'Your session is expired.',
-		});
-		const result = {
-			status: false as const,
-			error: error,
-		};
+		const result = createVerifySessionErrorResult(`The session you've attached (sessionID: ${sessionID}) is expired.`);
 		return result;
 	}
 
 	const result = {
 		status: true as const,
+		user: user,
 		error: undefined,
 	};
 

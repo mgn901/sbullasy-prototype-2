@@ -1,6 +1,7 @@
 import { dateToUnixTimeMillis } from '@mgn901/mgn901-utils-ts';
 import { EntityAsync } from '../EntityAsync';
 import { NotFoundError } from '../error/NotFoundError';
+import { PermissionError } from '../error/PermissionError';
 import { WrongParamsError } from '../error/WrongParamsError';
 import { IInteractorParams } from '../IInteractorParams';
 import { IUndoChangeEmailRequest } from '../undo-change-email-request/IUndoChangeEmailRequest';
@@ -29,12 +30,17 @@ export const userEmailChangeInteractor = async (params: IUserEmailChangeInteract
 	const { repository, input, requestRepository } = params;
 
 	const verifySessionResult = await verifySession({
-		userID: input.userID,
 		sessionID: input.sessionID,
 		userRepository: repository,
 	});
 	if (!verifySessionResult.status) {
 		throw verifySessionResult.error;
+	}
+	if (verifySessionResult.user.id !== input.userID) {
+		const error = new PermissionError({
+			message: `You are not allowed to edit the specified user (userID: ${input.userID}).`,
+		});
+		throw error;
 	}
 
 	const user = await repository.findByID(input.userID);

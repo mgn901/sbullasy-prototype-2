@@ -1,4 +1,5 @@
 import { NotFoundError } from '../error/NotFoundError';
+import { PermissionError } from '../error/PermissionError';
 import { IInteractorParams } from '../IInteractorParams';
 import { promisedMap } from '../utils/promisedMap';
 import { propertyToPropertyWithoutEntityKey } from '../utils/propertyToPropertyWithoutEntityKey';
@@ -19,12 +20,17 @@ export const userMeGetInteractor = async (params: IUserMeGetInteractorParams): P
 	const { repository, input } = params;
 
 	const verifySessionResult = await verifySession({
-		userID: input.userID,
 		sessionID: input.sessionID,
 		userRepository: repository,
 	});
-	if (verifySessionResult.status) {
+	if (!verifySessionResult.status) {
 		throw verifySessionResult.error;
+	}
+	if (verifySessionResult.user.id !== input.userID) {
+		const error = new PermissionError({
+			message: `You are not allowed to get information about the specified user (userID: ${input.userID}).`,
+		});
+		throw error;
 	}
 
 	const user = await repository.findByID(input.userID);
