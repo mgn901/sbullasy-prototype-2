@@ -1,6 +1,7 @@
 import { IUser } from '../user/IUser';
 
-export type IAPITokenPermission = 'subject_write'
+export type IAPITokenPermission = 'place_write'
+	| 'subject_write'
 	| 'subject-category_write'
 	| 'subject-semester_write'
 	| 'subject-week_write'
