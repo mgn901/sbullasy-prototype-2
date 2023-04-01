@@ -1,9 +1,8 @@
+import { EntityWithoutEntityKey } from '../EntityWithoutEntityKey';
 import { ISession } from '../session/ISession';
 import { IUser } from './IUser';
 
 export interface IUserCreateInput {
-	email: IUser['email'];
-	password: IUser['password'];
-	displayName: IUser['displayName'];
+	user: Pick<EntityWithoutEntityKey<IUser>, 'email' | 'displayName' | 'password'>;
 	ipAddress: ISession['ipAddress'];
 }

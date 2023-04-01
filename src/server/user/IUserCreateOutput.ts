@@ -1,14 +1,13 @@
 import { EntityWithoutEntityKey } from '../EntityWithoutEntityKey';
 import { TProperty } from '../property/TProperty';
 import { ISession } from '../session/ISession';
-import { IUserTag } from '../user-tag/IUserTag';
 import { IUser } from './IUser';
+import { TUserTagWithExpiresAt } from './TUserTagWithExpiresAt';
 
 export interface IUserCreateOutput {
-	id: IUser['id'];
-	email: IUser['email'];
-	displayName: IUser['displayName'];
+	user: Omit<EntityWithoutEntityKey<IUser>, 'password'> & {
+		tags: TUserTagWithExpiresAt[];
+		properties: EntityWithoutEntityKey<TProperty>[];
+	};
 	sessionID: ISession['id'];
-	tags: EntityWithoutEntityKey<IUserTag>[];
-	properties: EntityWithoutEntityKey<TProperty>[];
 }

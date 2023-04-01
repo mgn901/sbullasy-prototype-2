@@ -5,7 +5,7 @@ import { IUser } from './IUser';
 
 export interface IUserEditInput {
 	sessionID: ISession['id'];
-	userID: IUser['id'];
-	displayName: string;
-	properties: EntityWithoutEntityKey<TProperty>[];
+	user: Pick<EntityWithoutEntityKey<IUser>, 'id' | 'displayName'> & {
+		properties: EntityWithoutEntityKey<TProperty>[];
+	};
 }

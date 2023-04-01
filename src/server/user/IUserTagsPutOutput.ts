@@ -1,1 +1,1 @@
-export interface IUserTagsPutOutput {}
+export interface IUserTagsPutOutput { }

@@ -1,5 +1,4 @@
 import { PermissionError } from '../error/PermissionError';
-import { SessionInvalidError } from '../error/SessionInvalidError';
 import { IInteractorParams } from '../IInteractorParams';
 import { verifyPassword } from '../utils/verifyPassword.argon2';
 import { verifySession } from '../utils/verifySession';

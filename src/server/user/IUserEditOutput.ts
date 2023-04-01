@@ -4,9 +4,8 @@ import { IUser } from './IUser';
 import { TUserTagWithExpiresAt } from './TUserTagWithExpiresAt';
 
 export interface IUserEditOutput {
-	id: IUser['id'];
-	email: IUser['email'];
-	displayName: IUser['displayName'];
-	tags: TUserTagWithExpiresAt[];
-	properties: EntityWithoutEntityKey<TProperty>[];
+	user: Pick<EntityWithoutEntityKey<IUser>, 'id' | 'email' | 'displayName'> & {
+		tags: TUserTagWithExpiresAt[];
+		properties: EntityWithoutEntityKey<TProperty>[];
+	};
 }

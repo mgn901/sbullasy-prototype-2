@@ -24,6 +24,7 @@ interface IUserEditInteractorParams extends IInteractorParams<
 
 export const userEditInteractor = async (params: IUserEditInteractorParams): Promise<IUserEditOutput> => {
 	const { input, repository, groupRepository, pageRepository } = params;
+	const userPartial = input.user;
 
 	const verifySessionResult = await verifySession({
 		sessionID: input.sessionID,
@@ -32,23 +33,23 @@ export const userEditInteractor = async (params: IUserEditInteractorParams): Pro
 	if (!verifySessionResult.status) {
 		throw verifySessionResult.error;
 	}
-	if (verifySessionResult.user.id !== input.userID) {
+	if (verifySessionResult.user.id !== userPartial.id) {
 		const error = new PermissionError({
-			message: `You are not allowed to edit the specified user (userID: ${input.userID}).`,
+			message: `You are not allowed to edit the specified user (userID: ${userPartial.id}).`,
 		});
 		throw error;
 	}
 
-	const user = await repository.findByID(input.userID);
+	const user = await repository.findByID(userPartial.id);
 	if (!user) {
 		const error = new NotFoundError({
-			message: `The user ${input.userID} is not found.`,
+			message: `The user ${userPartial.id} is not found.`,
 		});
 		throw error;
 	}
 
 	const tagRegistrations = await user.tagRegistrations;
-	const propertiesPartial = input.properties;
+	const propertiesPartial = userPartial.properties;
 	const properties = await propertiesWithoutEntityKeyToProperties({
 		propertiesPartial: propertiesPartial,
 		userRepository: repository,
@@ -56,18 +57,20 @@ export const userEditInteractor = async (params: IUserEditInteractorParams): Pro
 		pageRepository: pageRepository,
 	});
 
-	user.displayName = input.displayName;
+	user.displayName = userPartial.displayName;
 	user.properties = properties;
 	await repository.save(user);
 
 	const propertiesForOutput = await promisedMap(propertyToPropertyWithoutEntityKey, properties);
 	const tagsForOutput = await promisedMap(userTagRegistrationToUserTagWithExpiresAt, tagRegistrations);
 	const output: IUserEditOutput = {
-		id: user.id,
-		email: user.email,
-		displayName: user.displayName,
-		properties: propertiesForOutput,
-		tags: tagsForOutput,
+		user: {
+			id: user.id,
+			email: user.email,
+			displayName: user.displayName,
+			properties: propertiesForOutput,
+			tags: tagsForOutput,
+		},
 	};
 
 	return output;

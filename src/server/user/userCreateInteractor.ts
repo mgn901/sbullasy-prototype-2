@@ -16,9 +16,10 @@ interface IUserCreateInteractorParams extends IInteractorParams<
 
 export const userCreateInteractor = async (params: IUserCreateInteractorParams): Promise<IUserCreateOutput> => {
 	const { repository, input } = params;
+	const userPartial = input.user;
 
 	const userID = generateID();
-	const hashedPassword = await hashPassword(input.password);
+	const hashedPassword = await hashPassword(userPartial.password);
 	const sessionID = generateID();
 	const sessionName = generateID();
 	const loggedInAt = dateToUnixTimeMillis(new Date());
@@ -26,9 +27,9 @@ export const userCreateInteractor = async (params: IUserCreateInteractorParams):
 
 	const user: IUser = {
 		id: userID,
-		email: input.email,
+		email: userPartial.email,
 		password: hashedPassword,
-		displayName: input.displayName,
+		displayName: userPartial.displayName,
 		sessions: [],
 		tagRegistrations: [],
 		properties: [],
@@ -51,12 +52,14 @@ export const userCreateInteractor = async (params: IUserCreateInteractorParams):
 	await repository.save(user);
 
 	const output: IUserCreateOutput = {
-		id: userID,
-		email: user.email,
-		displayName: user.displayName,
+		user: {
+			id: userID,
+			email: user.email,
+			displayName: user.displayName,
+			tags: [],
+			properties: [],
+		},
 		sessionID: sessionID,
-		tags: [],
-		properties: [],
 	};
 
 	return output;
