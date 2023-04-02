@@ -1,8 +1,8 @@
-import { Entity } from '../Entity';
-import { EntityAsync } from '../EntityAsync';
+import { TEntity } from '../TEntity';
+import { TEntityAsync } from '../TEntityAsync';
 
 export const promisedMap = <
-	From extends EntityAsync<Entity>,
+	From extends TEntityAsync<TEntity>,
 	To extends {}
 >(
 	callback: (item: From) => Promise<To> | To,

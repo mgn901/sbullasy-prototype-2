@@ -1,7 +1,7 @@
 import { Kysely } from 'kysely';
-import { Database } from '../Database';
-import { EntityAsync } from '../EntityAsync';
-import { createProperty } from '../kysely/createProperty.kysely';
+import { TDatabase } from '../database/TDatabase';
+import { TEntityAsync } from '../TEntityAsync';
+import { createProperty } from '../property/createProperty.kysely';
 import { IPlace } from '../place/IPlace';
 import { TProperty } from '../property/TProperty';
 import { ISubjectCategory } from '../subject-category/ISubjectCategory';
@@ -10,9 +10,9 @@ import { ISubjectWeek } from '../subject-week/ISubjectWeek';
 import { ITeacher } from '../teacher/ITeacher';
 import { ISubject } from './ISubject';
 
-export class Subject implements EntityAsync<ISubject> {
+export class Subject implements TEntityAsync<ISubject> {
 
-	public constructor(subject: Database['subjects'], db: Kysely<Database>) {
+	public constructor(subject: TDatabase['subjects'], db: Kysely<TDatabase>) {
 		this.db = db;
 		this.id = subject.id;
 		this.code = subject.code;
@@ -24,7 +24,7 @@ export class Subject implements EntityAsync<ISubject> {
 		this.units = subject.units;
 	}
 
-	private readonly db: Kysely<Database>;
+	private readonly db: Kysely<TDatabase>;
 	public readonly id: string;
 	public code?: string;
 	public name: string;
@@ -33,14 +33,14 @@ export class Subject implements EntityAsync<ISubject> {
 	public updatedAt: number;
 	public grades: number[];
 	public units?: number;
-	private _teachers?: Promise<EntityAsync<ITeacher>[]>;
-	private _categories?: Promise<EntityAsync<ISubjectCategory>[]>;
-	private _semesters?: Promise<EntityAsync<ISubjectSemester>[]>;
-	private _weeks?: Promise<EntityAsync<ISubjectWeek>[]>;
-	private _places?: Promise<EntityAsync<IPlace>[]>;
-	private _properties?: Promise<EntityAsync<TProperty>[]>;
+	private _teachers?: Promise<TEntityAsync<ITeacher>[]>;
+	private _categories?: Promise<TEntityAsync<ISubjectCategory>[]>;
+	private _semesters?: Promise<TEntityAsync<ISubjectSemester>[]>;
+	private _weeks?: Promise<TEntityAsync<ISubjectWeek>[]>;
+	private _places?: Promise<TEntityAsync<IPlace>[]>;
+	private _properties?: Promise<TEntityAsync<TProperty>[]>;
 
-	public get teachers(): Promise<EntityAsync<ITeacher>[]> {
+	public get teachers(): Promise<TEntityAsync<ITeacher>[]> {
 		if (this._teachers) {
 			return this._teachers;
 		}
@@ -57,7 +57,7 @@ export class Subject implements EntityAsync<ISubject> {
 		return promise;
 	}
 
-	public get categories(): Promise<EntityAsync<ISubjectCategory>[]> {
+	public get categories(): Promise<TEntityAsync<ISubjectCategory>[]> {
 		if (this._categories) {
 			return this._categories;
 		}
@@ -74,7 +74,7 @@ export class Subject implements EntityAsync<ISubject> {
 		return promise;
 	}
 
-	public get semesters(): Promise<EntityAsync<ISubjectSemester>[]> {
+	public get semesters(): Promise<TEntityAsync<ISubjectSemester>[]> {
 		if (this._semesters) {
 			return this._semesters;
 		}
@@ -91,7 +91,7 @@ export class Subject implements EntityAsync<ISubject> {
 		return promise;
 	}
 
-	public get weeks(): Promise<EntityAsync<ISubjectWeek>[]> {
+	public get weeks(): Promise<TEntityAsync<ISubjectWeek>[]> {
 		if (this._weeks) {
 			return this._weeks;
 		}
@@ -108,7 +108,7 @@ export class Subject implements EntityAsync<ISubject> {
 		return promise;
 	}
 
-	public get places(): Promise<EntityAsync<IPlace>[]> {
+	public get places(): Promise<TEntityAsync<IPlace>[]> {
 		if (this._places) {
 			return this._places;
 		}
@@ -125,7 +125,7 @@ export class Subject implements EntityAsync<ISubject> {
 		return promise;
 	}
 
-	public get properties(): Promise<EntityAsync<TProperty>[]> {
+	public get properties(): Promise<TEntityAsync<TProperty>[]> {
 		if (this._properties) {
 			return this._properties;
 		}

@@ -1,11 +1,11 @@
-import { EntityAsync } from '../EntityAsync';
-import { db } from '../kysely/db';
+import { TEntityAsync } from '../TEntityAsync';
+import { db } from '../database/db.kysely';
 import { IPlace } from './IPlace';
 import { IPlaceRepository } from './IPlaceRepository';
 
 export class PlaceRepository implements IPlaceRepository {
 
-	public async findByIDs(...ids: string[]): Promise<EntityAsync<IPlace>[]> {
+	public async findByIDs(...ids: string[]): Promise<TEntityAsync<IPlace>[]> {
 		const places = await db
 			.selectFrom('places')
 			.where('id', 'in', ids)
@@ -14,13 +14,13 @@ export class PlaceRepository implements IPlaceRepository {
 		return places;
 	}
 
-	public async findByID(id: string): Promise<EntityAsync<IPlace> | undefined> {
+	public async findByID(id: string): Promise<TEntityAsync<IPlace> | undefined> {
 		const places = await this.findByIDs(id);
 		const place = places[0];
 		return place;
 	}
 
-	public async findAll(): Promise<EntityAsync<IPlace>[]> {
+	public async findAll(): Promise<TEntityAsync<IPlace>[]> {
 		const places = await db
 			.selectFrom('places')
 			.selectAll()
@@ -28,7 +28,7 @@ export class PlaceRepository implements IPlaceRepository {
 		return places;
 	}
 
-	public async save(place: IPlace | EntityAsync<IPlace>): Promise<void> {
+	public async save(place: IPlace | TEntityAsync<IPlace>): Promise<void> {
 		await db
 			.insertInto('places')
 			.values(place)

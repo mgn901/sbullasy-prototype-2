@@ -1,5 +1,5 @@
 import { dateToUnixTimeMillis } from '@mgn901/mgn901-utils-ts';
-import { EntityAsync } from '../EntityAsync';
+import { TEntityAsync } from '../TEntityAsync';
 import { NotFoundError } from '../error/NotFoundError';
 import { PermissionError } from '../error/PermissionError';
 import { RequestExpiredError } from '../error/RequestExpiredError';
@@ -82,7 +82,7 @@ export const userTagsPutInteractor = async (params: IUserTagsPutInteractorParams
 		}
 
 		const registrationID = generateID();
-		const registration: EntityAsync<IUserTagRegistration> = {
+		const registration: TEntityAsync<IUserTagRegistration> = {
 			id: registrationID,
 			user: user,
 			tag: tagBeGranted,
@@ -124,7 +124,7 @@ export const userTagsPutInteractor = async (params: IUserTagsPutInteractorParams
 		const grantabilityAttached = await requestAttached.grantability;
 		const expiresAt = grantabilityAttached.expiresAt;
 		const registrationID = generateID();
-		const registration: EntityAsync<IUserTagRegistration> = {
+		const registration: TEntityAsync<IUserTagRegistration> = {
 			id: registrationID,
 			user: userInRequestAttached,
 			tag: tagBeGranted,

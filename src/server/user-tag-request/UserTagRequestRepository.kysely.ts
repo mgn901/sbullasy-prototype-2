@@ -1,5 +1,5 @@
-import { EntityAsync } from '../EntityAsync';
-import { db } from '../kysely/db';
+import { TEntityAsync } from '../TEntityAsync';
+import { db } from '../database/db.kysely';
 import { IUserTagRequest } from './IUserTagRequest';
 import { IUserTagRequestRepository } from './IUserTagRequestRepository';
 import { UserTagRequest } from './UserTagRequest.kysely';
@@ -8,7 +8,7 @@ export class UserTagRequestRepository implements IUserTagRequestRepository {
 
 	public constructor() { }
 
-	public async findByIDs(...ids: string[]): Promise<EntityAsync<IUserTagRequest>[]> {
+	public async findByIDs(...ids: string[]): Promise<TEntityAsync<IUserTagRequest>[]> {
 		const requestsPartial = await db
 			.selectFrom('usertagrequests')
 			.where('id', 'in', ids)
@@ -24,13 +24,13 @@ export class UserTagRequestRepository implements IUserTagRequestRepository {
 		return requests;
 	}
 
-	public async findByID(id: string): Promise<EntityAsync<IUserTagRequest> | undefined> {
+	public async findByID(id: string): Promise<TEntityAsync<IUserTagRequest> | undefined> {
 		const requests = await this.findByIDs(id);
 		const request = requests[0];
 		return request;
 	}
 
-	public async findByToken(token: string): Promise<EntityAsync<IUserTagRequest> | undefined> {
+	public async findByToken(token: string): Promise<TEntityAsync<IUserTagRequest> | undefined> {
 		const requestsPartial = await db
 			.selectFrom('usertagrequests')
 			.where('token', '==', token)
@@ -44,7 +44,7 @@ export class UserTagRequestRepository implements IUserTagRequestRepository {
 		return request;
 	}
 
-	public async findByUserAndTag(user: string, tag: string): Promise<EntityAsync<IUserTagRequest>[]> {
+	public async findByUserAndTag(user: string, tag: string): Promise<TEntityAsync<IUserTagRequest>[]> {
 		const requestsPartial = await db
 			.selectFrom('usertagrequests')
 			.where('user', '==', user)
@@ -59,7 +59,7 @@ export class UserTagRequestRepository implements IUserTagRequestRepository {
 		return requests;
 	}
 
-	public async save(request: IUserTagRequest | EntityAsync<IUserTagRequest>): Promise<void> {
+	public async save(request: IUserTagRequest | TEntityAsync<IUserTagRequest>): Promise<void> {
 		const user = await request.user;
 		const tag = await request.tag;
 		const grantability = await request.grantability;

@@ -1,9 +1,9 @@
-import { Entity } from './Entity';
-import { EntityAsync } from './EntityAsync';
+import { TEntity } from './TEntity';
+import { TEntityAsync } from './TEntityAsync';
 
-export interface IRepository<Interface extends Entity> {
-	findByID(id: Interface['id']): Promise<EntityAsync<Interface> | undefined>;
-	findByIDs(...ids: Interface['id'][]): Promise<EntityAsync<Interface>[]>;
-	save(item: EntityAsync<Interface> | Interface): Promise<void>;
+export interface IRepository<Interface extends TEntity> {
+	findByID(id: Interface['id']): Promise<TEntityAsync<Interface> | undefined>;
+	findByIDs(...ids: Interface['id'][]): Promise<TEntityAsync<Interface>[]>;
+	save(item: TEntityAsync<Interface> | Interface): Promise<void>;
 	deleteByID(id: string): Promise<void>;
 }

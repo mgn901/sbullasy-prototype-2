@@ -1,26 +1,26 @@
 import { Kysely } from 'kysely';
-import { Database } from '../Database';
-import { EntityAsync } from '../EntityAsync';
+import { TDatabase } from '../database/TDatabase';
+import { TEntityAsync } from '../TEntityAsync';
 import { IUserTag } from '../user-tag/IUserTag';
 import { UserTag } from '../user-tag/UserTag.kysely';
 import { IPageTag } from './IPageTag';
 
-export class PageTag implements EntityAsync<IPageTag> {
+export class PageTag implements TEntityAsync<IPageTag> {
 
-	public constructor(pageTag: Database['pagetags'], db: Kysely<Database>) {
+	public constructor(pageTag: TDatabase['pagetags'], db: Kysely<TDatabase>) {
 		this.db = db;
 		this.id = pageTag.id;
 		this.name = pageTag.name;
 		this.displayName = pageTag.displayName;
 	}
 
-	private readonly db: Kysely<Database>;
+	private readonly db: Kysely<TDatabase>;
 	public readonly id: string;
 	public name: string;
 	public displayName: string;
-	private _grantableBy?: Promise<EntityAsync<IUserTag>[]>;
+	private _grantableBy?: Promise<TEntityAsync<IUserTag>[]>;
 
-	public get grantableBy(): Promise<EntityAsync<IUserTag>[]> {
+	public get grantableBy(): Promise<TEntityAsync<IUserTag>[]> {
 		if (this._grantableBy) {
 			return this._grantableBy;
 		}

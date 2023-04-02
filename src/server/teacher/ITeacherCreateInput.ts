@@ -1,4 +1,4 @@
-import { EntityWithoutEntityKey } from '../EntityWithoutEntityKey';
+import { EntityWithoutEntityKey } from '../TEntityWithoutEntityKey';
 import { IAPIToken } from '../api-token/IAPIToken';
 import { ISession } from '../session/ISession';
 import { ITeacher } from './ITeacher';

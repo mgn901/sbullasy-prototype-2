@@ -1,5 +1,5 @@
 import { IAPIToken, IAPITokenPermission } from '../api-token/IAPIToken';
-import { EntityAsync } from '../EntityAsync';
+import { TEntityAsync } from '../TEntityAsync';
 import { SbullasyError } from '../error/SbullasyError';
 import { TokenInvalidError } from '../error/TokenInvalidError';
 import { IUser } from '../user/IUser';
@@ -13,7 +13,7 @@ interface IVerifyAPITokenParams {
 
 type TVerifyAPITokenResult = {
 	status: true;
-	user: EntityAsync<IUser>;
+	user: TEntityAsync<IUser>;
 	error: undefined;
 } | {
 	status: false;

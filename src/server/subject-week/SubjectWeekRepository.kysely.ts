@@ -1,17 +1,17 @@
-import { EntityAsync } from '../EntityAsync';
-import { db } from '../kysely/db';
+import { TEntityAsync } from '../TEntityAsync';
+import { db } from '../database/db.kysely';
 import { ISubjectWeek } from './ISubjectWeek';
 import { ISubjectWeekRepository } from './ISubjectWeekRepository';
 
 export class SubjectWeekRepository implements ISubjectWeekRepository {
 
-	public async findByID(id: string): Promise<EntityAsync<ISubjectWeek> | undefined> {
+	public async findByID(id: string): Promise<TEntityAsync<ISubjectWeek> | undefined> {
 		const weeks = await this.findByIDs(id);
 		const week = weeks[0];
 		return week;
 	}
 
-	public async findByIDs(...ids: string[]): Promise<EntityAsync<ISubjectWeek>[]> {
+	public async findByIDs(...ids: string[]): Promise<TEntityAsync<ISubjectWeek>[]> {
 		const weeks = await db
 			.selectFrom('subjectweeks')
 			.where('id', 'in', ids)
@@ -20,7 +20,7 @@ export class SubjectWeekRepository implements ISubjectWeekRepository {
 		return weeks;
 	}
 
-	public async findAll(): Promise<EntityAsync<ISubjectWeek>[]> {
+	public async findAll(): Promise<TEntityAsync<ISubjectWeek>[]> {
 		const weeks = await db
 			.selectFrom('subjectweeks')
 			.selectAll()
@@ -28,7 +28,7 @@ export class SubjectWeekRepository implements ISubjectWeekRepository {
 		return weeks;
 	}
 
-	public async save(week: ISubjectWeek | EntityAsync<ISubjectWeek>): Promise<void> {
+	public async save(week: ISubjectWeek | TEntityAsync<ISubjectWeek>): Promise<void> {
 		await db
 			.insertInto('subjectweeks')
 			.values(week)

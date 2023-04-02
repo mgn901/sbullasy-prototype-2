@@ -1,4 +1,4 @@
-import { EntityWithoutEntityKey } from '../EntityWithoutEntityKey';
+import { EntityWithoutEntityKey } from '../TEntityWithoutEntityKey';
 import { ITeacher } from './ITeacher';
 
 export interface ITeacherPutOutput {

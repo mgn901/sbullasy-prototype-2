@@ -1,12 +1,12 @@
-import { EntityAsync } from '../EntityAsync';
-import { db } from '../kysely/db';
+import { TEntityAsync } from '../TEntityAsync';
+import { db } from '../database/db.kysely';
 import { IPage } from './IPage';
 import { IPageRepository } from './IPageRepository';
 import { Page } from './Page.kysely';
 
 export class PageRepository implements IPageRepository {
 
-	public async findByIDs(...ids: string[]): Promise<EntityAsync<IPage>[]> {
+	public async findByIDs(...ids: string[]): Promise<TEntityAsync<IPage>[]> {
 		const pagesPartial = await db
 			.selectFrom('pages')
 			.where('id', 'in', ids)
@@ -19,13 +19,13 @@ export class PageRepository implements IPageRepository {
 		return pages;
 	}
 
-	public async findByID(id: string): Promise<EntityAsync<IPage> | undefined> {
+	public async findByID(id: string): Promise<TEntityAsync<IPage> | undefined> {
 		const pages = await this.findByIDs(id);
 		const page = pages[0];
 		return page;
 	}
 
-	public async save(page: IPage | EntityAsync<IPage>): Promise<void> {
+	public async save(page: IPage | TEntityAsync<IPage>): Promise<void> {
 		const { id, name, type, body, createdAt, updatedAt, startsAt, endsAt } = page;
 		const pagePartial = { id, name, type, body, createdAt, updatedAt, startsAt, endsAt };
 		const createdByUser = await page.createdByUser;

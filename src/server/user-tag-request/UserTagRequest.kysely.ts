@@ -1,6 +1,6 @@
 import { Kysely } from 'kysely';
-import { Database } from '../Database';
-import { EntityAsync } from '../EntityAsync';
+import { TDatabase } from '../database/TDatabase';
+import { TEntityAsync } from '../TEntityAsync';
 import { IUserTag } from '../user-tag/IUserTag';
 import { IUserTagGrantability } from '../user-tag/IUserTagGrantability';
 import { UserTag } from '../user-tag/UserTag.kysely';
@@ -9,9 +9,9 @@ import { IUser } from '../user/IUser';
 import { User } from '../user/User.kysely';
 import { IUserTagRequest } from './IUserTagRequest';
 
-export class UserTagRequest implements EntityAsync<IUserTagRequest> {
+export class UserTagRequest implements TEntityAsync<IUserTagRequest> {
 
-	constructor(userTagRequest: Database['usertagrequests'], db: Kysely<Database>) {
+	constructor(userTagRequest: TDatabase['usertagrequests'], db: Kysely<TDatabase>) {
 		this.db = db;
 		this.id = userTagRequest.id;
 		this.email = userTagRequest.email;
@@ -23,7 +23,7 @@ export class UserTagRequest implements EntityAsync<IUserTagRequest> {
 		this._grantability = userTagRequest.grantability;
 	}
 
-	private readonly db: Kysely<Database>;
+	private readonly db: Kysely<TDatabase>;
 	public readonly id: string;
 	public readonly email: string;
 	public readonly createdAt: number;
@@ -33,7 +33,7 @@ export class UserTagRequest implements EntityAsync<IUserTagRequest> {
 	private readonly _tag: string;
 	private readonly _grantability: string;
 
-	public get user(): Promise<EntityAsync<IUser>> {
+	public get user(): Promise<TEntityAsync<IUser>> {
 		const promise = (async () => {
 			const usersPartial = await this.db
 				.selectFrom('users')
@@ -47,7 +47,7 @@ export class UserTagRequest implements EntityAsync<IUserTagRequest> {
 		return promise;
 	}
 
-	public get tag(): Promise<EntityAsync<IUserTag>> {
+	public get tag(): Promise<TEntityAsync<IUserTag>> {
 		const promise = (async () => {
 			const tagsPartial = await this.db
 				.selectFrom('usertags')
@@ -61,7 +61,7 @@ export class UserTagRequest implements EntityAsync<IUserTagRequest> {
 		return promise;
 	}
 
-	public get grantability(): Promise<EntityAsync<IUserTagGrantability>> {
+	public get grantability(): Promise<TEntityAsync<IUserTagGrantability>> {
 		const promise = (async () => {
 			const grantabilitiesPartial = await this.db
 				.selectFrom('usertaggrantabilities')

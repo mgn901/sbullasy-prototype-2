@@ -1,7 +1,7 @@
-import { EntityAsync } from '../EntityAsync';
+import { TEntityAsync } from '../TEntityAsync';
 import { IRepository } from '../IRepository';
 import { ISubject } from './ISubject';
 
 export type ISubjectRepository = IRepository<ISubject> & {
-	findAll(): Promise<EntityAsync<ISubject>[]>;
+	findAll(): Promise<TEntityAsync<ISubject>[]>;
 };

@@ -1,13 +1,13 @@
 import { Kysely } from 'kysely';
-import { Database } from '../Database';
-import { EntityAsync } from '../EntityAsync';
+import { TDatabase } from '../database/TDatabase';
+import { TEntityAsync } from '../TEntityAsync';
 import { IUser } from '../user/IUser';
 import { User } from '../user/User.kysely';
 import { IAPIToken, IAPITokenPermission } from './IAPIToken'
 
-export class APIToken implements EntityAsync<IAPIToken> {
+export class APIToken implements TEntityAsync<IAPIToken> {
 
-	constructor(apiToken: Database['apitokens'], db: Kysely<Database>) {
+	constructor(apiToken: TDatabase['apitokens'], db: Kysely<TDatabase>) {
 		this.db = db;
 		this.id = apiToken.id;
 		this.token = apiToken.token;
@@ -16,14 +16,14 @@ export class APIToken implements EntityAsync<IAPIToken> {
 		this.userID = apiToken.user;
 	}
 
-	private db: Kysely<Database>;
+	private db: Kysely<TDatabase>;
 	public readonly id: string;
 	public readonly token: string;
 	public readonly createdAt: number;
 	public readonly permission: IAPITokenPermission[];
 	private readonly userID: string;
 
-	public get user(): Promise<EntityAsync<IUser>> {
+	public get user(): Promise<TEntityAsync<IUser>> {
 		const promise = (async () => {
 			const usersPartial = await this.db
 				.selectFrom('users')

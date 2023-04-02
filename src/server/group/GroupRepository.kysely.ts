@@ -1,5 +1,5 @@
-import { EntityAsync } from '../EntityAsync';
-import { db } from '../kysely/db';
+import { TEntityAsync } from '../TEntityAsync';
+import { db } from '../database/db.kysely';
 import { Group } from './Group.kysely';
 import { IGroup } from './IGroup';
 import { IGroupRepository } from './IGroupRepository';
@@ -8,7 +8,7 @@ export class GroupRepository implements IGroupRepository {
 
 	public constructor() { }
 
-	public async findByIDs(...ids: IGroup['id'][]): Promise<EntityAsync<IGroup>[]> {
+	public async findByIDs(...ids: IGroup['id'][]): Promise<TEntityAsync<IGroup>[]> {
 		const groupsPartial = await db
 			.selectFrom('groups')
 			.where('id', 'in', ids)
@@ -21,13 +21,13 @@ export class GroupRepository implements IGroupRepository {
 		return groups;
 	}
 
-	public async findByID(id: string): Promise<EntityAsync<IGroup> | undefined> {
+	public async findByID(id: string): Promise<TEntityAsync<IGroup> | undefined> {
 		const groups = await this.findByIDs(id);
 		const group = groups[0];
 		return group;
 	}
 
-	public async save(group: EntityAsync<IGroup> | IGroup): Promise<void> {
+	public async save(group: TEntityAsync<IGroup> | IGroup): Promise<void> {
 		const { id, name, createdAt, updatedAt, invitationToken } = group;
 		const groupPartial = { id, name, createdAt, updatedAt, invitationToken };
 		const owner = await group.owner;

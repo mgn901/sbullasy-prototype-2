@@ -1,5 +1,5 @@
-import { EntityAsync } from '../EntityAsync';
-import { db } from '../kysely/db';
+import { TEntityAsync } from '../TEntityAsync';
+import { db } from '../database/db.kysely';
 import { ILoginFailure } from './ILoginFailure';
 import { ILoginFailureRepository } from './ILoginFailureRepository';
 
@@ -7,7 +7,7 @@ export class LoginFailureRepository implements ILoginFailureRepository {
 
 	public constructor() { }
 
-	public async findByIDs(...ids: string[]): Promise<EntityAsync<ILoginFailure>[]> {
+	public async findByIDs(...ids: string[]): Promise<TEntityAsync<ILoginFailure>[]> {
 		const loginFailures = await db
 			.selectFrom('loginfailures')
 			.where('id', 'in', ids)
@@ -16,13 +16,13 @@ export class LoginFailureRepository implements ILoginFailureRepository {
 		return loginFailures;
 	}
 
-	public async findByID(id: string): Promise<EntityAsync<ILoginFailure> | undefined> {
+	public async findByID(id: string): Promise<TEntityAsync<ILoginFailure> | undefined> {
 		const loginFailures = await this.findByIDs(id);
 		const loginFailure = loginFailures[0];
 		return loginFailure;
 	}
 
-	public async save(loginFailure: ILoginFailure | EntityAsync<ILoginFailure>): Promise<void> {
+	public async save(loginFailure: ILoginFailure | TEntityAsync<ILoginFailure>): Promise<void> {
 		await db
 			.insertInto('loginfailures')
 			.values(loginFailure)

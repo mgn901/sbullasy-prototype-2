@@ -1,11 +1,11 @@
 import { Kysely } from 'kysely';
 import { APIToken } from '../api-token/APIToken.kysely';
 import { IAPIToken } from '../api-token/IAPIToken';
-import { Database } from '../Database';
-import { EntityAsync } from '../EntityAsync';
+import { TDatabase } from '../database/TDatabase';
+import { TEntityAsync } from '../TEntityAsync';
 import { Group } from '../group/Group.kysely';
 import { IGroup } from '../group/IGroup';
-import { createProperty } from '../kysely/createProperty.kysely';
+import { createProperty } from '../property/createProperty.kysely';
 import { IPage } from '../page/IPage';
 import { Page } from '../page/Page.kysely';
 import { TProperty } from '../property/TProperty';
@@ -15,9 +15,9 @@ import { IUser } from './IUser';
 import { IUserTagRegistration } from './IUserTagRegistration';
 import { UserTagRegistration } from './UserTagRegistration.kysely';
 
-export class User implements EntityAsync<IUser> {
+export class User implements TEntityAsync<IUser> {
 
-	public constructor(user: Database['users'], db: Kysely<Database>) {
+	public constructor(user: TDatabase['users'], db: Kysely<TDatabase>) {
 		this.db = db;
 		this.id = user.id;
 		this.email = user.email;
@@ -25,22 +25,22 @@ export class User implements EntityAsync<IUser> {
 		this.displayName = user.displayName;
 	}
 
-	private readonly db: Kysely<Database>;
+	private readonly db: Kysely<TDatabase>;
 	public readonly id: string;
 	public email: string;
 	public password: string;
 	public displayName: string;
-	private _tagRegistrations?: Promise<EntityAsync<IUserTagRegistration>[]>;
-	private _properties?: Promise<EntityAsync<TProperty>[]>;
-	private _sessions?: Promise<EntityAsync<ISession>[]>;
-	private _owns?: Promise<EntityAsync<IGroup>[]>;
-	private _belongs?: Promise<EntityAsync<IGroup>[]>;
-	private _watchesGroups?: Promise<EntityAsync<IGroup>[]>;
-	private _watchesPages?: Promise<EntityAsync<IPage>[]>;
-	private _pages?: Promise<EntityAsync<IPage>[]>;
-	private _apiTokens?: Promise<EntityAsync<IAPIToken>[]>;
+	private _tagRegistrations?: Promise<TEntityAsync<IUserTagRegistration>[]>;
+	private _properties?: Promise<TEntityAsync<TProperty>[]>;
+	private _sessions?: Promise<TEntityAsync<ISession>[]>;
+	private _owns?: Promise<TEntityAsync<IGroup>[]>;
+	private _belongs?: Promise<TEntityAsync<IGroup>[]>;
+	private _watchesGroups?: Promise<TEntityAsync<IGroup>[]>;
+	private _watchesPages?: Promise<TEntityAsync<IPage>[]>;
+	private _pages?: Promise<TEntityAsync<IPage>[]>;
+	private _apiTokens?: Promise<TEntityAsync<IAPIToken>[]>;
 
-	public get tagRegistrations(): Promise<EntityAsync<IUserTagRegistration>[]> {
+	public get tagRegistrations(): Promise<TEntityAsync<IUserTagRegistration>[]> {
 		if (this._tagRegistrations) {
 			return this._tagRegistrations;
 		}
@@ -60,7 +60,7 @@ export class User implements EntityAsync<IUser> {
 		return promise;
 	}
 
-	public get properties(): Promise<EntityAsync<TProperty>[]> {
+	public get properties(): Promise<TEntityAsync<TProperty>[]> {
 		if (this._properties) {
 			return this._properties;
 		}
@@ -81,7 +81,7 @@ export class User implements EntityAsync<IUser> {
 		return promise;
 	}
 
-	public get sessions(): Promise<EntityAsync<ISession>[]> {
+	public get sessions(): Promise<TEntityAsync<ISession>[]> {
 		if (this._sessions) {
 			return this._sessions;
 		}
@@ -100,7 +100,7 @@ export class User implements EntityAsync<IUser> {
 		return promise;
 	}
 
-	public get owns(): Promise<EntityAsync<IGroup>[]> {
+	public get owns(): Promise<TEntityAsync<IGroup>[]> {
 		if (this._owns) {
 			return this._owns;
 		}
@@ -121,7 +121,7 @@ export class User implements EntityAsync<IUser> {
 		return promise;
 	}
 
-	public get belongs(): Promise<EntityAsync<IGroup>[]> {
+	public get belongs(): Promise<TEntityAsync<IGroup>[]> {
 		if (this._belongs) {
 			return this._belongs;
 		}
@@ -142,7 +142,7 @@ export class User implements EntityAsync<IUser> {
 		return promise;
 	}
 
-	public get watchesGroups(): Promise<EntityAsync<IGroup>[]> {
+	public get watchesGroups(): Promise<TEntityAsync<IGroup>[]> {
 		if (this._watchesGroups) {
 			return this._watchesGroups;
 		}
@@ -163,7 +163,7 @@ export class User implements EntityAsync<IUser> {
 		return promise;
 	}
 
-	public get watchesPages(): Promise<EntityAsync<IPage>[]> {
+	public get watchesPages(): Promise<TEntityAsync<IPage>[]> {
 		if (this._watchesPages) {
 			return this._watchesPages;
 		}
@@ -184,7 +184,7 @@ export class User implements EntityAsync<IUser> {
 		return promise;
 	}
 
-	public get pages(): Promise<EntityAsync<IPage>[]> {
+	public get pages(): Promise<TEntityAsync<IPage>[]> {
 		if (this._pages) {
 			return this._pages;
 		}
@@ -205,7 +205,7 @@ export class User implements EntityAsync<IUser> {
 		return promise;
 	}
 
-	public get apiTokens(): Promise<EntityAsync<IAPIToken>[]> {
+	public get apiTokens(): Promise<TEntityAsync<IAPIToken>[]> {
 		if (this._apiTokens) {
 			return this._apiTokens;
 		}

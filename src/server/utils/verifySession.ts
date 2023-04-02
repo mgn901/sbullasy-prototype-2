@@ -1,5 +1,5 @@
 import { dateToUnixTimeMillis } from '@mgn901/mgn901-utils-ts';
-import { EntityAsync } from '../EntityAsync';
+import { TEntityAsync } from '../TEntityAsync';
 import { SbullasyError } from '../error/SbullasyError';
 import { SessionInvalidError } from '../error/SessionInvalidError';
 import { IUser } from '../user/IUser';
@@ -12,7 +12,7 @@ interface IVerifySessionParams {
 
 type TVerifySessionResult = {
 	status: true;
-	user: EntityAsync<IUser>;
+	user: TEntityAsync<IUser>;
 	error: undefined;
 } | {
 	status: false;

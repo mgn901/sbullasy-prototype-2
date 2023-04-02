@@ -1,5 +1,5 @@
-import { EntityAsync } from '../EntityAsync';
-import { db } from '../kysely/db';
+import { TEntityAsync } from '../TEntityAsync';
+import { db } from '../database/db.kysely';
 import { GroupTag } from './GroupTag.kysely';
 import { IGroupTag } from './IGroupTag';
 import { IGroupTagRepository } from './IGroupTagRepository';
@@ -8,7 +8,7 @@ export class GroupTagRepository implements IGroupTagRepository {
 
 	public constructor() { }
 
-	public async findByIDs(...ids: string[]): Promise<EntityAsync<IGroupTag>[]> {
+	public async findByIDs(...ids: string[]): Promise<TEntityAsync<IGroupTag>[]> {
 		const tagsPartial = await db
 			.selectFrom('grouptags')
 			.where('id', 'in', ids)
@@ -21,13 +21,13 @@ export class GroupTagRepository implements IGroupTagRepository {
 		return tags;
 	}
 
-	public async findByID(id: string): Promise<EntityAsync<IGroupTag> | undefined> {
+	public async findByID(id: string): Promise<TEntityAsync<IGroupTag> | undefined> {
 		const tags = await this.findByIDs(id);
 		const tag = tags[0];
 		return tag;
 	}
 
-	public async save(groupTag: IGroupTag | EntityAsync<IGroupTag>): Promise<void> {
+	public async save(groupTag: IGroupTag | TEntityAsync<IGroupTag>): Promise<void> {
 		const { id, name, displayName } = groupTag;
 		const grantableBy = await (groupTag.grantableBy)
 		const grantableByIDs = grantableBy.map(grantableByItem => grantableByItem.id);

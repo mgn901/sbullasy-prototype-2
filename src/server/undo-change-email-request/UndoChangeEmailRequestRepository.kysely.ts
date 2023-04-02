@@ -1,5 +1,5 @@
-import { EntityAsync } from '../EntityAsync';
-import { db } from '../kysely/db';
+import { TEntityAsync } from '../TEntityAsync';
+import { db } from '../database/db.kysely';
 import { IUndoChangeEmailRequest } from './IUndoChangeEmailRequest';
 import { IUndoChangeEmailRequestRepository } from './IUndoChangeEmailRequestRepository';
 import { UndoChangeEmailRequest } from './UndoChangeEmailRequest.kysely';
@@ -8,7 +8,7 @@ export class UndoChangeEmailRequestRepository implements IUndoChangeEmailRequest
 
 	public constructor() { }
 
-	public async findByIDs(...ids: string[]): Promise<EntityAsync<IUndoChangeEmailRequest>[]> {
+	public async findByIDs(...ids: string[]): Promise<TEntityAsync<IUndoChangeEmailRequest>[]> {
 		const requestsPartial = await db
 			.selectFrom('undochangeemailrequests')
 			.where('id', 'in', ids)
@@ -22,13 +22,13 @@ export class UndoChangeEmailRequestRepository implements IUndoChangeEmailRequest
 		return requests;
 	}
 
-	public async findByID(id: string): Promise<EntityAsync<IUndoChangeEmailRequest> | undefined> {
+	public async findByID(id: string): Promise<TEntityAsync<IUndoChangeEmailRequest> | undefined> {
 		const requests = await this.findByIDs(id);
 		const request = requests[0];
 		return request;
 	}
 
-	public async save(request: IUndoChangeEmailRequest | EntityAsync<IUndoChangeEmailRequest>): Promise<void> {
+	public async save(request: IUndoChangeEmailRequest | TEntityAsync<IUndoChangeEmailRequest>): Promise<void> {
 		const user = await request.user;
 		const requestPartial = {
 			id: request.id,

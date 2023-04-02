@@ -1,13 +1,13 @@
 import { Kysely } from 'kysely';
-import { Database } from '../Database';
-import { EntityAsync } from '../EntityAsync';
+import { TDatabase } from '../database/TDatabase';
+import { TEntityAsync } from '../TEntityAsync';
 import { IUser } from '../user/IUser';
 import { User } from '../user/User.kysely';
 import { IPropertyWithUser } from './IPropertyWithUser'
 
-export class PropertyWithUser implements EntityAsync<IPropertyWithUser> {
+export class PropertyWithUser implements TEntityAsync<IPropertyWithUser> {
 
-	constructor(property: Database['properties'] & { type: 'user' }, db: Kysely<Database>) {
+	constructor(property: TDatabase['properties'] & { type: 'user' }, db: Kysely<TDatabase>) {
 		this.db = db;
 		this.id = property.id;
 		this.key = property.key;
@@ -15,14 +15,14 @@ export class PropertyWithUser implements EntityAsync<IPropertyWithUser> {
 		this.valueID = property.value;
 	}
 
-	private readonly db: Kysely<Database>;
+	private readonly db: Kysely<TDatabase>;
 	public readonly id: string;
 	public readonly key: string;
 	public readonly type: 'user';
-	private _value?: Promise<EntityAsync<IUser> | undefined>;
+	private _value?: Promise<TEntityAsync<IUser> | undefined>;
 	private valueID?: string;
 
-	public get value(): Promise<EntityAsync<IUser> | undefined> | undefined {
+	public get value(): Promise<TEntityAsync<IUser> | undefined> | undefined {
 		if (this._value) {
 			return this._value;
 		}

@@ -1,8 +1,8 @@
-import { EntityAsync } from '../EntityAsync';
+import { TEntityAsync } from '../TEntityAsync';
 import { ISubject } from './ISubject';
 import { TSubjectForPublic } from './TSubjectForPublic';
 
-export const subjectToSubjectForPublicWithoutProperties = async (subject: EntityAsync<ISubject>): Promise<Omit<TSubjectForPublic, 'properties'>> => {
+export const subjectToSubjectForPublicWithoutProperties = async (subject: TEntityAsync<ISubject>): Promise<Omit<TSubjectForPublic, 'properties'>> => {
 	const teachers = await subject.teachers;
 	const categories = await subject.categories;
 	const semesters = await subject.semesters;

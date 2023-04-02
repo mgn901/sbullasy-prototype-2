@@ -1,12 +1,12 @@
-import { EntityAsync } from '../EntityAsync';
-import { db } from '../kysely/db';
+import { TEntityAsync } from '../TEntityAsync';
+import { db } from '../database/db.kysely';
 import { IResetPasswordRequest } from './IResetPasswordRequest';
 import { IResetPasswordRequestRepository } from './IResetPasswordRequestRepository';
 import { ResetPasswordRequest } from './ResetPasswordRequest.kysely';
 
 export class ResetPasswordRequestRepository implements IResetPasswordRequestRepository {
 
-	public async findByIDs(...ids: string[]): Promise<EntityAsync<IResetPasswordRequest>[]> {
+	public async findByIDs(...ids: string[]): Promise<TEntityAsync<IResetPasswordRequest>[]> {
 		const requestsPartial = await db
 			.selectFrom('resetpasswordrequests')
 			.where('id', 'in', ids)
@@ -20,13 +20,13 @@ export class ResetPasswordRequestRepository implements IResetPasswordRequestRepo
 		return requests;
 	}
 
-	public async findByID(id: string): Promise<EntityAsync<IResetPasswordRequest> | undefined> {
+	public async findByID(id: string): Promise<TEntityAsync<IResetPasswordRequest> | undefined> {
 		const requests = await this.findByIDs(id);
 		const request = requests[0];
 		return request;
 	}
 
-	public async save(request: IResetPasswordRequest | EntityAsync<IResetPasswordRequest>): Promise<void> {
+	public async save(request: IResetPasswordRequest | TEntityAsync<IResetPasswordRequest>): Promise<void> {
 		const user = await request.user;
 		const requestPartial = {
 			id: request.id,

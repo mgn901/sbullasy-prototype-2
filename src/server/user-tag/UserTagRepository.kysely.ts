@@ -1,5 +1,5 @@
-import { EntityAsync } from '../EntityAsync';
-import { db } from '../kysely/db';
+import { TEntityAsync } from '../TEntityAsync';
+import { db } from '../database/db.kysely';
 import { IUserTag } from './IUserTag';
 import { IUserTagRepository } from './IUserTagRepository';
 import { UserTag } from './UserTag.kysely';
@@ -8,7 +8,7 @@ export class UserTagRepository implements IUserTagRepository {
 
 	public constructor() { }
 
-	public async findByIDs(...ids: string[]): Promise<EntityAsync<IUserTag>[]> {
+	public async findByIDs(...ids: string[]): Promise<TEntityAsync<IUserTag>[]> {
 		const tagsPartial = await db
 			.selectFrom('usertags')
 			.where('id', 'in', ids)
@@ -21,13 +21,13 @@ export class UserTagRepository implements IUserTagRepository {
 		return tags;
 	}
 
-	public async findByID(id: string): Promise<EntityAsync<IUserTag> | undefined> {
+	public async findByID(id: string): Promise<TEntityAsync<IUserTag> | undefined> {
 		const tags = await this.findByIDs(id);
 		const tag = tags[0];
 		return tag;
 	}
 
-	public async save(userTag: IUserTag | EntityAsync<IUserTag>): Promise<void> {
+	public async save(userTag: IUserTag | TEntityAsync<IUserTag>): Promise<void> {
 		const grantableBy = await userTag.grantableBy;
 		const grantableByIDs = grantableBy.map(grantableByItem => grantableByItem.id);
 		const userTagPartial = {

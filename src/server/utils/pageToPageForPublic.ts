@@ -1,4 +1,4 @@
-import { EntityAsync } from '../EntityAsync';
+import { TEntityAsync } from '../TEntityAsync';
 import { IPage } from '../page/IPage';
 import { TPageForPublic } from '../page/TPageForPublic';
 import { groupToGroupForPublic } from './groupToGroupForPublic';
@@ -7,7 +7,7 @@ import { propertyToPropertyWithoutEntityKey } from './propertyToPropertyWithoutE
 import { tagToTagWithoutEntityKey } from './tagToTagWithoutEntityKey';
 import { userToUserForPublic } from './userToUserForPublic';
 
-export const pageToPageForPublic = async (page: EntityAsync<IPage>): Promise<TPageForPublic> => {
+export const pageToPageForPublic = async (page: TEntityAsync<IPage>): Promise<TPageForPublic> => {
 	const createdByUser = await page.createdByUser;
 	const createdByUserForOutput = createdByUser ? await userToUserForPublic(createdByUser) : undefined;
 	const createdByGroup = await page.createdByGroup;

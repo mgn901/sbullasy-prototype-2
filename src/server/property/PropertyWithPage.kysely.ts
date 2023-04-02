@@ -1,13 +1,13 @@
 import { Kysely } from 'kysely';
-import { Database } from '../Database';
-import { EntityAsync } from '../EntityAsync';
+import { TDatabase } from '../database/TDatabase';
+import { TEntityAsync } from '../TEntityAsync';
 import { IPage } from '../page/IPage';
 import { Page } from '../page/Page.kysely';
 import { IPropertyWithPage } from './IPropertyWithPage'
 
-export class PropertyWithPage implements EntityAsync<IPropertyWithPage> {
+export class PropertyWithPage implements TEntityAsync<IPropertyWithPage> {
 
-	constructor(proeprty: Database['properties'] & { type: 'page' }, db: Kysely<Database>) {
+	constructor(proeprty: TDatabase['properties'] & { type: 'page' }, db: Kysely<TDatabase>) {
 		this.db = db;
 		this.id = proeprty.id;
 		this.key = proeprty.key;
@@ -15,14 +15,14 @@ export class PropertyWithPage implements EntityAsync<IPropertyWithPage> {
 		this.valueID = proeprty.value;
 	}
 
-	private db: Kysely<Database>;
+	private db: Kysely<TDatabase>;
 	public readonly id: string;
 	public readonly key: string;
 	public readonly type: 'page';
-	private _value?: Promise<EntityAsync<IPage> | undefined> | undefined;
+	private _value?: Promise<TEntityAsync<IPage> | undefined> | undefined;
 	private valueID?: string;
 
-	public get value(): Promise<EntityAsync<IPage> | undefined> | undefined {
+	public get value(): Promise<TEntityAsync<IPage> | undefined> | undefined {
 		if (this._value) {
 			return this._value;
 		}

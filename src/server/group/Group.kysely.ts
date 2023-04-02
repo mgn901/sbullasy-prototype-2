@@ -1,9 +1,9 @@
 import { Kysely } from 'kysely';
-import { Database } from '../Database';
-import { EntityAsync } from '../EntityAsync';
+import { TDatabase } from '../database/TDatabase';
+import { TEntityAsync } from '../TEntityAsync';
 import { GroupTag } from '../group-tag/GroupTag.kysely';
 import { IGroupTag } from '../group-tag/IGroupTag';
-import { createProperty } from '../kysely/createProperty.kysely';
+import { createProperty } from '../property/createProperty.kysely';
 import { IPage } from '../page/IPage';
 import { Page } from '../page/Page.kysely';
 import { TProperty } from '../property/TProperty';
@@ -11,9 +11,9 @@ import { IUser } from '../user/IUser';
 import { User } from '../user/User.kysely';
 import { IGroup } from './IGroup';
 
-export class Group implements EntityAsync<IGroup> {
+export class Group implements TEntityAsync<IGroup> {
 
-	public constructor(group: Database['groups'], db: Kysely<Database>) {
+	public constructor(group: TDatabase['groups'], db: Kysely<TDatabase>) {
 		this.db = db;
 		this.id = group.id;
 		this.name = group.name;
@@ -22,19 +22,19 @@ export class Group implements EntityAsync<IGroup> {
 		this.invitationToken = group.invitationToken;
 	}
 
-	private readonly db: Kysely<Database>;
+	private readonly db: Kysely<TDatabase>;
 	public readonly id: string;
 	public name: string;
 	public readonly createdAt: number;
 	public updatedAt: number;
 	public invitationToken: string;
-	private _tags?: Promise<EntityAsync<IGroupTag>[]>;
-	private _properties?: Promise<EntityAsync<TProperty>[]>;
-	private _owner?: Promise<EntityAsync<IUser>>;
-	private _members?: Promise<EntityAsync<IUser>[]>;
-	private _pages?: Promise<EntityAsync<IPage>[]>;
+	private _tags?: Promise<TEntityAsync<IGroupTag>[]>;
+	private _properties?: Promise<TEntityAsync<TProperty>[]>;
+	private _owner?: Promise<TEntityAsync<IUser>>;
+	private _members?: Promise<TEntityAsync<IUser>[]>;
+	private _pages?: Promise<TEntityAsync<IPage>[]>;
 
-	public get tags(): Promise<EntityAsync<IGroupTag>[]> {
+	public get tags(): Promise<TEntityAsync<IGroupTag>[]> {
 		if (this._tags) {
 			return this._tags;
 		}
@@ -55,7 +55,7 @@ export class Group implements EntityAsync<IGroup> {
 		return promise;
 	}
 
-	public get properties(): Promise<EntityAsync<TProperty>[]> {
+	public get properties(): Promise<TEntityAsync<TProperty>[]> {
 		if (this._properties) {
 			return this._properties;
 		}
@@ -76,7 +76,7 @@ export class Group implements EntityAsync<IGroup> {
 		return promise;
 	}
 
-	public get owner(): Promise<EntityAsync<IUser>> {
+	public get owner(): Promise<TEntityAsync<IUser>> {
 		if (this._owner) {
 			return this._owner;
 		}
@@ -95,7 +95,7 @@ export class Group implements EntityAsync<IGroup> {
 		return promise;
 	}
 
-	public get members(): Promise<EntityAsync<IUser>[]> {
+	public get members(): Promise<TEntityAsync<IUser>[]> {
 		if (this._members) {
 			return this._members;
 		}
@@ -116,7 +116,7 @@ export class Group implements EntityAsync<IGroup> {
 		return promise;
 	}
 
-	public get pages(): Promise<EntityAsync<IPage>[]> {
+	public get pages(): Promise<TEntityAsync<IPage>[]> {
 		if (this._pages) {
 			return this._pages;
 		}

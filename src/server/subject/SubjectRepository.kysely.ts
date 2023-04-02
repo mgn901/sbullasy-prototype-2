@@ -1,6 +1,6 @@
-import { EntityAsync } from '../EntityAsync';
-import { EntityWithoutEntityKey } from '../EntityWithoutEntityKey';
-import { db } from '../kysely/db';
+import { TEntityAsync } from '../TEntityAsync';
+import { EntityWithoutEntityKey } from '../TEntityWithoutEntityKey';
+import { db } from '../database/db.kysely';
 import { TProperty } from '../property/TProperty';
 import { ISubject } from './ISubject';
 import { ISubjectRepository } from './ISubjectRepository';
@@ -8,13 +8,13 @@ import { Subject } from './Subject.kysely';
 
 export class SubjectRepository implements ISubjectRepository {
 
-	public async findByID(id: string): Promise<EntityAsync<ISubject> | undefined> {
+	public async findByID(id: string): Promise<TEntityAsync<ISubject> | undefined> {
 		const subjects = await this.findByIDs(id);
 		const subject = subjects[0];
 		return subject;
 	}
 
-	public async findByIDs(...ids: string[]): Promise<EntityAsync<ISubject>[]> {
+	public async findByIDs(...ids: string[]): Promise<TEntityAsync<ISubject>[]> {
 		const subjectsPartial = await db
 			.selectFrom('subjects')
 			.where('id', 'in', ids)
@@ -27,7 +27,7 @@ export class SubjectRepository implements ISubjectRepository {
 		return subjects;
 	}
 
-	public async findAll(): Promise<EntityAsync<ISubject>[]> {
+	public async findAll(): Promise<TEntityAsync<ISubject>[]> {
 		const subjectsPartial = await db
 			.selectFrom('subjects')
 			.selectAll()
@@ -39,7 +39,7 @@ export class SubjectRepository implements ISubjectRepository {
 		return subjects;
 	}
 
-	public async save(subject: ISubject | EntityAsync<ISubject>): Promise<void> {
+	public async save(subject: ISubject | TEntityAsync<ISubject>): Promise<void> {
 		const teachers = await subject.teachers;
 		const categories = await subject.categories;
 		const semesters = await subject.semesters;

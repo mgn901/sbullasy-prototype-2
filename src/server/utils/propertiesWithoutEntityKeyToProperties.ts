@@ -1,7 +1,7 @@
-import { EntityAsync } from '../EntityAsync';
-import { EntityWithoutEntityKey } from '../EntityWithoutEntityKey';
+import { TEntityAsync } from '../TEntityAsync';
+import { EntityWithoutEntityKey } from '../TEntityWithoutEntityKey';
 import { IGroupRepository } from '../group/IGroupRepository';
-import { createProperty } from '../kysely/createProperty.kysely';
+import { createProperty } from '../property/createProperty.kysely';
 import { IPageRepository } from '../page/IPageRepository';
 import { TProperty } from '../property/TProperty';
 import { IUserRepository } from '../user/IUserRepository';
@@ -13,13 +13,13 @@ interface IPropertyWithoutEntityKeyToPropertiesParams {
 	pageRepository: IPageRepository;
 }
 
-export const propertiesWithoutEntityKeyToProperties = (params: IPropertyWithoutEntityKeyToPropertiesParams): Promise<EntityAsync<TProperty>[]> => {
+export const propertiesWithoutEntityKeyToProperties = (params: IPropertyWithoutEntityKeyToPropertiesParams): Promise<TEntityAsync<TProperty>[]> => {
 	const { propertiesPartial, userRepository, groupRepository, pageRepository } = params;
 
 	const propertyPromises = propertiesPartial.map(async (propertyPartial) => {
 		const type = propertyPartial.type;
 		const valueID = propertyPartial.value;
-		const property: EntityAsync<TProperty> = {
+		const property: TEntityAsync<TProperty> = {
 			id: propertyPartial.id,
 			key: propertyPartial.key,
 			type: type,

@@ -1,13 +1,13 @@
 import { Kysely } from 'kysely';
-import { Database } from '../Database';
-import { EntityAsync } from '../EntityAsync';
+import { TDatabase } from '../database/TDatabase';
+import { TEntityAsync } from '../TEntityAsync';
 import { IUser } from '../user/IUser';
 import { User } from '../user/User.kysely';
 import { IResetPasswordRequest } from './IResetPasswordRequest';
 
-export class ResetPasswordRequest implements EntityAsync<IResetPasswordRequest> {
+export class ResetPasswordRequest implements TEntityAsync<IResetPasswordRequest> {
 
-	public constructor(resetPasswordRequest: Database['resetpasswordrequests'], db: Kysely<Database>) {
+	public constructor(resetPasswordRequest: TDatabase['resetpasswordrequests'], db: Kysely<TDatabase>) {
 		this.db = db;
 		this.id = resetPasswordRequest.id;
 		this.email = resetPasswordRequest.email;
@@ -16,14 +16,14 @@ export class ResetPasswordRequest implements EntityAsync<IResetPasswordRequest> 
 		this.userID = resetPasswordRequest.user;
 	}
 
-	private readonly db: Kysely<Database>;
+	private readonly db: Kysely<TDatabase>;
 	public readonly id: string;
 	public readonly email: string;
 	public readonly createdAt: number;
 	public isDisposed: boolean;
 	private readonly userID: string;
 
-	public get user(): Promise<EntityAsync<IUser>> {
+	public get user(): Promise<TEntityAsync<IUser>> {
 		const promise = (async () => {
 			const usersPartial = await this.db
 				.selectFrom('users')

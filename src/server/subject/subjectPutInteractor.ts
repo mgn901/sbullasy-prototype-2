@@ -1,5 +1,5 @@
 import { dateToUnixTimeMillis } from '@mgn901/mgn901-utils-ts';
-import { EntityAsync } from '../EntityAsync';
+import { TEntityAsync } from '../TEntityAsync';
 import { WrongParamsError } from '../error/WrongParamsError';
 import { IGroupRepository } from '../group/IGroupRepository';
 import { IInteractorParams } from '../IInteractorParams';
@@ -86,7 +86,7 @@ export const subjectPutInteractor = async (params: ISubjectPutInteractorParams):
 		throw error;
 	}
 
-	const subject: EntityAsync<ISubject> = {
+	const subject: TEntityAsync<ISubject> = {
 		id: subjectPartial.id,
 		code: subjectPartial.code,
 		name: subjectPartial.name,

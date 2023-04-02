@@ -1,17 +1,17 @@
-import { EntityAsync } from '../EntityAsync';
-import { db } from '../kysely/db';
+import { TEntityAsync } from '../TEntityAsync';
+import { db } from '../database/db.kysely';
 import { ISubjectCategory } from './ISubjectCategory';
 import { ISubjectCategoryRepository } from './ISubjectCategoryRepository';
 
 export class SubjectCategoryRepository implements ISubjectCategoryRepository {
 
-	public async findByID(id: string): Promise<EntityAsync<ISubjectCategory> | undefined> {
+	public async findByID(id: string): Promise<TEntityAsync<ISubjectCategory> | undefined> {
 		const categories = await this.findByIDs(id);
 		const category = categories[0];
 		return category;
 	}
 
-	public async findByIDs(...ids: string[]): Promise<EntityAsync<ISubjectCategory>[]> {
+	public async findByIDs(...ids: string[]): Promise<TEntityAsync<ISubjectCategory>[]> {
 		const categories = await db
 			.selectFrom('categories')
 			.where('id', 'in', ids)
@@ -20,7 +20,7 @@ export class SubjectCategoryRepository implements ISubjectCategoryRepository {
 		return categories;
 	}
 
-	public async findAll(): Promise<EntityAsync<ISubjectCategory>[]> {
+	public async findAll(): Promise<TEntityAsync<ISubjectCategory>[]> {
 		const categories = await db
 			.selectFrom('categories')
 			.selectAll()
@@ -28,7 +28,7 @@ export class SubjectCategoryRepository implements ISubjectCategoryRepository {
 		return categories;
 	}
 
-	public async save(item: ISubjectCategory | EntityAsync<ISubjectCategory>): Promise<void> {
+	public async save(item: ISubjectCategory | TEntityAsync<ISubjectCategory>): Promise<void> {
 		await db
 			.insertInto('categories')
 			.values(item)

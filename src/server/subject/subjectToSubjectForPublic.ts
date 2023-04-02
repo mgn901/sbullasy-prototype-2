@@ -1,10 +1,10 @@
-import { EntityAsync } from '../EntityAsync';
+import { TEntityAsync } from '../TEntityAsync';
 import { promisedMap } from '../utils/promisedMap';
 import { propertyToPropertyWithoutEntityKey } from '../utils/propertyToPropertyWithoutEntityKey';
 import { ISubject } from './ISubject';
 import { TSubjectForPublic } from './TSubjectForPublic';
 
-export const subjectToSubjectForPublic = async (subject: EntityAsync<ISubject>): Promise<TSubjectForPublic> => {
+export const subjectToSubjectForPublic = async (subject: TEntityAsync<ISubject>): Promise<TSubjectForPublic> => {
 	const teachers = await subject.teachers;
 	const categories = await subject.categories;
 	const semesters = await subject.semesters;

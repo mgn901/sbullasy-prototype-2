@@ -1,13 +1,13 @@
 import { Kysely } from 'kysely';
-import { Database } from '../Database';
-import { EntityAsync } from '../EntityAsync';
+import { TDatabase } from '../database/TDatabase';
+import { TEntityAsync } from '../TEntityAsync';
 import { IUser } from '../user/IUser';
 import { User } from '../user/User.kysely';
 import { ISession } from './ISession';
 
-export class Session implements EntityAsync<ISession> {
+export class Session implements TEntityAsync<ISession> {
 
-	public constructor(session: Database['sessions'], db: Kysely<Database>) {
+	public constructor(session: TDatabase['sessions'], db: Kysely<TDatabase>) {
 		this.db = db;
 		this.id = session.id;
 		this.loggedInAt = session.loggedInAt;
@@ -17,7 +17,7 @@ export class Session implements EntityAsync<ISession> {
 		this.userID = session.user;
 	}
 
-	private readonly db: Kysely<Database>;
+	private readonly db: Kysely<TDatabase>;
 	public readonly id: string;
 	public readonly loggedInAt: number;
 	public readonly expiresAt: number;
@@ -25,7 +25,7 @@ export class Session implements EntityAsync<ISession> {
 	public readonly name: string;
 	private readonly userID: string;
 
-	public get user(): Promise<EntityAsync<IUser>> {
+	public get user(): Promise<TEntityAsync<IUser>> {
 		const promise = (async () => {
 			const usersPartial = await this.db
 				.selectFrom('users')

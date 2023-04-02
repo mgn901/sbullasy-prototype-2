@@ -1,4 +1,4 @@
-import { EntityWithoutEntityKey } from '../EntityWithoutEntityKey';
+import { EntityWithoutEntityKey } from '../TEntityWithoutEntityKey';
 import { TProperty } from '../property/TProperty';
 import { IUser } from './IUser';
 import { TUserTagWithExpiresAt } from './TUserTagWithExpiresAt';

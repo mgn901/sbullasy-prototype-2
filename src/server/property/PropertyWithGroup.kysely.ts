@@ -1,13 +1,13 @@
 import { Kysely } from 'kysely';
-import { Database } from '../Database';
-import { EntityAsync } from '../EntityAsync';
+import { TDatabase } from '../database/TDatabase';
+import { TEntityAsync } from '../TEntityAsync';
 import { Group } from '../group/Group.kysely';
 import { IGroup } from '../group/IGroup';
 import { IPropertyWithGroup } from './IPropertyWithGroup'
 
-export class PropertyWithGroup implements EntityAsync<IPropertyWithGroup> {
+export class PropertyWithGroup implements TEntityAsync<IPropertyWithGroup> {
 
-	constructor(property: Database['properties'] & { type: 'group' }, db: Kysely<Database>) {
+	constructor(property: TDatabase['properties'] & { type: 'group' }, db: Kysely<TDatabase>) {
 		this.db = db;
 		this.id = property.id;
 		this.key = property.key;
@@ -15,14 +15,14 @@ export class PropertyWithGroup implements EntityAsync<IPropertyWithGroup> {
 		this.valueID = property.value;
 	}
 
-	private db: Kysely<Database>;
+	private db: Kysely<TDatabase>;
 	public readonly id: string;
 	public readonly key: string;
 	public readonly type: 'group';
-	private _value?: Promise<EntityAsync<IGroup> | undefined>;
+	private _value?: Promise<TEntityAsync<IGroup> | undefined>;
 	private valueID?: string;
 
-	public get value(): Promise<EntityAsync<IGroup> | undefined> | undefined {
+	public get value(): Promise<TEntityAsync<IGroup> | undefined> | undefined {
 		if (this._value) {
 			return this._value;
 		}

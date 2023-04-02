@@ -1,7 +1,7 @@
 import { IAPIToken } from '../api-token/IAPIToken';
-import { EntityAsync } from '../EntityAsync';
-import { EntityWithoutEntityKey } from '../EntityWithoutEntityKey';
-import { db } from '../kysely/db';
+import { TEntityAsync } from '../TEntityAsync';
+import { EntityWithoutEntityKey } from '../TEntityWithoutEntityKey';
+import { db } from '../database/db.kysely';
 import { IPage } from '../page/IPage';
 import { IUser } from './IUser';
 import { IUserRepository } from './IUserRepository';
@@ -12,7 +12,7 @@ export class UserRepository implements IUserRepository {
 
 	public constructor() { }
 
-	public async findByIDs(...ids: string[]): Promise<EntityAsync<IUser>[]> {
+	public async findByIDs(...ids: string[]): Promise<TEntityAsync<IUser>[]> {
 		const usersPartial = await db
 			.selectFrom('users')
 			.where('id', 'in', ids)
@@ -25,13 +25,13 @@ export class UserRepository implements IUserRepository {
 		return users;
 	}
 
-	public async findByID(id: string): Promise<EntityAsync<IUser> | undefined> {
+	public async findByID(id: string): Promise<TEntityAsync<IUser> | undefined> {
 		const users = await this.findByIDs(id);
 		const user = users[0];
 		return user;
 	}
 
-	public async findByEmail(email: string): Promise<EntityAsync<IUser> | undefined> {
+	public async findByEmail(email: string): Promise<TEntityAsync<IUser> | undefined> {
 		const usersPartial = await db
 			.selectFrom('users')
 			.where('email', '==', email)
@@ -45,7 +45,7 @@ export class UserRepository implements IUserRepository {
 		return user;
 	}
 
-	public async findBySessionID(sessionID: string): Promise<EntityAsync<IUser> | undefined> {
+	public async findBySessionID(sessionID: string): Promise<TEntityAsync<IUser> | undefined> {
 		const usersPartial = await db
 			.selectFrom('sessions')
 			.where('id', '==', sessionID)
@@ -61,7 +61,7 @@ export class UserRepository implements IUserRepository {
 		return user;
 	}
 
-	public async findByAPIToken(token: string): Promise<EntityAsync<IUser> | undefined> {
+	public async findByAPIToken(token: string): Promise<TEntityAsync<IUser> | undefined> {
 		const usersPartial = await db
 			.selectFrom('apitokens')
 			.where('token', '==', token)
@@ -77,7 +77,7 @@ export class UserRepository implements IUserRepository {
 		return user;
 	}
 
-	public async save(user: IUser | EntityAsync<IUser>): Promise<void> {
+	public async save(user: IUser | TEntityAsync<IUser>): Promise<void> {
 		const { id, email, password, displayName } = user;
 		const userPartial = { id, email, password, displayName };
 		const oldProperties = await db

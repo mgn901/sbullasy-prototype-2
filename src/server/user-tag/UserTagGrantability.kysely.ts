@@ -1,13 +1,13 @@
 import { Kysely } from 'kysely';
-import { Database } from '../Database';
-import { EntityAsync } from '../EntityAsync';
+import { TDatabase } from '../database/TDatabase';
+import { TEntityAsync } from '../TEntityAsync';
 import { IUserTag } from './IUserTag';
 import { IUserTagGrantability } from './IUserTagGrantability';
 import { UserTag } from './UserTag.kysely';
 
-export class UserTagGrantability implements EntityAsync<IUserTagGrantability> {
+export class UserTagGrantability implements TEntityAsync<IUserTagGrantability> {
 
-	constructor(userTagGrantability: Database['usertaggrantabilities'], db: Kysely<Database>) {
+	constructor(userTagGrantability: TDatabase['usertaggrantabilities'], db: Kysely<TDatabase>) {
 		this.db = db;
 		this.id = userTagGrantability.id;
 		this.grantableByEmailRegex = userTagGrantability.id;
@@ -16,14 +16,14 @@ export class UserTagGrantability implements EntityAsync<IUserTagGrantability> {
 		this._grantableByUserTag = userTagGrantability.grantableByUserTag;
 	}
 	
-	private db: Kysely<Database>;
+	private db: Kysely<TDatabase>;
 	public id: string;
 	public grantableByEmailRegex?: string | undefined;
 	public expires?: number | undefined;
 	private _tag: string;
 	private _grantableByUserTag?: string | undefined;
 
-	public get tag(): Promise<EntityAsync<IUserTag>> {
+	public get tag(): Promise<TEntityAsync<IUserTag>> {
 		const promise = (async () => {
 			const tagsPartial = await this.db
 				.selectFrom('usertags')
@@ -37,7 +37,7 @@ export class UserTagGrantability implements EntityAsync<IUserTagGrantability> {
 		return promise;
 	}
 
-	public get grantableByUserTag(): Promise<EntityAsync<IUserTag>> | undefined {
+	public get grantableByUserTag(): Promise<TEntityAsync<IUserTag>> | undefined {
 		const usertag_id = this._grantableByUserTag;
 		if (!usertag_id) {
 			return undefined;

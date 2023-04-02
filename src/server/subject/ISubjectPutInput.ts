@@ -1,5 +1,5 @@
 import { IAPIToken } from '../api-token/IAPIToken';
-import { EntityWithoutEntityKey } from '../EntityWithoutEntityKey';
+import { EntityWithoutEntityKey } from '../TEntityWithoutEntityKey';
 import { IPlace } from '../place/IPlace';
 import { TProperty } from '../property/TProperty';
 import { ISession } from '../session/ISession';

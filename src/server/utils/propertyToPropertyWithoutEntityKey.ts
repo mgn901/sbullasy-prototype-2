@@ -1,8 +1,8 @@
-import { EntityAsync } from '../EntityAsync';
-import { EntityWithoutEntityKey } from '../EntityWithoutEntityKey';
+import { TEntityAsync } from '../TEntityAsync';
+import { EntityWithoutEntityKey } from '../TEntityWithoutEntityKey';
 import { TProperty } from '../property/TProperty';
 
-export const propertyToPropertyWithoutEntityKey = async (property: EntityAsync<TProperty>): Promise<EntityWithoutEntityKey<TProperty>> => {
+export const propertyToPropertyWithoutEntityKey = async (property: TEntityAsync<TProperty>): Promise<EntityWithoutEntityKey<TProperty>> => {
 	const value = await property.value;
 	const propertyForOutput = {
 		id: property.id,

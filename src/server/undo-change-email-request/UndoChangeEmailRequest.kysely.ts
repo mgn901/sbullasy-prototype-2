@@ -1,13 +1,13 @@
 import { Kysely } from 'kysely';
-import { Database } from '../Database';
-import { EntityAsync } from '../EntityAsync';
+import { TDatabase } from '../database/TDatabase';
+import { TEntityAsync } from '../TEntityAsync';
 import { IUser } from '../user/IUser';
 import { User } from '../user/User.kysely';
 import { IUndoChangeEmailRequest } from './IUndoChangeEmailRequest';
 
-export class UndoChangeEmailRequest implements EntityAsync<IUndoChangeEmailRequest> {
+export class UndoChangeEmailRequest implements TEntityAsync<IUndoChangeEmailRequest> {
 
-	constructor(undoChangeEmailRequest: Database['undochangeemailrequests'], db: Kysely<Database>) {
+	constructor(undoChangeEmailRequest: TDatabase['undochangeemailrequests'], db: Kysely<TDatabase>) {
 		this.db = db;
 		this.id = undoChangeEmailRequest.id;
 		this.email = undoChangeEmailRequest.email;
@@ -15,13 +15,13 @@ export class UndoChangeEmailRequest implements EntityAsync<IUndoChangeEmailReque
 		this.userID = undoChangeEmailRequest.user;
 	}
 
-	private readonly db: Kysely<Database>;
+	private readonly db: Kysely<TDatabase>;
 	public readonly id: string;
 	public readonly email: string;
 	public readonly createdAt: number;
 	private readonly userID: string;
 
-	public get user(): Promise<EntityAsync<IUser>> {
+	public get user(): Promise<TEntityAsync<IUser>> {
 		const promise = (async () => {
 			const usersPartial = await this.db
 				.selectFrom('users')

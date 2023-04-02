@@ -1,5 +1,5 @@
 import { dateToUnixTimeMillis } from '@mgn901/mgn901-utils-ts';
-import { EntityAsync } from '../EntityAsync';
+import { TEntityAsync } from '../TEntityAsync';
 import { NotFoundError } from '../error/NotFoundError';
 import { PermissionError } from '../error/PermissionError';
 import { WrongParamsError } from '../error/WrongParamsError';
@@ -75,7 +75,7 @@ export const userEmailChangeInteractor = async (params: IUserEmailChangeInteract
 
 	const requestID = generateID();
 	const now = dateToUnixTimeMillis(new Date());
-	const request: EntityAsync<IUndoChangeEmailRequest> = {
+	const request: TEntityAsync<IUndoChangeEmailRequest> = {
 		id: requestID,
 		email: oldEmail,
 		createdAt: now,
