@@ -20,6 +20,14 @@ export class TeacherRepository implements ITeacherRepository {
 		return teachers;
 	}
 
+	public async findAll(): Promise<EntityAsync<ITeacher>[]> {
+		const teachers = await db
+			.selectFrom('teachers')
+			.selectAll()
+			.execute();
+		return teachers;
+	}
+
 	public async save(item: ITeacher | EntityAsync<ITeacher>): Promise<void> {
 		await db
 			.insertInto('teachers')

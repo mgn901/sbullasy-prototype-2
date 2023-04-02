@@ -20,6 +20,14 @@ export class SubjectWeekRepository implements ISubjectWeekRepository {
 		return weeks;
 	}
 
+	public async findAll(): Promise<EntityAsync<ISubjectWeek>[]> {
+		const weeks = await db
+			.selectFrom('subjectweeks')
+			.selectAll()
+			.execute();
+		return weeks;
+	}
+
 	public async save(week: ISubjectWeek | EntityAsync<ISubjectWeek>): Promise<void> {
 		await db
 			.insertInto('subjectweeks')

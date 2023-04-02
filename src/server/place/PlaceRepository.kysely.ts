@@ -20,6 +20,14 @@ export class PlaceRepository implements IPlaceRepository {
 		return place;
 	}
 
+	public async findAll(): Promise<EntityAsync<IPlace>[]> {
+		const places = await db
+			.selectFrom('places')
+			.selectAll()
+			.execute();
+		return places;
+	}
+
 	public async save(place: IPlace | EntityAsync<IPlace>): Promise<void> {
 		await db
 			.insertInto('places')
