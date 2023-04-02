@@ -63,7 +63,6 @@ export interface Database {
 	undochangeemailrequests: EntityWithoutEntityKey<IUndoChangeEmailRequest>;
 	resetpasswordrequests: EntityWithoutEntityKey<IResetPasswordRequest>;
 	loginfailures: EntityWithoutEntityKey<ILoginFailure>;
-	user_usertagregistrations: Junction<IUser, IUser['tagRegistrations'], 'user_id', 'registration_id'>;
 	user_properties: Junction<IUser, IUser['properties'], 'user_id', 'property_id'>;
 	user_owns_groups: Junction<IGroup['owner'], IUser['owns'], 'user_id', 'group_id'>;
 	users_belongs_groups: Junction<IGroup['members'], IUser['belongs'], 'user_id', 'group_id'>;

@@ -5,6 +5,7 @@ import { db } from '../kysely/db';
 import { IPage } from '../page/IPage';
 import { IUser } from './IUser';
 import { IUserRepository } from './IUserRepository';
+import { IUserTagRegistration } from './IUserTagRegistration';
 import { User } from './User.kysely';
 
 export class UserRepository implements IUserRepository {
@@ -153,21 +154,25 @@ export class UserRepository implements IUserRepository {
 		});
 
 		await db
-			.deleteFrom('user_usertagregistrations')
-			.where('user_id', '==', id)
-			.where('registration_id', 'not in', registrationIDs)
+			.deleteFrom('usertagregistrations')
+			.where('user', '==', id)
+			.where('id', 'not in', registrationIDs)
 			.executeTakeFirst();
-		registrationIDs.forEach(async (tagID) => {
-			const usersUserTagRegistrationsItem = {
-				user_id: id,
-				registration_id: tagID,
+		registrations.forEach(async (registration) => {
+			const user = await registration.user;
+			const tag = await registration.tag;
+			const registrationPartial: EntityWithoutEntityKey<IUserTagRegistration> = {
+				id: registration.id,
+				tag: tag.id,
+				user: user.id,
+				expiresAt: registration.expiresAt,
 			};
 			await db
-				.insertInto('user_usertagregistrations')
-				.values(usersUserTagRegistrationsItem)
+				.insertInto('usertagregistrations')
+				.values(registrationPartial)
 				.onConflict(oc => oc
-					.columns(['user_id', 'registration_id'])
-					.doNothing())
+					.column('id')
+					.doUpdateSet(registrationPartial))
 				.executeTakeFirst();
 			return;
 		});

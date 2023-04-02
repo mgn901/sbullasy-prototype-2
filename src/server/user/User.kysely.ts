@@ -46,10 +46,9 @@ export class User implements EntityAsync<IUser> {
 		}
 		const promise = (async () => {
 			const registrationsPartial = await this.db
-				.selectFrom('user_usertagregistrations')
-				.where('user_id', '==', this.id)
-				.where('registration_id', 'is not', null)
-				.innerJoin('usertagregistrations', 'usertagregistrations.id', 'usertagregistrations.id')
+				.selectFrom('usertagregistrations')
+				.where('user', '==', this.id)
+				.where('tag', 'is not', null)
 				.selectAll()
 				.execute();
 			const registrations = registrationsPartial.map((registrationPartial) => {

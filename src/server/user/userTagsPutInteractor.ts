@@ -84,6 +84,7 @@ export const userTagsPutInteractor = async (params: IUserTagsPutInteractorParams
 		const registrationID = generateID();
 		const registration: EntityAsync<IUserTagRegistration> = {
 			id: registrationID,
+			user: user,
 			tag: tagBeGranted,
 			expiresAt: undefined,
 		};
@@ -125,6 +126,7 @@ export const userTagsPutInteractor = async (params: IUserTagsPutInteractorParams
 		const registrationID = generateID();
 		const registration: EntityAsync<IUserTagRegistration> = {
 			id: registrationID,
+			user: userInRequestAttached,
 			tag: tagBeGranted,
 			expiresAt: expiresAt,
 		};
