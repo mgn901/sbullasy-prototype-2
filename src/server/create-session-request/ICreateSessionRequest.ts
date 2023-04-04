@@ -1,9 +1,9 @@
 import { IUser } from '../user/IUser';
 
-export interface IResetPasswordRequest {
+export interface ICreateSessionRequest {
 	readonly id: string;
 	readonly user: IUser;
-	readonly email: string;
 	readonly createdAt: number;
+	readonly token: string;
 	isDisposed: boolean;
 }

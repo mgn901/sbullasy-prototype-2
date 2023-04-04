@@ -3,12 +3,10 @@ import { TEntity } from '../TEntity';
 import { TEntityWithoutEntityKey } from '../TEntityWithoutEntityKey';
 import { IGroupTag } from '../group-tag/IGroupTag';
 import { IGroup } from '../group/IGroup';
-import { ILoginFailure } from '../login-failure/ILoginFailure';
 import { IPageTag } from '../page-tag/IPageTag';
 import { IPage } from '../page/IPage';
 import { IPlace } from '../place/IPlace';
 import { TProperty } from '../property/TProperty';
-import { IResetPasswordRequest } from '../reset-password-request/IResetPasswordRequest';
 import { ISession } from '../session/ISession';
 import { ISubjectCategory } from '../subject-category/ISubjectCategory';
 import { ISubjectSemester } from '../subject-semester/ISubjectSemester';
@@ -21,6 +19,7 @@ import { IUserTag } from '../user-tag/IUserTag';
 import { IUserTagGrantability } from '../user-tag/IUserTagGrantability';
 import { IUser } from '../user/IUser';
 import { IUserTagRegistration } from '../user/IUserTagRegistration';
+import { ICreateSessionRequest } from '../create-session-request/ICreateSessionRequest';
 
 type TJoinTable<
 	I extends (TEntity | TEntity[] | undefined),
@@ -59,10 +58,9 @@ export interface TDatabase {
 	places: TEntityWithoutEntityKey<IPlace>;
 	properties: TEntityWithoutEntityKey<TProperty>;
 	sessions: TEntityWithoutEntityKey<ISession>;
+	createsessionrequests: TEntityWithoutEntityKey<ICreateSessionRequest>;
 	usertagrequests: TEntityWithoutEntityKey<IUserTagRequest>;
 	undochangeemailrequests: TEntityWithoutEntityKey<IUndoChangeEmailRequest>;
-	resetpasswordrequests: TEntityWithoutEntityKey<IResetPasswordRequest>;
-	loginfailures: TEntityWithoutEntityKey<ILoginFailure>;
 	user_properties: TJoinTable<IUser, IUser['properties'], 'user_id', 'property_id'>;
 	user_owns_groups: TJoinTable<IGroup['owner'], IUser['owns'], 'user_id', 'group_id'>;
 	users_belongs_groups: TJoinTable<IGroup['members'], IUser['belongs'], 'user_id', 'group_id'>;

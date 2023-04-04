@@ -7,6 +7,7 @@ import { IUser } from './IUser';
 import { IUserRepository } from './IUserRepository';
 import { IUserTagRegistration } from './IUserTagRegistration';
 import { User } from './User.kysely';
+import { ICreateSessionRequest } from '../create-session-request/ICreateSessionRequest';
 
 export class UserRepository implements IUserRepository {
 
@@ -78,8 +79,8 @@ export class UserRepository implements IUserRepository {
 	}
 
 	public async save(user: IUser | TEntityAsync<IUser>): Promise<void> {
-		const { id, email, password, displayName } = user;
-		const userPartial = { id, email, password, displayName };
+		const { id, email, displayName, createdAt, ipAddress } = user;
+		const userPartial = { id, email, displayName, createdAt, ipAddress };
 		const oldProperties = await db
 			.selectFrom('user_properties')
 			.where('user_id', '==', id)
@@ -89,6 +90,7 @@ export class UserRepository implements IUserRepository {
 		const properties = await user.properties;
 		const registrations = await user.tagRegistrations;
 		const sessions = await user.sessions;
+		const sessionRequests = await user.createSessionRequests;
 		const owns = await user.owns;
 		const belongs = await user.belongs;
 		const watchesGroups = await user.watchesGroups;
@@ -99,6 +101,7 @@ export class UserRepository implements IUserRepository {
 		const propertyIDs = properties.map(property => property.id);
 		const registrationIDs = registrations.map(tag => tag.id);
 		const sessionIDs = sessions.map(session => session.id);
+		const sessionRequestIDs = sessionRequests.map(request => request.id);
 		const ownsIDs = owns.map(group => group.id);
 		const belongsIDs = belongs.map(group => group.id);
 		const watchesGroupIDs = watchesGroups.map(group => group.id);
@@ -200,6 +203,29 @@ export class UserRepository implements IUserRepository {
 					.doUpdateSet(sessionPartial))
 				.executeTakeFirst();
 			return;
+		});
+
+		await db
+			.deleteFrom('createsessionrequests')
+			.where('user', '==', id)
+			.where('id', 'not in', sessionRequestIDs)
+			.executeTakeFirst();
+		sessionRequests.forEach(async (request) => {
+			const user = await request.user;
+			const requestPartial: TEntityWithoutEntityKey<ICreateSessionRequest> = {
+				id: request.id,
+				createdAt: request.createdAt,
+				token: request.token,
+				isDisposed: request.isDisposed,
+				user: user.id,
+			};
+			await db
+				.insertInto('createsessionrequests')
+				.values(requestPartial)
+				.onConflict(oc => oc
+					.column('id')
+					.doUpdateSet(requestPartial))
+				.executeTakeFirst();
 		});
 
 		await db

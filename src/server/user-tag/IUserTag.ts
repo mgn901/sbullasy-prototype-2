@@ -2,7 +2,6 @@ import { IUserTagGrantability } from './IUserTagGrantability';
 
 export type TUserTagIDReserved = 'owner'
 	| 'admin'
-	| 'email_valid'
 	| 'post'
 	| 'user_read'
 	| 'user_write'

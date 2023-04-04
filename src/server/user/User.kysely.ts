@@ -14,6 +14,8 @@ import { Session } from '../session/Session.kysely';
 import { IUser } from './IUser';
 import { IUserTagRegistration } from './IUserTagRegistration';
 import { UserTagRegistration } from './UserTagRegistration.kysely';
+import { ICreateSessionRequest } from '../create-session-request/ICreateSessionRequest';
+import { CreateSessionRequest } from '../create-session-request/CreateSessionRequest.kysely';
 
 export class User implements TEntityAsync<IUser> {
 
@@ -21,18 +23,21 @@ export class User implements TEntityAsync<IUser> {
 		this.db = db;
 		this.id = user.id;
 		this.email = user.email;
-		this.password = user.password;
 		this.displayName = user.displayName;
+		this.createdAt = user.createdAt;
+		this.ipAddress = user.ipAddress;
 	}
-
+	
 	private readonly db: Kysely<TDatabase>;
 	public readonly id: string;
 	public email: string;
-	public password: string;
 	public displayName: string;
+	public readonly createdAt: number;
+	public readonly ipAddress: string;
 	private _tagRegistrations?: Promise<TEntityAsync<IUserTagRegistration>[]>;
 	private _properties?: Promise<TEntityAsync<TProperty>[]>;
 	private _sessions?: Promise<TEntityAsync<ISession>[]>;
+	private _sessionRequests?: Promise<TEntityAsync<ICreateSessionRequest>[]>;
 	private _owns?: Promise<TEntityAsync<IGroup>[]>;
 	private _belongs?: Promise<TEntityAsync<IGroup>[]>;
 	private _watchesGroups?: Promise<TEntityAsync<IGroup>[]>;
@@ -96,6 +101,25 @@ export class User implements TEntityAsync<IUser> {
 				return session;
 			});
 			return sessions;
+		})();
+		return promise;
+	}
+
+	public get createSessionRequests(): Promise<TEntityAsync<ICreateSessionRequest>[]> {
+		if (this._sessionRequests) {
+			return this._sessionRequests;
+		}
+		const promise = (async () => {
+			const requestsPartial = await this.db
+				.selectFrom('createsessionrequests')
+				.where('user', '==', this.id)
+				.selectAll()
+				.execute();
+			const requests = requestsPartial.map((requestPartial) => {
+				const request = new CreateSessionRequest(requestPartial, this.db);
+				return request;
+			});
+			return requests;
 		})();
 		return promise;
 	}

@@ -1,33 +1,33 @@
 import { Kysely } from 'kysely';
 import { TDatabase } from '../database/TDatabase';
 import { TEntityAsync } from '../TEntityAsync';
+import { ICreateSessionRequest } from './ICreateSessionRequest'
 import { IUser } from '../user/IUser';
 import { User } from '../user/User.kysely';
-import { IResetPasswordRequest } from './IResetPasswordRequest';
 
-export class ResetPasswordRequest implements TEntityAsync<IResetPasswordRequest> {
+export class CreateSessionRequest implements TEntityAsync<ICreateSessionRequest> {
 
-	public constructor(resetPasswordRequest: TDatabase['resetpasswordrequests'], db: Kysely<TDatabase>) {
+	constructor(sessionRequest: TDatabase['createsessionrequests'], db: Kysely<TDatabase>) {
 		this.db = db;
-		this.id = resetPasswordRequest.id;
-		this.email = resetPasswordRequest.email;
-		this.createdAt = resetPasswordRequest.createdAt;
-		this.isDisposed = resetPasswordRequest.isDisposed;
-		this.userID = resetPasswordRequest.user;
+		this.id = sessionRequest.id;
+		this.createdAt = sessionRequest.createdAt;
+		this.token = sessionRequest.token;
+		this.isDisposed = sessionRequest.isDisposed;
+		this._user = sessionRequest.user;
 	}
 
-	private readonly db: Kysely<TDatabase>;
 	public readonly id: string;
-	public readonly email: string;
 	public readonly createdAt: number;
+	public readonly token: string;
 	public isDisposed: boolean;
-	private readonly userID: string;
+	private readonly _user: IUser['id'];
+	private db: Kysely<TDatabase>;
 
 	public get user(): Promise<TEntityAsync<IUser>> {
 		const promise = (async () => {
 			const usersPartial = await this.db
 				.selectFrom('users')
-				.where('id', '==', this.userID)
+				.where('id', '==', this._user)
 				.selectAll()
 				.execute();
 			const userPartial = usersPartial[0];

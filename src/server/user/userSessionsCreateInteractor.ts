@@ -4,8 +4,6 @@ import { TEntityAsync } from '../TEntityAsync';
 import { WrongParamsError } from '../error/WrongParamsError';
 import { ISession } from '../session/ISession';
 import { generateID } from '../utils/generateID.node';
-import { hashPassword } from '../utils/hashPassword.argon2';
-import { verifyPassword } from '../utils/verifyPassword.argon2';
 import { IUser } from './IUser';
 import { IUserRepository } from './IUserRepository';
 import { IUserSessionsCreateInput } from './IUserSessionsCreateInput';
@@ -19,26 +17,27 @@ interface IUserSessionsCreateInteractorParams extends IInteractorParams<
 
 export const userSessionsCreateInteractor = async (params: IUserSessionsCreateInteractorParams): Promise<IUserSessionsCreateOutput> => {
 	const { repository, input } = params;
-	const { email, password, ipAddress } = input;
+	const { email, ipAddress, createSessionRequestToken } = input;
 
 	const user = await repository.findByEmail(email);
+	const now = dateToUnixTimeMillis(new Date());
 	if (!user) {
-		const hashedPassword = await hashPassword(password);
 		const error = new WrongParamsError({
-			message: `Email and/or password are incorrect.`,
+			message: `Email and/or token are incorrect.`,
 		});
 		throw error;
 	}
-	const verifyPasswordResult = await verifyPassword({
-		userID: user.id,
-		password: password,
-		userRepository: repository,
+	const sessionRequests = await user.createSessionRequests;
+	const request = sessionRequests.find((request) => {
+		return request.token === createSessionRequestToken;
 	});
-	if (!verifyPasswordResult.status) {
-		throw verifyPasswordResult.error;
+	if (!request || request.createdAt + 5 * 60 * 60 * 1000 < now) {
+		const error = new WrongParamsError({
+			message: `Email and/or token are incorrect.`,
+		});
+		throw error;
 	}
 
-	const now = dateToUnixTimeMillis(new Date());
 	const expiresAt = now + 4 * 365 * 24 * 60 * 60 * 1000;
 	const session: TEntityAsync<ISession> = {
 		id: generateID(),

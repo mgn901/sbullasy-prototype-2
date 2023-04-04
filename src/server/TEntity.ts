@@ -1,7 +1,6 @@
 import { IAPIToken } from './api-token/IAPIToken';
 import { IGroupTag } from './group-tag/IGroupTag';
 import { IGroup } from './group/IGroup';
-import { ILoginFailure } from './login-failure/ILoginFailure';
 import { IPageTag } from './page-tag/IPageTag';
 import { IPage } from './page/IPage';
 import { IPlace } from './place/IPlace';
@@ -9,7 +8,7 @@ import { IPropertyPlain } from './property/IPropertyPlain';
 import { IPropertyWithGroup } from './property/IPropertyWithGroup';
 import { IPropertyWithPage } from './property/IPropertyWithPage';
 import { IPropertyWithUser } from './property/IPropertyWithUser';
-import { IResetPasswordRequest } from './reset-password-request/IResetPasswordRequest';
+import { ICreateSessionRequest } from './create-session-request/ICreateSessionRequest';
 import { ISession } from './session/ISession';
 import { ISubjectCategory } from './subject-category/ISubjectCategory';
 import { ISubjectSemester } from './subject-semester/ISubjectSemester';
@@ -43,7 +42,6 @@ export type TEntity = IUser
 	| IPropertyWithGroup
 	| IPropertyWithPage
 	| ISession
+	| ICreateSessionRequest
 	| IUserTagRequest
-	| IUndoChangeEmailRequest
-	| IResetPasswordRequest
-	| ILoginFailure;
+	| IUndoChangeEmailRequest;
