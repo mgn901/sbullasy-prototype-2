@@ -8,7 +8,7 @@ type TEntityWithoutEntityKeyBase<Interface extends TEntity> = {
 	: NonNullable<Interface[K]>;
 };
 
-export type EntityWithoutEntityKey<Interface extends TEntity> = Pick<
+export type TEntityWithoutEntityKey<Interface extends TEntity> = Pick<
 	TEntityWithoutEntityKeyBase<Interface>,
 	Extract<
 		keyof TEntityWithoutEntityKeyBase<Interface>,

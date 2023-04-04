@@ -1,5 +1,5 @@
 import { IAPIToken } from '../api-token/IAPIToken';
-import { EntityWithoutEntityKey } from '../TEntityWithoutEntityKey';
+import { TEntityWithoutEntityKey } from '../TEntityWithoutEntityKey';
 import { IPlace } from '../place/IPlace';
 import { TProperty } from '../property/TProperty';
 import { ISession } from '../session/ISession';
@@ -25,6 +25,6 @@ export interface ISubjectPutInput {
 		weeks: ISubjectWeek['id'];
 		places: IPlace['id'][];
 		units: ISubject['units'];
-		properties: EntityWithoutEntityKey<TProperty>[];
+		properties: TEntityWithoutEntityKey<TProperty>[];
 	};
 }

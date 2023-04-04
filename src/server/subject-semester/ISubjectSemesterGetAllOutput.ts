@@ -1,6 +1,6 @@
-import { EntityWithoutEntityKey } from '../TEntityWithoutEntityKey';
+import { TEntityWithoutEntityKey } from '../TEntityWithoutEntityKey';
 import { ISubjectSemester } from './ISubjectSemester';
 
 export interface ISubjectSemesterGetAllOutput {
-	subjectSemesters: EntityWithoutEntityKey<ISubjectSemester>[];
+	subjectSemesters: TEntityWithoutEntityKey<ISubjectSemester>[];
 }

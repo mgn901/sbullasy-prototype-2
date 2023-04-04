@@ -1,5 +1,5 @@
 import { TEntityAsync } from '../TEntityAsync';
-import { EntityWithoutEntityKey } from '../TEntityWithoutEntityKey';
+import { TEntityWithoutEntityKey } from '../TEntityWithoutEntityKey';
 import { db } from '../database/db.kysely';
 import { TProperty } from '../property/TProperty';
 import { ISubject } from './ISubject';
@@ -59,7 +59,7 @@ export class SubjectRepository implements ISubjectRepository {
 		const placeIDs = places.map(place => place.id);
 		const propertyIDs = properties.map(property => property.id);
 		const oldPropertyIDs = oldProperties.map(oldProperty => oldProperty.property_id);
-		const subjectPartial: EntityWithoutEntityKey<ISubject> = {
+		const subjectPartial: TEntityWithoutEntityKey<ISubject> = {
 			id: subject.id,
 			code: subject.code,
 			name: subject.name,
@@ -182,7 +182,7 @@ export class SubjectRepository implements ISubjectRepository {
 			.executeTakeFirst();
 		properties.map(async (property) => {
 			const value = await property.value;
-			const propertyPartial: EntityWithoutEntityKey<TProperty> = {
+			const propertyPartial: TEntityWithoutEntityKey<TProperty> = {
 				id: property.id,
 				key: property.key,
 				type: property.type,

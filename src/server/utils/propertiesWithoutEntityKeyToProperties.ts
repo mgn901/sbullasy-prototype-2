@@ -1,5 +1,5 @@
 import { TEntityAsync } from '../TEntityAsync';
-import { EntityWithoutEntityKey } from '../TEntityWithoutEntityKey';
+import { TEntityWithoutEntityKey } from '../TEntityWithoutEntityKey';
 import { IGroupRepository } from '../group/IGroupRepository';
 import { createProperty } from '../property/createProperty.kysely';
 import { IPageRepository } from '../page/IPageRepository';
@@ -7,7 +7,7 @@ import { TProperty } from '../property/TProperty';
 import { IUserRepository } from '../user/IUserRepository';
 
 interface IPropertyWithoutEntityKeyToPropertiesParams {
-	propertiesPartial: EntityWithoutEntityKey<TProperty>[];
+	propertiesPartial: TEntityWithoutEntityKey<TProperty>[];
 	userRepository: IUserRepository;
 	groupRepository: IGroupRepository;
 	pageRepository: IPageRepository;

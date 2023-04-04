@@ -1,6 +1,6 @@
 import { IAPIToken } from '../api-token/IAPIToken';
 import { TEntityAsync } from '../TEntityAsync';
-import { EntityWithoutEntityKey } from '../TEntityWithoutEntityKey';
+import { TEntityWithoutEntityKey } from '../TEntityWithoutEntityKey';
 import { db } from '../database/db.kysely';
 import { IPage } from '../page/IPage';
 import { IUser } from './IUser';
@@ -161,7 +161,7 @@ export class UserRepository implements IUserRepository {
 		registrations.forEach(async (registration) => {
 			const user = await registration.user;
 			const tag = await registration.tag;
-			const registrationPartial: EntityWithoutEntityKey<IUserTagRegistration> = {
+			const registrationPartial: TEntityWithoutEntityKey<IUserTagRegistration> = {
 				id: registration.id,
 				tag: tag.id,
 				user: user.id,
@@ -288,7 +288,7 @@ export class UserRepository implements IUserRepository {
 			.where('page_id', 'not in', pageIDs)
 			.executeTakeFirst();
 		pages.forEach(async (page) => {
-			const pagePartial: EntityWithoutEntityKey<IPage> = {
+			const pagePartial: TEntityWithoutEntityKey<IPage> = {
 				id: page.id,
 				name: page.name,
 				type: page.type,
@@ -326,7 +326,7 @@ export class UserRepository implements IUserRepository {
 			.executeTakeFirst();
 		apiTokens.forEach(async (token) => {
 			const user = await token.user;
-			const tokenPartial: EntityWithoutEntityKey<IAPIToken> = {
+			const tokenPartial: TEntityWithoutEntityKey<IAPIToken> = {
 				id: token.id,
 				createdAt: token.createdAt,
 				token: token.token,

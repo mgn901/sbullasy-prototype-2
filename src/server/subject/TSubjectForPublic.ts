@@ -1,4 +1,4 @@
-import { EntityWithoutEntityKey } from '../TEntityWithoutEntityKey';
+import { TEntityWithoutEntityKey } from '../TEntityWithoutEntityKey';
 import { IPlace } from '../place/IPlace';
 import { TProperty } from '../property/TProperty';
 import { ISubjectCategory } from '../subject-category/ISubjectCategory';
@@ -7,11 +7,11 @@ import { ISubjectWeek } from '../subject-week/ISubjectWeek';
 import { ITeacher } from '../teacher/ITeacher';
 import { ISubject } from './ISubject';
 
-export type TSubjectForPublic = EntityWithoutEntityKey<ISubject> & {
+export type TSubjectForPublic = TEntityWithoutEntityKey<ISubject> & {
 	teachers: ITeacher[];
 	categories: ISubjectCategory[];
 	semesters: ISubjectSemester[];
 	weeks: ISubjectWeek[];
 	places: IPlace[];
-	properties: EntityWithoutEntityKey<TProperty>[];
+	properties: TEntityWithoutEntityKey<TProperty>[];
 }

@@ -1,4 +1,4 @@
-import { EntityWithoutEntityKey } from '../TEntityWithoutEntityKey';
+import { TEntityWithoutEntityKey } from '../TEntityWithoutEntityKey';
 import { IAPIToken } from '../api-token/IAPIToken';
 import { ISession } from '../session/ISession';
 import { ITeacher } from './ITeacher';
@@ -6,5 +6,5 @@ import { ITeacher } from './ITeacher';
 export interface ITeacherPutInput {
 	apiToken?: IAPIToken['token'];
 	sessionID?: ISession['id'];
-	teacher: EntityWithoutEntityKey<ITeacher>;
+	teacher: TEntityWithoutEntityKey<ITeacher>;
 }

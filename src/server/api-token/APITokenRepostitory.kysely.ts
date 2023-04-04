@@ -1,5 +1,5 @@
 import { TEntityAsync } from '../TEntityAsync';
-import { EntityWithoutEntityKey } from '../TEntityWithoutEntityKey';
+import { TEntityWithoutEntityKey } from '../TEntityWithoutEntityKey';
 import { db } from '../database/db.kysely';
 import { APIToken } from './APIToken.kysely';
 import { IAPIToken } from './IAPIToken';
@@ -31,7 +31,7 @@ export class APITokenRepostitory implements IAPITokenRepository {
 
 	public async save(token: IAPIToken | TEntityAsync<IAPIToken>): Promise<void> {
 		const user = await token.user;
-		const tokenPartial: EntityWithoutEntityKey<IAPIToken> = {
+		const tokenPartial: TEntityWithoutEntityKey<IAPIToken> = {
 			id: token.id,
 			token: token.token,
 			createdAt: token.createdAt,
