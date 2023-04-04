@@ -27,6 +27,18 @@ export class UserTagRepository implements IUserTagRepository {
 		return tag;
 	}
 
+	public async findAll(): Promise<TEntityAsync<IUserTag>[]> {
+		const tagsPartial = await db
+			.selectFrom('usertags')
+			.selectAll()
+			.execute();
+		const tags = tagsPartial.map((tagPartial) => {
+			const tag = new UserTag(tagPartial, db);
+			return tag;
+		});
+		return tags;
+	}
+
 	public async save(userTag: IUserTag | TEntityAsync<IUserTag>): Promise<void> {
 		const grantableBy = await userTag.grantableBy;
 		const grantableByIDs = grantableBy.map(grantableByItem => grantableByItem.id);
