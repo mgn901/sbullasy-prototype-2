@@ -12,8 +12,6 @@ export const groupToGroupForPublic = async (group: TEntityAsync<IGroup>): Promis
 	const groupForPublic: TGroupForPublic = {
 		id: group.id,
 		name: group.name,
-		createdAt: group.createdAt,
-		updatedAt: group.updatedAt,
 		properties: properties,
 		tags: tags,
 	};

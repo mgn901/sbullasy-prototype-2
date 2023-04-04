@@ -1,6 +1,7 @@
 import { NotFoundError } from '../error/NotFoundError';
 import { PermissionError } from '../error/PermissionError';
 import { IInteractorParams } from '../IInteractorParams';
+import { groupToGroupForPublic } from '../utils/groupToGroupForPublic';
 import { promisedMap } from '../utils/promisedMap';
 import { propertyToPropertyWithoutEntityKey } from '../utils/propertyToPropertyWithoutEntityKey';
 import { userTagRegistrationToUserTagWithExpiresAt } from '../utils/userTagRegistrationToUserTagWithExpiresAt';
@@ -28,6 +29,8 @@ export const userMeGetInteractor = async (params: IUserMeGetInteractorParams): P
 	}
 
 	const user = verifySessionResult.user;
+	const owns = await promisedMap(groupToGroupForPublic, await user.owns);
+	const belongs = await promisedMap(groupToGroupForPublic, await user.belongs);
 	const properties = await promisedMap(propertyToPropertyWithoutEntityKey, await user.properties);
 	const tags = await promisedMap(userTagRegistrationToUserTagWithExpiresAt, await user.tagRegistrations);
 	const output: IUserMeGetOutput = {
@@ -37,6 +40,8 @@ export const userMeGetInteractor = async (params: IUserMeGetInteractorParams): P
 			displayName: user.displayName,
 			properties: properties,
 			tags: tags,
+			owns: owns,
+			belongs: belongs,
 		},
 	};
 
