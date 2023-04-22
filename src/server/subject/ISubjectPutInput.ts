@@ -22,7 +22,7 @@ export interface ISubjectPutInput {
 		classes: ISubject['classes'];
 		grades: ISubject['grades'];
 		semesters: ISubjectSemester['id'][];
-		weeks: ISubjectWeek['id'];
+		weeks: ISubjectWeek['id'][];
 		places: IPlace['id'][];
 		units: ISubject['units'];
 		properties: TEntityWithoutEntityKey<TProperty>[];

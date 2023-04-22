@@ -4,7 +4,7 @@ import { ISession } from '../session/ISession';
 import { ISubjectSemester } from './ISubjectSemester';
 
 export interface ISubjectSemesterPutInput {
-	apiToken: IAPIToken['token'];
-	sessionID: ISession['id'];
+	apiToken?: IAPIToken['token'];
+	sessionID?: ISession['id'];
 	subjectSemester: TEntityWithoutEntityKey<ISubjectSemester>;
 }

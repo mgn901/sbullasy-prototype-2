@@ -4,7 +4,7 @@ import { ISession } from '../session/ISession';
 import { IPlace } from './IPlace';
 
 export interface IPlacePutInput {
-	apiToken: IAPIToken['token'];
-	sessionID: ISession['id'];
+	apiToken?: IAPIToken['token'];
+	sessionID?: ISession['id'];
 	place: TEntityWithoutEntityKey<IPlace>;
 }

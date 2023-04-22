@@ -29,19 +29,19 @@ interface ISubjectPutInteractorParams extends IInteractorParams<
 	groupRepository: IGroupRepository;
 	pageRepository: IPageRepository;
 	teacherRepository: ITeacherRepository;
-	categoryRepository: ISubjectCategoryRepository;
-	semesterRepository: ISubjectSemesterRepository;
-	weekRepository: ISubjectWeekRepository;
+	subjectCategoryRepository: ISubjectCategoryRepository;
+	subjectSemesterRepository: ISubjectSemesterRepository;
+	subjectWeekRepository: ISubjectWeekRepository;
 	placeRepository: IPlaceRepository;
 }
 
 export const subjectPutInteractor = async (params: ISubjectPutInteractorParams): Promise<ISubjectPutOutput> => {
-	const { repository, input, userRepository, groupRepository, pageRepository, teacherRepository, categoryRepository, semesterRepository, weekRepository, placeRepository } = params;
+	const { repository, input, userRepository, groupRepository, pageRepository, teacherRepository, subjectCategoryRepository, subjectSemesterRepository, subjectWeekRepository, placeRepository } = params;
 	const subjectPartial = input.subject;
 	const teachers = await teacherRepository.findByIDs(...subjectPartial.teachers);
-	const categories = await categoryRepository.findByIDs(...subjectPartial.categories);
-	const semesters = await semesterRepository.findByIDs(...subjectPartial.semesters);
-	const weeks = await weekRepository.findByIDs(...subjectPartial.weeks);
+	const categories = await subjectCategoryRepository.findByIDs(...subjectPartial.categories);
+	const semesters = await subjectSemesterRepository.findByIDs(...subjectPartial.semesters);
+	const weeks = await subjectWeekRepository.findByIDs(...subjectPartial.weeks);
 	const places = await placeRepository.findByIDs(...subjectPartial.places);
 	const properties = await propertiesWithoutEntityKeyToProperties({
 		propertiesPartial: subjectPartial.properties,
