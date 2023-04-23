@@ -30,7 +30,7 @@ const subjectCategoryGetAllResponseSchema = Type.Object({
 
 const subjectCategoryPutParamsSchema = subjectCategoryIDSchema;
 const subjectCategoryPutBodySchema = Type.Object({
-	subjectCategory: subjectCategorySchema,
+	subjectCategory: Type.Omit(subjectCategorySchema, ['id']),
 });
 const subjectCategoryPutResponseSchema = Type.Object({
 	subjectCategory: subjectCategorySchema,
@@ -123,7 +123,10 @@ export const subjectCategoryPutRouteOptions = (repositories: IRepositories): TRo
 	handler: async (request, reply) => {
 		const input: ISubjectCategoryPutInput = {
 			sessionID: request.cookies.sessionID!,
-			subjectCategory: request.body.subjectCategory,
+			subjectCategory: {
+				id: request.params.subjectCategoryID,
+				...request.body.subjectCategory,
+			},
 		};
 		const output = await subjectCategoryPutInteractor({
 			input: input,
