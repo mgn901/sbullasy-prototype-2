@@ -1,13 +1,14 @@
 import { dateToUnixTimeMillis } from '@mgn901/mgn901-utils-ts';
 import { IInteractorParams } from '../IInteractorParams';
-import { IUser } from '../user/IUser';
-import { IUserRepository } from '../user/IUserRepository';
-import { IUserCreateIfNotExistsAndCreateSessionRequestCreateInput } from './IUserCreateIfNotExistsAndCreateSessionRequestCreateInput';
-import { IUserCreateIfNotExistsAndCreateSessionRequestCreateOutput } from './IUserCreateIfNotExistsAndCreateSessionRequestCreateOutput';
-import { generateID } from '../utils/generateID.node';
 import { TEntityAsync } from '../TEntityAsync';
 import { ICreateSessionRequest } from '../create-session-request/ICreateSessionRequest';
+import { IUser } from '../user/IUser';
+import { IUserRepository } from '../user/IUserRepository';
+import { ableToResendEmail } from '../utils/ableToResendEmail';
+import { generateID } from '../utils/generateID.node';
 import { generateToken } from '../utils/generateToken.node';
+import { IUserCreateIfNotExistsAndCreateSessionRequestCreateInput } from './IUserCreateIfNotExistsAndCreateSessionRequestCreateInput';
+import { IUserCreateIfNotExistsAndCreateSessionRequestCreateOutput } from './IUserCreateIfNotExistsAndCreateSessionRequestCreateOutput';
 
 interface IUserCreateIfNotExistsAndCreateSessionRequestCreateInteractorParams extends IInteractorParams<
 	IUserRepository,
@@ -17,7 +18,7 @@ interface IUserCreateIfNotExistsAndCreateSessionRequestCreateInteractorParams ex
 
 export const userCreateIfNotExistsAndCreateSessionRequestCreateInteractor = async (params: IUserCreateIfNotExistsAndCreateSessionRequestCreateInteractorParams): Promise<IUserCreateIfNotExistsAndCreateSessionRequestCreateOutput> => {
 	const { repository, input } = params;
-	
+
 	const now = dateToUnixTimeMillis(new Date());
 	const userPartial = input.user;
 	let user = await repository.findByEmail(userPartial.email);
@@ -43,6 +44,13 @@ export const userCreateIfNotExistsAndCreateSessionRequestCreateInteractor = asyn
 		};
 	}
 
+	const requests = await user.createSessionRequests;
+	const requestTimeList = requests.map(request => request.createdAt);
+	const ableToResendEmailResult = ableToResendEmail(requestTimeList, now);
+	if (ableToResendEmailResult.status === false) {
+		throw ableToResendEmailResult.error;
+	}
+
 	const request: TEntityAsync<ICreateSessionRequest> = {
 		id: generateID(),
 		token: generateToken(),
@@ -50,7 +58,6 @@ export const userCreateIfNotExistsAndCreateSessionRequestCreateInteractor = asyn
 		user: user,
 		isDisposed: false,
 	};
-	const requests = await user.createSessionRequests;
 	requests.push(request);
 	await repository.save(user);
 
