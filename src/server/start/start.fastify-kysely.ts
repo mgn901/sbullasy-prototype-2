@@ -1,3 +1,4 @@
+import fastifyCookie from '@fastify/cookie';
 import fastifyEtag from '@fastify/etag';
 import fastifyHelmet, { FastifyHelmetOptions } from '@fastify/helmet';
 import fastify, { FastifyHttpOptions, FastifyListenOptions } from 'fastify';
@@ -107,6 +108,7 @@ export const start = async () => {
 	};
 	const instance = fastify(instanceOptions);
 	await instance.register(fastifyEtag);
+	await instance.register(fastifyCookie);
 	await instance.register(fastifyHelmet, fastifyHelmetOptions);
 	await instance.register(router, routerOptions);
 
