@@ -44,7 +44,7 @@ type TSubjectCategoryPutParamsSchema = Static<typeof subjectCategoryPutParamsSch
 type TSubjectCategoryPutBodySchema = Static<typeof subjectCategoryPutBodySchema>;
 type TSubjectCategoryPutResponseSchema = Static<typeof subjectCategoryPutResponseSchema>;
 
-export const subjectCategoryCreateRouteHandlerOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const subjectCategoryCreateRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
 	Body: TSubjectCategoryCreateBodySchema;
 	Reply: TSubjectCategoryCreateResponseSchema;
 }> => ({
@@ -68,7 +68,7 @@ export const subjectCategoryCreateRouteHandlerOptions = (repositories: IReposito
 	},
 })
 
-export const subjectCategoryDeleteRouteHandlerOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const subjectCategoryDeleteRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
 	Params: TSubjectCategoryDeleteParamsSchema;
 }> => ({
 	method: 'DELETE',
@@ -90,7 +90,7 @@ export const subjectCategoryDeleteRouteHandlerOptions = (repositories: IReposito
 	},
 })
 
-export const subjectCategoryGetAllRouteHandlerOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const subjectCategoryGetAllRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
 	Reply: TSubjectCategoryGetAllResponseSchema;
 }> => ({
 	method: 'GET',
@@ -108,7 +108,7 @@ export const subjectCategoryGetAllRouteHandlerOptions = (repositories: IReposito
 	},
 })
 
-export const subjectCategoryPutRouteHandlerOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const subjectCategoryPutRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
 	Params: TSubjectCategoryPutParamsSchema;
 	Body: TSubjectCategoryPutBodySchema;
 	Reply: TSubjectCategoryPutResponseSchema;

@@ -44,7 +44,7 @@ type TTeacherPutParamsSchema = Static<typeof teacherPutParamsSchema>;
 type TTeacherPutBodySchema = Static<typeof teacherPutBodySchema>;
 type TTeacherPutResponseSchema = Static<typeof teacherPutResponseSchema>;
 
-export const teacherCreateRouteHandlerOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const teacherCreateRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
 	Body: TTeacherCreateBodySchema;
 	Reply: TTeacherCreateResponseSchema;
 }> => ({
@@ -68,7 +68,7 @@ export const teacherCreateRouteHandlerOptions = (repositories: IRepositories): T
 	},
 })
 
-export const teacherDeleteRouteHandlerOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const teacherDeleteRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
 	Params: TTeacherDeleteParamsSchema;
 }> => ({
 	method: 'DELETE',
@@ -90,7 +90,7 @@ export const teacherDeleteRouteHandlerOptions = (repositories: IRepositories): T
 	},
 })
 
-export const teacherGetAllRouteHandlerOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const teacherGetAllRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
 	Reply: TTeacherGetAllResponseSchema;
 }> => ({
 	method: 'GET',
@@ -108,7 +108,7 @@ export const teacherGetAllRouteHandlerOptions = (repositories: IRepositories): T
 	},
 })
 
-export const teacherPutRouteHandlerOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const teacherPutRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
 	Params: TTeacherPutParamsSchema;
 	Body: TTeacherPutBodySchema;
 	Reply: TTeacherPutResponseSchema;

@@ -44,7 +44,7 @@ type TSubjectWeekPutParamsSchema = Static<typeof subjectWeekPutParamsSchema>;
 type TSubjectWeekPutBodySchema = Static<typeof subjectWeekPutBodySchema>;
 type TSubjectWeekPutResponseSchema = Static<typeof subjectWeekPutResponseSchema>;
 
-export const subjectWeekCreateRouteHandlerOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const subjectWeekCreateRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
 	Body: TSubjectWeekCreateBodySchema;
 	Reply: TSubjectWeekCreateResponseSchema;
 }> => ({
@@ -68,7 +68,7 @@ export const subjectWeekCreateRouteHandlerOptions = (repositories: IRepositories
 	},
 })
 
-export const subjectWeekDeleteRouteHandlerOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const subjectWeekDeleteRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
 	Params: TSubjectWeekDeleteParamsSchema;
 }> => ({
 	method: 'DELETE',
@@ -90,7 +90,7 @@ export const subjectWeekDeleteRouteHandlerOptions = (repositories: IRepositories
 	},
 })
 
-export const subjectWeekGetAllRouteHandlerOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const subjectWeekGetAllRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
 	Reply: TSubjectWeekGetAllResponseSchema;
 }> => ({
 	method: 'GET',
@@ -108,7 +108,7 @@ export const subjectWeekGetAllRouteHandlerOptions = (repositories: IRepositories
 	},
 })
 
-export const subjectWeekPutRouteHandlerOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const subjectWeekPutRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
 	Params: TSubjectWeekPutParamsSchema;
 	Body: TSubjectWeekPutBodySchema;
 	Reply: TSubjectWeekPutResponseSchema;

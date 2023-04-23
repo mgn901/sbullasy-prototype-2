@@ -56,7 +56,7 @@ type TSubjectPutParamsSchema = Static<typeof subjectPutParamsSchema>;
 type TSubjectPutBodySchema = Static<typeof subjectPutBodySchema>;
 type TSubjectPutResponseSchema = Static<typeof subjectPutResponseSchema>;
 
-export const subjectDeleteRouteHandlerOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const subjectDeleteRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
 	Params: TSubjectDeleteParamsSchema;
 }> => ({
 	method: 'DELETE',
@@ -78,7 +78,7 @@ export const subjectDeleteRouteHandlerOptions = (repositories: IRepositories): T
 	},
 })
 
-export const subjectGetAllRouteHandlerOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const subjectGetAllRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
 	Reply: TSubjectGetAllResponseSchema;
 }> => ({
 	method: 'GET',
@@ -96,7 +96,7 @@ export const subjectGetAllRouteHandlerOptions = (repositories: IRepositories): T
 	},
 })
 
-export const subjectGetRouteHandlerOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const subjectGetRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
 	Params: TSubjectGetParamsSchema;
 	Reply: TSubjectGetResponseSchema;
 }> => ({
@@ -118,7 +118,7 @@ export const subjectGetRouteHandlerOptions = (repositories: IRepositories): TRou
 	},
 })
 
-export const subjectPutRouteHandlerOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const subjectPutRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
 	Params: TSubjectPutParamsSchema;
 	Body: TSubjectPutBodySchema;
 	Reply: TSubjectPutResponseSchema;

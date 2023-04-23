@@ -44,7 +44,7 @@ type TPlacePutParamsSchema = Static<typeof placePutParamsSchema>;
 type TPlacePutBodySchema = Static<typeof placePutBodySchema>;
 type TPlacePutResponseSchema = Static<typeof placePutResponseSchema>;
 
-export const placeCreateRouteHandlerOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const placeCreateRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
 	Body: TPlaceCreateBodySchema;
 	Reply: TPlaceCreateResponseSchema;
 }> => ({
@@ -68,7 +68,7 @@ export const placeCreateRouteHandlerOptions = (repositories: IRepositories): TRo
 	},
 })
 
-export const placeDeleteRouteHandlerOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const placeDeleteRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
 	Params: TPlaceDeleteParamsSchema;
 }> => ({
 	method: 'DELETE',
@@ -90,7 +90,7 @@ export const placeDeleteRouteHandlerOptions = (repositories: IRepositories): TRo
 	},
 })
 
-export const placeGetAllRouteHandlerOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const placeGetAllRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
 	Reply: TPlaceGetAllResponseSchema;
 }> => ({
 	method: 'GET',
@@ -108,7 +108,7 @@ export const placeGetAllRouteHandlerOptions = (repositories: IRepositories): TRo
 	},
 })
 
-export const placePutRouteHandlerOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const placePutRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
 	Params: TPlacePutParamsSchema;
 	Body: TPlacePutBodySchema;
 	Reply: TPlacePutResponseSchema;
