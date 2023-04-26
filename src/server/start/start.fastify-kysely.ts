@@ -1,13 +1,17 @@
-import fastifyCookie from '@fastify/cookie';
+import fastifyCookie, { FastifyCookieOptions } from '@fastify/cookie';
 import fastifyEtag from '@fastify/etag';
 import fastifyHelmet, { FastifyHelmetOptions } from '@fastify/helmet';
-import fastify, { FastifyHttpOptions, FastifyListenOptions } from 'fastify';
+import { fastifyStatic } from '@fastify/static';
+import fastify, { FastifyHttpOptions, FastifyListenOptions, FastifyRegisterOptions } from 'fastify';
 import { Server } from 'http';
 import { createTables } from '../database/createTables.kysely';
 import { db } from '../database/db.kysely';
 import { GroupTagRepository } from '../group-tag/GroupTagRepository.kysely';
 import { GroupRepository } from '../group/GroupRepository.kysely';
-import { IRouterOptions, router } from '../http-api/router.fastify';
+import { httpAPIRouter } from '../http-api/httpAPIRouter.fastify';
+import { IRouterOptions } from "../http-api/IRouterOptions";
+import { fastifyStaticOptions } from '../http-view/fastifyStaticOptions';
+import { httpViewRouter } from '../http-view/httpViewRouter.fastify';
 import { PageTagRepository } from '../page-tag/PageTagRepository.kysely';
 import { PageRepository } from '../page/PageRepository.kysely';
 import { PlaceRepository } from '../place/PlaceRepository.kysely';
@@ -43,8 +47,8 @@ export const start = async () => {
 		SBULLASY_APP_ADMIN_PASSWORD,
 		SBULLASY_APP_ADMIN_DISPLAYNAME,
 	};
-	const EnvsIncludesUndefined = Object.entries(envs).map(([key, value]) => value).includes(undefined);
-	if (EnvsIncludesUndefined) {
+	const envsIncludesUndefined = Object.entries(envs).map(([key, value]) => value).includes(undefined);
+	if (envsIncludesUndefined) {
 		throw new Error('Necessary envs are not passed');
 	}
 
@@ -62,6 +66,20 @@ export const start = async () => {
 	const subjectWeekRepository = new SubjectWeekRepository();
 	const teacherRepository = new TeacherRepository();
 	const userTagRepository = new UserTagRepository();
+	const repositories = {
+		userRepository,
+		groupRepository,
+		pageRepository,
+		userTagRepository,
+		groupTagRepository,
+		pageTagRepository,
+		placeRepository,
+		subjectRepository,
+		subjectCategoryRepository,
+		subjectSemesterRepository,
+		subjectWeekRepository,
+		teacherRepository,
+	};
 
 	await startInteractor({
 		input: {
@@ -77,6 +95,7 @@ export const start = async () => {
 	const instanceOptions: FastifyHttpOptions<Server> = {
 		logger: true,
 	};
+	const fastifyCookieOptions: FastifyCookieOptions = {};
 	const fastifyHelmetOptions: FastifyHelmetOptions = {
 		contentSecurityPolicy: {
 			directives: {
@@ -90,27 +109,20 @@ export const start = async () => {
 		host: SBULLASY_APP_HOST!,
 		port: Number(SBULLASY_APP_PORT!),
 	};
-	const routerOptions: IRouterOptions = {
-		repositories: {
-			userRepository,
-			groupRepository,
-			pageRepository,
-			userTagRepository,
-			groupTagRepository,
-			pageTagRepository,
-			placeRepository,
-			subjectRepository,
-			subjectCategoryRepository,
-			subjectSemesterRepository,
-			subjectWeekRepository,
-			teacherRepository,
-		},
+	const httpAPIRouterOptions: FastifyRegisterOptions<IRouterOptions> = {
+		repositories: repositories,
+		prefix: '/http-api/v1',
+	};
+	const httpViewRouterOptions: FastifyRegisterOptions<IRouterOptions> = {
+		repositories: repositories,
 	};
 	const instance = fastify(instanceOptions);
 	await instance.register(fastifyEtag);
-	await instance.register(fastifyCookie);
+	await instance.register(fastifyCookie, fastifyCookieOptions);
 	await instance.register(fastifyHelmet, fastifyHelmetOptions);
-	await instance.register(router, routerOptions);
+	await instance.register(fastifyStatic, fastifyStaticOptions);
+	await instance.register(httpAPIRouter, httpAPIRouterOptions);
+	await instance.register(httpViewRouter, httpViewRouterOptions);
 
 	try {
 		await instance.listen(listenOptions);

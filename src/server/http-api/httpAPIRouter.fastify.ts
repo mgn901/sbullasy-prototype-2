@@ -5,14 +5,10 @@ import { subjectSemesterCreateRouteOptions, subjectSemesterDeleteRouteOptions, s
 import { subjectWeekCreateRouteOptions, subjectWeekDeleteRouteOptions, subjectWeekGetAllRouteOptions, subjectWeekPutRouteOptions } from '../subject-week/subjectWeekRouteOptions.fastify';
 import { subjectDeleteRouteOptions, subjectGetAllRouteOptions, subjectGetRouteOptions, subjectPutRouteOptions } from '../subject/subjectRouteOptions.fastify';
 import { teacherCreateRouteOptions, teacherDeleteRouteOptions, teacherGetAllRouteOptions, teacherPutRouteOptions } from '../teacher/teacherRouteOptions.fastify';
-import { IRepositories } from './IRepositories';
 import { errorHandler } from './errorHandler.fastify';
+import { IRouterOptions } from './IRouterOptions';
 
-export interface IRouterOptions {
-	repositories: IRepositories;
-}
-
-export const router: FastifyPluginAsync<IRouterOptions> = async (instance, options) => {
+export const httpAPIRouter: FastifyPluginAsync<IRouterOptions> = async (instance, options) => {
 
 	const repositories = options.repositories;
 
