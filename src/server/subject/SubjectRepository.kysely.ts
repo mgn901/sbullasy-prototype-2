@@ -1,10 +1,13 @@
+import { InsertObject } from 'kysely';
 import { TEntityAsync } from '../TEntityAsync';
 import { TEntityWithoutEntityKey } from '../TEntityWithoutEntityKey';
+import { arrayRawBuilder } from '../database/arrayRawBuilder';
 import { db } from '../database/db.kysely';
 import { TProperty } from '../property/TProperty';
 import { ISubject } from './ISubject';
 import { ISubjectRepository } from './ISubjectRepository';
 import { Subject } from './Subject.kysely';
+import { TDatabase } from '../database/TDatabase';
 
 export class SubjectRepository implements ISubjectRepository {
 
@@ -59,13 +62,13 @@ export class SubjectRepository implements ISubjectRepository {
 		const placeIDs = places.map(place => place.id);
 		const propertyIDs = properties.map(property => property.id);
 		const oldPropertyIDs = oldProperties.map(oldProperty => oldProperty.property_id);
-		const subjectPartial: TEntityWithoutEntityKey<ISubject> = {
+		const subjectInsertedObject: InsertObject<TDatabase, 'subjects'> = {
 			id: subject.id,
 			code: subject.code,
 			name: subject.name,
 			nameRuby: subject.nameRuby,
-			classes: subject.classes,
-			grades: subject.grades,
+			classes: arrayRawBuilder(subject.classes),
+			grades: arrayRawBuilder(subject.grades),
 			units: subject.units,
 			updatedAt: subject.updatedAt,
 		};
@@ -212,10 +215,10 @@ export class SubjectRepository implements ISubjectRepository {
 
 		await db
 			.insertInto('subjects')
-			.values(subjectPartial)
+			.values(subjectInsertedObject)
 			.onConflict(oc => oc
 				.column('id')
-				.doUpdateSet(subjectPartial))
+				.doUpdateSet(subjectInsertedObject))
 			.executeTakeFirst();
 
 		return;

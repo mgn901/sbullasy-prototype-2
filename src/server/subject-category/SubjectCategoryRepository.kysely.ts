@@ -1,4 +1,5 @@
 import { TEntityAsync } from '../TEntityAsync';
+import { arrayRawBuilder } from '../database/arrayRawBuilder';
 import { db } from '../database/db.kysely';
 import { ISubjectCategory } from './ISubjectCategory';
 import { ISubjectCategoryRepository } from './ISubjectCategoryRepository';
@@ -29,12 +30,16 @@ export class SubjectCategoryRepository implements ISubjectCategoryRepository {
 	}
 
 	public async save(item: ISubjectCategory | TEntityAsync<ISubjectCategory>): Promise<void> {
+		const insertObject = {
+			...item,
+			studentIDRegex: arrayRawBuilder(item.studentIDRegex),
+		};
 		await db
 			.insertInto('categories')
-			.values(item)
+			.values(insertObject)
 			.onConflict(oc => oc
 				.column('id')
-				.doUpdateSet(item))
+				.doUpdateSet(insertObject))
 			.executeTakeFirst();
 
 		return;
@@ -43,7 +48,7 @@ export class SubjectCategoryRepository implements ISubjectCategoryRepository {
 	public async deleteByID(id: string): Promise<void> {
 		await db
 			.deleteFrom('categories')
-			.where('id', 'in', id)
+			.where('id', '==', id)
 			.executeTakeFirst();
 
 		return;
