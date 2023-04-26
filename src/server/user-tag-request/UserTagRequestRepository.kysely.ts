@@ -86,7 +86,7 @@ export class UserTagRequestRepository implements IUserTagRequestRepository {
 	public async deleteByID(id: string): Promise<void> {
 		await db
 			.deleteFrom('usertagrequests')
-			.where('id', 'in', id)
+			.where('id', '==', id)
 			.executeTakeFirst();
 		return;
 	}
