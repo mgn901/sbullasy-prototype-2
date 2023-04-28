@@ -5,12 +5,23 @@ import { subjectSemesterCreateRouteOptions, subjectSemesterDeleteRouteOptions, s
 import { subjectWeekCreateRouteOptions, subjectWeekDeleteRouteOptions, subjectWeekGetAllRouteOptions, subjectWeekPutRouteOptions } from '../subject-week/subjectWeekRouteOptions.fastify';
 import { subjectDeleteRouteOptions, subjectGetAllRouteOptions, subjectGetRouteOptions, subjectPutRouteOptions } from '../subject/subjectRouteOptions.fastify';
 import { teacherCreateRouteOptions, teacherDeleteRouteOptions, teacherGetAllRouteOptions, teacherPutRouteOptions } from '../teacher/teacherRouteOptions.fastify';
-import { errorHandler } from './errorHandler.fastify';
+import { userCreateIfNotExistsAndCreateSessionRequestCreateRouteOptions, userDeleteRouteOptions, userEditRouteOptions, userMeGetRouteOptions, userSessionDeleteRouteOptions, userSessionsCreateRouteOptions, userSessionsDeleteAllRouteOptions, userSessionsDeleteCurrentRouteOptions, userSessionsGetAllRouteOptions } from '../user/userRouteOptions.fastify';
 import { IRouterOptions } from './IRouterOptions';
+import { errorHandler } from './errorHandler.fastify';
 
 export const httpAPIRouter: FastifyPluginAsync<IRouterOptions> = async (instance, options) => {
 
 	const repositories = options.repositories;
+
+	instance.route(userCreateIfNotExistsAndCreateSessionRequestCreateRouteOptions(repositories));
+	instance.route(userDeleteRouteOptions(repositories));
+	instance.route(userEditRouteOptions(repositories));
+	instance.route(userMeGetRouteOptions(repositories));
+	instance.route(userSessionsCreateRouteOptions(repositories));
+	instance.route(userSessionsDeleteAllRouteOptions(repositories));
+	instance.route(userSessionsDeleteCurrentRouteOptions(repositories));
+	instance.route(userSessionDeleteRouteOptions(repositories));
+	instance.route(userSessionsGetAllRouteOptions(repositories));
 
 	instance.route(placePutRouteOptions(repositories));
 	instance.route(placeCreateRouteOptions(repositories));

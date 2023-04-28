@@ -1,15 +1,29 @@
 import { Static, Type } from '@fastify/type-provider-typebox';
 import { groupForPublicSchema } from '../group/groupForPublicSchema';
+import { IRepositories } from '../http-api/IRepositories';
+import { TRouteOptionsWrapper } from '../http-api/TRouteOptionsWrapper.fastify';
 import { pageForPublicSchema } from '../page/pageForPublicSchema';
 import { propertyWithoutEntityKeySchema } from '../property/propertyWithoutEntityKeySchema';
 import { sessionForPublicSchema } from '../session/sessionForPublicSchema';
-import { userTagWithExpiresAtSchema } from './userTagWithExpiresAtSchema';
-import { IRepositories } from '../http-api/IRepositories';
-import { TRouteOptionsWrapper } from '../http-api/TRouteOptionsWrapper.fastify';
 import { IUserCreateIfNotExistsAndCreateSessionRequestCreateInput } from './IUserCreateIfNotExistsAndCreateSessionRequestCreateInput';
+import { IUserDeleteInput } from './IUserDeleteInput';
+import { IUserEditInput } from './IUserEditInput';
+import { IUserMeGetInput } from './IUserMeGetInput';
+import { IUserSessionsCreateInput } from './IUserSessionsCreateInput';
+import { IUserSessionsDeleteAllInput } from './IUserSessionsDeleteAllInput';
+import { IUserSessionsDeleteCurrentInput } from './IUserSessionsDeleteCurrentInput';
+import { IUserSessionsDeleteInput } from './IUserSessionsDeleteInput';
+import { IUserSessionsGetAllInput } from './IUserSessionsGetAllInput';
 import { userCreateIfNotExistsAndCreateSessionRequestCreateInteractor } from './userCreateIfNotExistsAndCreateSessionRequestCreateInteractor';
 import { userDeleteInteractor } from './userDeleteInteractor';
-import { IUserDeleteInput } from './IUserDeleteInput';
+import { userEditInteractor } from './userEditInteractor';
+import { userMeGetInteractor } from './userMeGetInteractor';
+import { userSessionsCreateInteractor } from './userSessionsCreateInteractor';
+import { userSessionsDeleteAllInteractor } from './userSessionsDeleteAllInteractor';
+import { userSessionsDeleteCurrentInteractor } from './userSessionsDeleteCurrentInteractor';
+import { userSessionsDeleteInteractor } from './userSessionsDeleteInteractor';
+import { userSessionsGetAllInteractor } from './userSessionsGetAllInteractor';
+import { userTagWithExpiresAtSchema } from './userTagWithExpiresAtSchema';
 
 const userIDParamsSchema = Type.Object({
 	userID: Type.String(),
@@ -23,7 +37,7 @@ const userCreateIfNotExistsAndCreateSessionRequestCreateBodySchema = Type.Object
 
 const userDeleteParamsSchema = userIDParamsSchema;
 
-const userEditParamsSchema = userIDParamsSchema
+const userEditParamsSchema = userIDParamsSchema;
 const userEditBodySchema = Type.Object({
 	user: Type.Object({
 		displayName: Type.String(),
@@ -70,6 +84,7 @@ const userSessionsCreateBodySchema = Type.Object({
 const userSessionsDeleteAllParamsSchema = userIDParamsSchema;
 
 const userSessionsDeleteParamsSchema = Type.Object({
+	userID: Type.String(),
 	sessionName: Type.String(),
 });
 
@@ -165,9 +180,7 @@ export const userCreateIfNotExistsAndCreateSessionRequestCreateRouteOptions = (r
 			input: input,
 			repository: repositories.userRepository,
 		});
-		if (output) {
-			reply.status(204).send();
-		}
+		await (async o => reply.status(204).send())(output);
 	},
 })
 
@@ -188,7 +201,7 @@ export const userDeleteRouteOptions = (repositories: IRepositories): TRouteOptio
 			input: input,
 			repository: repositories.userRepository,
 		});
-		reply.status(200).send(output);
+		await reply.status(200).send(output);
 	},
 })
 
@@ -198,13 +211,28 @@ export const userEditRouteOptions = (repositories: IRepositories): TRouteOptions
 	Reply: TUserEditResponseSchema;
 }> => ({
 	method: 'PUT',
-	url: '/users/me',
+	url: '/users/:userID',
 	schema: {
 		params: userEditParamsSchema,
 		body: userEditBodySchema,
 		response: userEditResponseSchema,
 	},
-	handler: async (request, reply) => {},
+	handler: async (request, reply) => {
+		const input: IUserEditInput = {
+			sessionID: request.cookies.sessionID!,
+			user: {
+				id: request.params.userID,
+				...request.body.user,
+			},
+		};
+		const output = await userEditInteractor({
+			input: input,
+			repository: repositories.userRepository,
+			groupRepository: repositories.groupRepository,
+			pageRepository: repositories.pageRepository,
+		});
+		await reply.status(200).send(output);
+	},
 })
 
 export const userMeGetRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
@@ -215,7 +243,16 @@ export const userMeGetRouteOptions = (repositories: IRepositories): TRouteOption
 	schema: {
 		response: userMeGetResponseSchema,
 	},
-	handler: async (request, reply) => {},
+	handler: async (request, reply) => {
+		const input: IUserMeGetInput = {
+			sessionID: request.cookies.sessionID!,
+		};
+		const output = await userMeGetInteractor({
+			input: input,
+			repository: repositories.userRepository,
+		});
+		await reply.status(200).send(output);
+	},
 })
 
 export const userSessionsCreateRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
@@ -226,7 +263,26 @@ export const userSessionsCreateRouteOptions = (repositories: IRepositories): TRo
 	schema: {
 		body: userSessionsCreateBodySchema,
 	},
-	handler: async (request, reply) => {},
+	handler: async (request, reply) => {
+		const input: IUserSessionsCreateInput = {
+			ipAddress: request.ip,
+			...request.body,
+		};
+		const output = await userSessionsCreateInteractor({
+			input: input,
+			repository: repositories.userRepository,
+		});
+		await reply
+			.setCookie('sessionID', output.sessionID, {
+				httpOnly: true,
+				sameSite: 'lax',
+				maxAge: 5 * 365 * 24 * 60 * 60,
+				secure: true,
+				signed: false,
+			})
+			.status(204)
+			.send();
+	},
 })
 
 export const userSessionsDeleteAllRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
@@ -237,13 +293,48 @@ export const userSessionsDeleteAllRouteOptions = (repositories: IRepositories): 
 	schema: {
 		params: userSessionsDeleteAllParamsSchema,
 	},
-	handler: async (request, reply) => {},
+	handler: async (request, reply) => {
+		const input: IUserSessionsDeleteAllInput = {
+			userID: request.params.userID,
+			sessionID: request.cookies.sessionID!,
+		};
+		const output = await userSessionsDeleteAllInteractor({
+			input: input,
+			repository: repositories.userRepository,
+		});
+		// TODO: Cookieのオプション
+		await (async o => await reply
+			.clearCookie('sessionID', {
+				httpOnly: true,
+				sameSite: 'lax',
+				secure: true,
+			})
+			.status(204)
+			.send())(output);
+	},
 })
 
 export const userSessionsDeleteCurrentRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{}> => ({
 	method: 'DELETE',
 	url: '/users/:userID/sessions/current',
-	handler: async (request, reply) => {},
+	handler: async (request, reply) => {
+		const input: IUserSessionsDeleteCurrentInput = {
+			sessionID: request.cookies.sessionID!,
+		};
+		const output = await userSessionsDeleteCurrentInteractor({
+			input: input,
+			repository: repositories.userRepository,
+		});
+		// TODO: Cookieのオプション
+		await (async o => await reply
+			.clearCookie('sessionID', {
+				httpOnly: true,
+				sameSite: 'lax',
+				secure: true,
+			})
+			.status(204)
+			.send())(output);
+	},
 })
 
 export const userSessionDeleteRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
@@ -254,7 +345,18 @@ export const userSessionDeleteRouteOptions = (repositories: IRepositories): TRou
 	schema: {
 		params: userSessionsDeleteParamsSchema,
 	},
-	handler: async (request, reply) => {},
+	handler: async (request, reply) => {
+		const input: IUserSessionsDeleteInput = {
+			sessionID: request.cookies.sessionID!,
+			userID: request.params.userID,
+			sessionName: request.params.sessionName,
+		};
+		const output = await userSessionsDeleteInteractor({
+			input: input,
+			repository: repositories.userRepository,
+		});
+		await (async o => await reply.status(204).send())(output);
+	},
 })
 
 export const userSessionsGetAllRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
@@ -267,5 +369,15 @@ export const userSessionsGetAllRouteOptions = (repositories: IRepositories): TRo
 		params: userSessionsGetAllParamsSchema,
 		response: userSessionsGetAllResponseSchema,
 	},
-	handler: async (request, reply) => {},
+	handler: async (request, reply) => {
+		const input: IUserSessionsGetAllInput = {
+			sessionID: request.cookies.sessionID!,
+			userID: request.params.userID,
+		};
+		const output = await userSessionsGetAllInteractor({
+			input: input,
+			repository: repositories.userRepository,
+		});
+		await reply.status(200).send(output);
+	},
 })
