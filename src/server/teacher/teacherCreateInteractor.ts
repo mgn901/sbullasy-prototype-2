@@ -28,7 +28,7 @@ export const teacherCreateInteractor = async (params: ITeacherCreateInteractorPa
 			userRepository: userRepository,
 			permissionNeeded: 'teacher_write',
 		});
-		if (!verifyAPITokenResult.status) {
+		if (!(verifyAPITokenResult.status)) {
 			throw verifyAPITokenResult.error;
 		}
 
@@ -37,7 +37,7 @@ export const teacherCreateInteractor = async (params: ITeacherCreateInteractorPa
 			sessionID: sessionID,
 			userRepository: userRepository,
 		});
-		if (!verifySessionResult.status) {
+		if (!(verifySessionResult.status)) {
 			throw verifySessionResult.error;
 		}
 
@@ -47,7 +47,7 @@ export const teacherCreateInteractor = async (params: ITeacherCreateInteractorPa
 			userRepository: userRepository,
 			tagNeeded: 'teacher_write',
 		});
-		if (!verifyUserTagResult.status) {
+		if (!(verifyUserTagResult.status)) {
 			throw verifyUserTagResult.error;
 		}
 

@@ -27,7 +27,7 @@ export const placePutInteractor = async (params: IPlacePutInteractorParams): Pro
 			userRepository: userRepository,
 			permissionNeeded: 'place_write',
 		});
-		if (!verifyAPITokenResult.status) {
+		if (!(verifyAPITokenResult.status)) {
 			throw verifyAPITokenResult.error;
 		}
 
@@ -36,7 +36,7 @@ export const placePutInteractor = async (params: IPlacePutInteractorParams): Pro
 			sessionID: sessionID,
 			userRepository: userRepository,
 		});
-		if (!verifySessionResult.status) {
+		if (!(verifySessionResult.status)) {
 			throw verifySessionResult.error;
 		}
 
@@ -46,7 +46,7 @@ export const placePutInteractor = async (params: IPlacePutInteractorParams): Pro
 			userRepository: userRepository,
 			tagNeeded: 'place_write',
 		});
-		if (!verifyUserTagResult.status) {
+		if (!(verifyUserTagResult.status)) {
 			throw verifyUserTagResult.error;
 		}
 

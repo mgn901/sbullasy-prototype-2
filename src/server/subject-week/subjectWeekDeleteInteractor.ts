@@ -27,7 +27,7 @@ export const subjectWeekDeleteInteractor = async (params: ISubjectWeekDeleteInte
 			permissionNeeded: 'subject-week_write',
 			userRepository: userRepository,
 		});
-		if (!verifyAPITokenResult.status) {
+		if (!(verifyAPITokenResult.status)) {
 			throw verifyAPITokenResult.error;
 		}
 
@@ -36,7 +36,7 @@ export const subjectWeekDeleteInteractor = async (params: ISubjectWeekDeleteInte
 			sessionID: sessionID,
 			userRepository: userRepository,
 		});
-		if (!verifySessionResult.status) {
+		if (!(verifySessionResult.status)) {
 			throw verifySessionResult.error;
 		}
 
@@ -46,7 +46,7 @@ export const subjectWeekDeleteInteractor = async (params: ISubjectWeekDeleteInte
 			tagNeeded: 'subject-week_write',
 			userRepository: userRepository,
 		});
-		if (!verifyUserTagResult.status) {
+		if (!(verifyUserTagResult.status)) {
 			throw verifyUserTagResult.error;
 		}
 

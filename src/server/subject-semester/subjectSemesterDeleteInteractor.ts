@@ -27,7 +27,7 @@ export const subjectSemesterDeleteInteractor = async (params: ISubjectSemesterDe
 			permissionNeeded: 'subject-semester_write',
 			userRepository: userRepository,
 		});
-		if (!verifyAPITokenResult.status) {
+		if (!(verifyAPITokenResult.status)) {
 			throw verifyAPITokenResult.error;
 		}
 
@@ -36,7 +36,7 @@ export const subjectSemesterDeleteInteractor = async (params: ISubjectSemesterDe
 			sessionID: sessionID,
 			userRepository: userRepository,
 		});
-		if (!verifySessionResult.status) {
+		if (!(verifySessionResult.status)) {
 			throw verifySessionResult.error;
 		}
 
@@ -46,7 +46,7 @@ export const subjectSemesterDeleteInteractor = async (params: ISubjectSemesterDe
 			tagNeeded: 'subject-category_write',
 			userRepository: userRepository,
 		});
-		if (!verifyUserTagResult.status) {
+		if (!(verifyUserTagResult.status)) {
 			throw verifyUserTagResult.error;
 		}
 

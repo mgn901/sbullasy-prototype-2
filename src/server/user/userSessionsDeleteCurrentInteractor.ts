@@ -20,7 +20,7 @@ export const userSessionsDeleteCurrentInteractor = async (params: IUserSessionsD
 		sessionID: sessionID,
 		userRepository: repository,
 	});
-	if (!verifySessionResult.status) {
+	if (!(verifySessionResult.status)) {
 		throw verifySessionResult.error;
 	}
 	const user = verifySessionResult.user;

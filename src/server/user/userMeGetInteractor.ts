@@ -24,7 +24,7 @@ export const userMeGetInteractor = async (params: IUserMeGetInteractorParams): P
 		sessionID: input.sessionID,
 		userRepository: repository,
 	});
-	if (!verifySessionResult.status) {
+	if (!(verifySessionResult.status)) {
 		throw verifySessionResult.error;
 	}
 

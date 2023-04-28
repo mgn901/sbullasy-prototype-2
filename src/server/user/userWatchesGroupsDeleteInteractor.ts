@@ -20,7 +20,7 @@ export const userWatchesGroupsDeleteInteractor = async (params: IUserWatchesGrou
 		sessionID: input.sessionID,
 		userRepository: repository,
 	});
-	if (!verifySessionResult.status) {
+	if (!(verifySessionResult.status)) {
 		throw verifySessionResult.error;
 	}
 	if (verifySessionResult.user.id !== input.userID) {

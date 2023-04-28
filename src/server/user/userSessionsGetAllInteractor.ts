@@ -21,7 +21,7 @@ export const userSessionsGetAllInteractor = async (params: IUserSessionsGetAllIn
 		sessionID: sessionID,
 		userRepository: repository,
 	});
-	if (!verifySessionResult.status) {
+	if (!(verifySessionResult.status)) {
 		throw verifySessionResult.error;
 	}
 	if (verifySessionResult.user.id !== input.userID) {

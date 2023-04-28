@@ -25,7 +25,7 @@ export const subjectDeleteInteractor = async (params: ISubjectDeleteInteractorPa
 			sessionID: input.sessionID,
 			userRepository: userRepository,
 		});
-		if (!verifySessionResult.status) {
+		if (!(verifySessionResult.status)) {
 			throw verifySessionResult.error;
 		}
 
@@ -34,7 +34,7 @@ export const subjectDeleteInteractor = async (params: ISubjectDeleteInteractorPa
 			tagNeeded: 'subject_write',
 			userRepository: userRepository,
 		});
-		if (!verifyUserTagResult.status) {
+		if (!(verifyUserTagResult.status)) {
 			throw verifyUserTagResult.error;
 		}
 
@@ -44,7 +44,7 @@ export const subjectDeleteInteractor = async (params: ISubjectDeleteInteractorPa
 			permissionNeeded: 'subject_write',
 			userRepository: userRepository,
 		});
-		if (!verifycationResult.status) {
+		if (!(verifycationResult.status)) {
 			throw verifycationResult.error;
 		}
 

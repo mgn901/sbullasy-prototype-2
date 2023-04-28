@@ -28,7 +28,7 @@ export const subjectCategoryCreateInteractor = async (params: ISubjectCategoryCr
 			permissionNeeded: 'subject-category_write',
 			userRepository: userRepository,
 		});
-		if (!verifyAPITokenResult.status) {
+		if (!(verifyAPITokenResult.status)) {
 			throw verifyAPITokenResult.error;
 		}
 
@@ -37,7 +37,7 @@ export const subjectCategoryCreateInteractor = async (params: ISubjectCategoryCr
 			sessionID: sessionID,
 			userRepository: userRepository,
 		});
-		if (!verifySessionResult.status) {
+		if (!(verifySessionResult.status)) {
 			throw verifySessionResult.error;
 		}
 
@@ -47,7 +47,7 @@ export const subjectCategoryCreateInteractor = async (params: ISubjectCategoryCr
 			tagNeeded: 'subject-category_write',
 			userRepository: userRepository,
 		});
-		if (!verifyUserTagResult.status) {
+		if (!(verifyUserTagResult.status)) {
 			throw verifyUserTagResult.error;
 		}
 

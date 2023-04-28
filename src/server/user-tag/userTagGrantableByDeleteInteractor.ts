@@ -24,7 +24,7 @@ export const userTagGrantableByDeleteInteractor = async (params: IUserTagGrantab
 		sessionID: sessionID,
 		userRepository: userRepository,
 	});
-	if (!verifySessionResult.status) {
+	if (!(verifySessionResult.status)) {
 		throw verifySessionResult.error;
 	}
 	const user = verifySessionResult.user;
@@ -33,7 +33,7 @@ export const userTagGrantableByDeleteInteractor = async (params: IUserTagGrantab
 		userRepository: userRepository,
 		tagNeeded: 'user-tag_write',
 	});
-	if (!verifyUserTagResult.status) {
+	if (!(verifyUserTagResult.status)) {
 		throw verifyUserTagResult.error;
 	}
 

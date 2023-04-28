@@ -21,7 +21,7 @@ export const userSessionsDeleteInteractor = async (params: IUserSessionsDeleteIn
 		sessionID: sessionID,
 		userRepository: repository,
 	});
-	if (!verifySessionResult.status) {
+	if (!(verifySessionResult.status)) {
 		throw verifySessionResult.error;
 	}
 	if (verifySessionResult.user.id !== input.userID) {

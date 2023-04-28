@@ -23,7 +23,7 @@ export const userWatchesPagesPutInteractor = async (params: IUserWatchesPagesPut
 		sessionID: input.sessionID,
 		userRepository: repository,
 	});
-	if (!verifySessionResult.status) {
+	if (!(verifySessionResult.status)) {
 		throw verifySessionResult.error;
 	}
 	if (verifySessionResult.user.id !== input.userID) {

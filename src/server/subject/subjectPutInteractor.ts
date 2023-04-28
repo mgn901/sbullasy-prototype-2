@@ -56,7 +56,7 @@ export const subjectPutInteractor = async (params: ISubjectPutInteractorParams):
 			sessionID: input.sessionID,
 			userRepository: userRepository,
 		});
-		if (!verifySessionResult.status) {
+		if (!(verifySessionResult.status)) {
 			throw verifySessionResult.error;
 		}
 
@@ -65,7 +65,7 @@ export const subjectPutInteractor = async (params: ISubjectPutInteractorParams):
 			tagNeeded: 'subject_write',
 			userRepository: userRepository,
 		});
-		if (!verifyUserTagResult.status) {
+		if (!(verifyUserTagResult.status)) {
 			throw verifyUserTagResult.error;
 		}
 
@@ -75,7 +75,7 @@ export const subjectPutInteractor = async (params: ISubjectPutInteractorParams):
 			userRepository: userRepository,
 			permissionNeeded: 'subject_write',
 		});
-		if (!verifycationResult.status) {
+		if (!(verifycationResult.status)) {
 			throw verifycationResult.error;
 		}
 

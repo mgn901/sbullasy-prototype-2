@@ -23,7 +23,7 @@ export const userTagDeleteInteractor = async (params: IUserTagDeleteInteractorPa
 		sessionID: sessionID,
 		userRepository: userRepository,
 	});
-	if (!verifySessionResult.status) {
+	if (!(verifySessionResult.status)) {
 		throw verifySessionResult.error;
 	}
 	const user = verifySessionResult.user;
@@ -32,7 +32,7 @@ export const userTagDeleteInteractor = async (params: IUserTagDeleteInteractorPa
 		userRepository: userRepository,
 		tagNeeded: 'user-tag_write',
 	});
-	if (!verifyUserTagResult.status) {
+	if (!(verifyUserTagResult.status)) {
 		throw verifyUserTagResult.error;
 	}
 
