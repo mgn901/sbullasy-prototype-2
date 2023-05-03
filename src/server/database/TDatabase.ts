@@ -20,6 +20,7 @@ import { IUserTagGrantability } from '../user-tag/IUserTagGrantability';
 import { IUser } from '../user/IUser';
 import { IUserTagRegistration } from '../user/IUserTagRegistration';
 import { ICreateSessionRequest } from '../create-session-request/ICreateSessionRequest';
+import { ISettingItem } from '../setting/ISettingItem';
 
 type TJoinTable<
 	I extends (TEntity | TEntity[] | undefined),
@@ -57,6 +58,7 @@ export interface TDatabase {
 	teachers: TEntityWithoutEntityKey<ITeacher>;
 	places: TEntityWithoutEntityKey<IPlace>;
 	properties: TEntityWithoutEntityKey<TProperty>;
+	settings: TEntityWithoutEntityKey<ISettingItem>;
 	sessions: TEntityWithoutEntityKey<ISession>;
 	createsessionrequests: TEntityWithoutEntityKey<ICreateSessionRequest>;
 	usertagrequests: TEntityWithoutEntityKey<IUserTagRequest>;

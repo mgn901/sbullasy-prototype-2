@@ -4,11 +4,13 @@ import fastifyHelmet, { FastifyHelmetOptions } from '@fastify/helmet';
 import { fastifyStatic } from '@fastify/static';
 import fastify, { FastifyHttpOptions, FastifyListenOptions, FastifyRegisterOptions } from 'fastify';
 import { Server } from 'http';
+import { SettingItemRepository } from '../setting/SettingItemRepository.kysely';
 import { createTables } from '../database/createTables.kysely';
 import { db } from '../database/db.kysely';
 import { EmailClient, IEmailClientOptions } from '../email/EmailClient.nodemailer';
 import { GroupTagRepository } from '../group-tag/GroupTagRepository.kysely';
 import { GroupRepository } from '../group/GroupRepository.kysely';
+import { IInfrastructures } from '../http-api/IInfrastructures';
 import { IRouterOptions } from "../http-api/IRouterOptions";
 import { httpAPIRouter } from '../http-api/httpAPIRouter.fastify';
 import { fastifyStaticOptions } from '../http-view/fastifyStaticOptions';
@@ -24,7 +26,6 @@ import { TeacherRepository } from '../teacher/TeacherRepository.kysely';
 import { UserTagRepository } from '../user-tag/UserTagRepository.kysely';
 import { UserRepository } from '../user/UserRepository.kysely';
 import { startInteractor } from './startInteractor';
-import { IInfrastructures } from '../http-api/IInfrastructures';
 
 export const start = async () => {
 	const {
@@ -80,6 +81,7 @@ export const start = async () => {
 	const subjectCategoryRepository = new SubjectCategoryRepository();
 	const subjectSemesterRepository = new SubjectSemesterRepository();
 	const subjectWeekRepository = new SubjectWeekRepository();
+	const settingItemRepository = new SettingItemRepository();
 	const teacherRepository = new TeacherRepository();
 	const userTagRepository = new UserTagRepository();
 	const emailClient = new EmailClient(emailClientOptions);
@@ -95,6 +97,7 @@ export const start = async () => {
 		subjectCategoryRepository,
 		subjectSemesterRepository,
 		subjectWeekRepository,
+		settingItemRepository,
 		teacherRepository,
 		emailClient,
 	};

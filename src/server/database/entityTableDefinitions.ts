@@ -112,6 +112,10 @@ export const entityTableDefinitions: TEntityTableDefinitions<TDatabase> = {
 		name: { type: 'text', isPrimaryKey: false, isNotNull: true },
 		numbering: { type: 'text', isPrimaryKey: false, isNotNull: true },
 	},
+	settings: {
+		id: { type: 'text', isPrimaryKey: true, isNotNull: true },
+		value: { type: 'text', isPrimaryKey: false, isNotNull: true },
+	},
 	sessions: {
 		id: { type: 'text', isPrimaryKey: true, isNotNull: true },
 		name: { type: 'text', isPrimaryKey: false, isNotNull: true },
