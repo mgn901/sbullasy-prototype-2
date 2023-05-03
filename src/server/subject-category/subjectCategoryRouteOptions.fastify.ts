@@ -1,5 +1,5 @@
 import { Static, Type } from '@fastify/type-provider-typebox';
-import { IRepositories } from '../http-api/IRepositories';
+import { IInfrastructures } from '../http-api/IInfrastructures';
 import { TRouteOptionsWrapper } from '../http-api/TRouteOptionsWrapper.fastify';
 import { ISubjectCategoryCreateInput } from './ISubjectCategoryCreateInput';
 import { ISubjectCategoryDeleteInput } from './ISubjectCategoryDeleteInput';
@@ -44,7 +44,7 @@ type TSubjectCategoryPutParamsSchema = Static<typeof subjectCategoryPutParamsSch
 type TSubjectCategoryPutBodySchema = Static<typeof subjectCategoryPutBodySchema>;
 type TSubjectCategoryPutResponseSchema = Static<typeof subjectCategoryPutResponseSchema>;
 
-export const subjectCategoryCreateRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const subjectCategoryCreateRouteOptions = (repositories: IInfrastructures): TRouteOptionsWrapper<{
 	Body: TSubjectCategoryCreateBodySchema;
 	Reply: TSubjectCategoryCreateResponseSchema;
 }> => ({
@@ -68,7 +68,7 @@ export const subjectCategoryCreateRouteOptions = (repositories: IRepositories): 
 	},
 })
 
-export const subjectCategoryDeleteRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const subjectCategoryDeleteRouteOptions = (repositories: IInfrastructures): TRouteOptionsWrapper<{
 	Params: TSubjectCategoryDeleteParamsSchema;
 }> => ({
 	method: 'DELETE',
@@ -90,7 +90,7 @@ export const subjectCategoryDeleteRouteOptions = (repositories: IRepositories): 
 	},
 })
 
-export const subjectCategoryGetAllRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const subjectCategoryGetAllRouteOptions = (repositories: IInfrastructures): TRouteOptionsWrapper<{
 	Reply: TSubjectCategoryGetAllResponseSchema;
 }> => ({
 	method: 'GET',
@@ -108,7 +108,7 @@ export const subjectCategoryGetAllRouteOptions = (repositories: IRepositories): 
 	},
 })
 
-export const subjectCategoryPutRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const subjectCategoryPutRouteOptions = (repositories: IInfrastructures): TRouteOptionsWrapper<{
 	Params: TSubjectCategoryPutParamsSchema;
 	Body: TSubjectCategoryPutBodySchema;
 	Reply: TSubjectCategoryPutResponseSchema;

@@ -1,5 +1,5 @@
 import { Static, Type } from '@sinclair/typebox';
-import { IRepositories } from '../http-api/IRepositories';
+import { IInfrastructures } from '../http-api/IInfrastructures';
 import { TRouteOptionsWrapper } from '../http-api/TRouteOptionsWrapper.fastify';
 import { ISubjectSemesterCreateInput } from './ISubjectSemesterCreateInput';
 import { ISubjectSemesterDeleteInput } from './ISubjectSemesterDeleteInput';
@@ -44,7 +44,7 @@ type TSubjectSemesterPutParamsSchema = Static<typeof subjectSemesterPutParamsSch
 type TSubjectSemesterPutBodySchema = Static<typeof subjectSemesterPutBodySchema>;
 type TSubjectSemesterPutResponseSchema = Static<typeof subjectSemesterPutResponseSchema>;
 
-export const subjectSemesterCreateRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const subjectSemesterCreateRouteOptions = (repositories: IInfrastructures): TRouteOptionsWrapper<{
 	Body: TSubjectSemesterCreateBodySchema;
 	Reply: TSubjectSemesterCreateResponseSchema;
 }> => ({
@@ -68,7 +68,7 @@ export const subjectSemesterCreateRouteOptions = (repositories: IRepositories): 
 	},
 })
 
-export const subjectSemesterDeleteRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const subjectSemesterDeleteRouteOptions = (repositories: IInfrastructures): TRouteOptionsWrapper<{
 	Params: TSubjectSemesterDeleteParamsSchema;
 }> => ({
 	method: 'DELETE',
@@ -90,7 +90,7 @@ export const subjectSemesterDeleteRouteOptions = (repositories: IRepositories): 
 	},
 })
 
-export const subjectSemesterGetAllRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const subjectSemesterGetAllRouteOptions = (repositories: IInfrastructures): TRouteOptionsWrapper<{
 	Reply: TSubjectSemesterGetAllResponseSchema;
 }> => ({
 	method: 'GET',
@@ -108,7 +108,7 @@ export const subjectSemesterGetAllRouteOptions = (repositories: IRepositories): 
 	},
 })
 
-export const subjectSemesterPutRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const subjectSemesterPutRouteOptions = (repositories: IInfrastructures): TRouteOptionsWrapper<{
 	Params: TSubjectSemesterPutParamsSchema;
 	Body: TSubjectSemesterPutBodySchema;
 	Reply: TSubjectSemesterPutResponseSchema;

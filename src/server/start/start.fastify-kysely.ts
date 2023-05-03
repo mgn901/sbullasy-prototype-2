@@ -24,6 +24,7 @@ import { TeacherRepository } from '../teacher/TeacherRepository.kysely';
 import { UserTagRepository } from '../user-tag/UserTagRepository.kysely';
 import { UserRepository } from '../user/UserRepository.kysely';
 import { startInteractor } from './startInteractor';
+import { IInfrastructures } from '../http-api/IInfrastructures';
 
 export const start = async () => {
 	const {
@@ -63,6 +64,12 @@ export const start = async () => {
 
 	await createTables(db);
 
+	const emailClientOptions: IEmailClientOptions = {
+		host: SBULLASY_APP_SMTP_HOST!,
+		port: Number(SBULLASY_APP_SMTP_PORT)!,
+		userEmail: SBULLASY_APP_SMTP_USEREMAIL!,
+		password: SBULLASY_APP_SMTP_PASSWORD!,
+	};
 	const userRepository = new UserRepository();
 	const groupRepository = new GroupRepository();
 	const pageRepository = new PageRepository();
@@ -75,7 +82,8 @@ export const start = async () => {
 	const subjectWeekRepository = new SubjectWeekRepository();
 	const teacherRepository = new TeacherRepository();
 	const userTagRepository = new UserTagRepository();
-	const repositories = {
+	const emailClient = new EmailClient(emailClientOptions);
+	const repositories: IInfrastructures = {
 		userRepository,
 		groupRepository,
 		pageRepository,
@@ -88,14 +96,8 @@ export const start = async () => {
 		subjectSemesterRepository,
 		subjectWeekRepository,
 		teacherRepository,
+		emailClient,
 	};
-	const emailClientOptions: IEmailClientOptions = {
-		host: SBULLASY_APP_SMTP_HOST!,
-		port: Number(SBULLASY_APP_SMTP_PORT)!,
-		userEmail: SBULLASY_APP_SMTP_USEREMAIL!,
-		password: SBULLASY_APP_SMTP_PASSWORD!,
-	}
-	const emailClient = new EmailClient(emailClientOptions);
 
 	await startInteractor({
 		input: {
@@ -126,11 +128,11 @@ export const start = async () => {
 		port: Number(SBULLASY_APP_PORT!),
 	};
 	const httpAPIRouterOptions: FastifyRegisterOptions<IRouterOptions> = {
-		repositories: repositories,
+		infrastructures: repositories,
 		prefix: '/http-api/v1',
 	};
 	const httpViewRouterOptions: FastifyRegisterOptions<IRouterOptions> = {
-		repositories: repositories,
+		infrastructures: repositories,
 	};
 	const instance = fastify(instanceOptions);
 	await instance.register(fastifyEtag);

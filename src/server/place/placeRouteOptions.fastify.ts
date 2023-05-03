@@ -1,5 +1,5 @@
 import { Static, Type } from '@sinclair/typebox';
-import { IRepositories } from '../http-api/IRepositories';
+import { IInfrastructures } from '../http-api/IInfrastructures';
 import { TRouteOptionsWrapper } from '../http-api/TRouteOptionsWrapper.fastify';
 import { IPlaceCreateInput } from './IPlaceCreateInput';
 import { IPlaceDeleteInput } from './IPlaceDeleteInput';
@@ -44,7 +44,7 @@ type TPlacePutParamsSchema = Static<typeof placePutParamsSchema>;
 type TPlacePutBodySchema = Static<typeof placePutBodySchema>;
 type TPlacePutResponseSchema = Static<typeof placePutResponseSchema>;
 
-export const placeCreateRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const placeCreateRouteOptions = (repositories: IInfrastructures): TRouteOptionsWrapper<{
 	Body: TPlaceCreateBodySchema;
 	Reply: TPlaceCreateResponseSchema;
 }> => ({
@@ -68,7 +68,7 @@ export const placeCreateRouteOptions = (repositories: IRepositories): TRouteOpti
 	},
 })
 
-export const placeDeleteRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const placeDeleteRouteOptions = (repositories: IInfrastructures): TRouteOptionsWrapper<{
 	Params: TPlaceDeleteParamsSchema;
 }> => ({
 	method: 'DELETE',
@@ -90,7 +90,7 @@ export const placeDeleteRouteOptions = (repositories: IRepositories): TRouteOpti
 	},
 })
 
-export const placeGetAllRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const placeGetAllRouteOptions = (repositories: IInfrastructures): TRouteOptionsWrapper<{
 	Reply: TPlaceGetAllResponseSchema;
 }> => ({
 	method: 'GET',
@@ -108,7 +108,7 @@ export const placeGetAllRouteOptions = (repositories: IRepositories): TRouteOpti
 	},
 })
 
-export const placePutRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const placePutRouteOptions = (repositories: IInfrastructures): TRouteOptionsWrapper<{
 	Params: TPlacePutParamsSchema;
 	Body: TPlacePutBodySchema;
 	Reply: TPlacePutResponseSchema;

@@ -11,47 +11,47 @@ import { errorHandler } from './errorHandler.fastify';
 
 export const httpAPIRouter: FastifyPluginAsync<IRouterOptions> = async (instance, options) => {
 
-	const repositories = options.repositories;
+	const infrastructures = options.infrastructures;
 
-	instance.route(userCreateIfNotExistsAndCreateSessionRequestCreateRouteOptions(repositories));
-	instance.route(userDeleteRouteOptions(repositories));
-	instance.route(userEditRouteOptions(repositories));
-	instance.route(userMeGetRouteOptions(repositories));
-	instance.route(userSessionsCreateRouteOptions(repositories));
-	instance.route(userSessionsDeleteAllRouteOptions(repositories));
-	instance.route(userSessionsDeleteCurrentRouteOptions(repositories));
-	instance.route(userSessionDeleteRouteOptions(repositories));
-	instance.route(userSessionsGetAllRouteOptions(repositories));
+	instance.route(userCreateIfNotExistsAndCreateSessionRequestCreateRouteOptions(infrastructures));
+	instance.route(userDeleteRouteOptions(infrastructures));
+	instance.route(userEditRouteOptions(infrastructures));
+	instance.route(userMeGetRouteOptions(infrastructures));
+	instance.route(userSessionsCreateRouteOptions(infrastructures));
+	instance.route(userSessionsDeleteAllRouteOptions(infrastructures));
+	instance.route(userSessionsDeleteCurrentRouteOptions(infrastructures));
+	instance.route(userSessionDeleteRouteOptions(infrastructures));
+	instance.route(userSessionsGetAllRouteOptions(infrastructures));
 
-	instance.route(placePutRouteOptions(repositories));
-	instance.route(placeCreateRouteOptions(repositories));
-	instance.route(placeDeleteRouteOptions(repositories));
-	instance.route(placeGetAllRouteOptions(repositories));
+	instance.route(placePutRouteOptions(infrastructures));
+	instance.route(placeCreateRouteOptions(infrastructures));
+	instance.route(placeDeleteRouteOptions(infrastructures));
+	instance.route(placeGetAllRouteOptions(infrastructures));
 
-	instance.route(subjectGetRouteOptions(repositories));
-	instance.route(subjectPutRouteOptions(repositories));
-	instance.route(subjectDeleteRouteOptions(repositories));
-	instance.route(subjectGetAllRouteOptions(repositories));
+	instance.route(subjectGetRouteOptions(infrastructures));
+	instance.route(subjectPutRouteOptions(infrastructures));
+	instance.route(subjectDeleteRouteOptions(infrastructures));
+	instance.route(subjectGetAllRouteOptions(infrastructures));
 
-	instance.route(subjectCategoryPutRouteOptions(repositories));
-	instance.route(subjectCategoryCreateRouteOptions(repositories));
-	instance.route(subjectCategoryDeleteRouteOptions(repositories));
-	instance.route(subjectCategoryGetAllRouteOptions(repositories));
+	instance.route(subjectCategoryPutRouteOptions(infrastructures));
+	instance.route(subjectCategoryCreateRouteOptions(infrastructures));
+	instance.route(subjectCategoryDeleteRouteOptions(infrastructures));
+	instance.route(subjectCategoryGetAllRouteOptions(infrastructures));
 
-	instance.route(subjectSemesterPutRouteOptions(repositories));
-	instance.route(subjectSemesterCreateRouteOptions(repositories));
-	instance.route(subjectSemesterDeleteRouteOptions(repositories));
-	instance.route(subjectSemesterGetAllRouteOptions(repositories));
+	instance.route(subjectSemesterPutRouteOptions(infrastructures));
+	instance.route(subjectSemesterCreateRouteOptions(infrastructures));
+	instance.route(subjectSemesterDeleteRouteOptions(infrastructures));
+	instance.route(subjectSemesterGetAllRouteOptions(infrastructures));
 
-	instance.route(subjectWeekPutRouteOptions(repositories));
-	instance.route(subjectWeekCreateRouteOptions(repositories));
-	instance.route(subjectWeekDeleteRouteOptions(repositories));
-	instance.route(subjectWeekGetAllRouteOptions(repositories));
+	instance.route(subjectWeekPutRouteOptions(infrastructures));
+	instance.route(subjectWeekCreateRouteOptions(infrastructures));
+	instance.route(subjectWeekDeleteRouteOptions(infrastructures));
+	instance.route(subjectWeekGetAllRouteOptions(infrastructures));
 
-	instance.route(teacherPutRouteOptions(repositories));
-	instance.route(teacherCreateRouteOptions(repositories));
-	instance.route(teacherDeleteRouteOptions(repositories));
-	instance.route(teacherGetAllRouteOptions(repositories));
+	instance.route(teacherPutRouteOptions(infrastructures));
+	instance.route(teacherCreateRouteOptions(infrastructures));
+	instance.route(teacherDeleteRouteOptions(infrastructures));
+	instance.route(teacherGetAllRouteOptions(infrastructures));
 
 	instance.setErrorHandler(errorHandler);
 

@@ -50,6 +50,7 @@ export const startInteractor = async (params: IStartInteractorParams): Promise<I
 		displayName: userPartial.displayName,
 		createdAt: now,
 		ipAddress: '',
+		isOnboarded: true,
 		sessions: [],
 		createSessionRequests: [],
 		apiTokens: [],

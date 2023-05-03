@@ -1,5 +1,5 @@
-import { IRepositories } from './IRepositories';
+import { IInfrastructures } from './IInfrastructures';
 
 export interface IRouterOptions {
-	repositories: IRepositories;
+	infrastructures: IInfrastructures;
 }

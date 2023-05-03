@@ -1,6 +1,6 @@
 import { Static, Type } from '@fastify/type-provider-typebox';
 import { groupForPublicSchema } from '../group/groupForPublicSchema';
-import { IRepositories } from '../http-api/IRepositories';
+import { IInfrastructures } from '../http-api/IInfrastructures';
 import { TRouteOptionsWrapper } from '../http-api/TRouteOptionsWrapper.fastify';
 import { pageForPublicSchema } from '../page/pageForPublicSchema';
 import { propertyWithoutEntityKeySchema } from '../property/propertyWithoutEntityKeySchema';
@@ -161,7 +161,7 @@ type TUserWatchesPagesGetParamsSchema = Static<typeof userWatchesPagesGetParamsS
 type TUserWatchesPagesGetResponseSchema = Static<typeof userWatchesPagesGetResponseSchema>;
 type TUserWatchesPagesPutParamsSchema = Static<typeof userWatchesPagesPutParamsSchema>;
 
-export const userCreateIfNotExistsAndCreateSessionRequestCreateRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const userCreateIfNotExistsAndCreateSessionRequestCreateRouteOptions = (repositories: IInfrastructures): TRouteOptionsWrapper<{
 	Body: TUserCreateIfNotExistsAndCreateSessionRequestCreateBodySchema;
 }> => ({
 	method: 'POST',
@@ -184,7 +184,7 @@ export const userCreateIfNotExistsAndCreateSessionRequestCreateRouteOptions = (r
 	},
 })
 
-export const userDeleteRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const userDeleteRouteOptions = (repositories: IInfrastructures): TRouteOptionsWrapper<{
 	Params: TUserDeleteParamsSchema;
 }> => ({
 	method: 'DELETE',
@@ -205,7 +205,7 @@ export const userDeleteRouteOptions = (repositories: IRepositories): TRouteOptio
 	},
 })
 
-export const userEditRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const userEditRouteOptions = (repositories: IInfrastructures): TRouteOptionsWrapper<{
 	Params: TUserEditParamsSchema;
 	Body: TUserEditBodySchema;
 	Reply: TUserEditResponseSchema;
@@ -235,7 +235,7 @@ export const userEditRouteOptions = (repositories: IRepositories): TRouteOptions
 	},
 })
 
-export const userMeGetRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const userMeGetRouteOptions = (repositories: IInfrastructures): TRouteOptionsWrapper<{
 	Reply: TUserMeGetResponseSchema;
 }> => ({
 	method: 'GET',
@@ -255,7 +255,7 @@ export const userMeGetRouteOptions = (repositories: IRepositories): TRouteOption
 	},
 })
 
-export const userSessionsCreateRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const userSessionsCreateRouteOptions = (repositories: IInfrastructures): TRouteOptionsWrapper<{
 	Body: TUserSessionsCreateBodySchema;
 }> => ({
 	method: 'POST',
@@ -285,7 +285,7 @@ export const userSessionsCreateRouteOptions = (repositories: IRepositories): TRo
 	},
 })
 
-export const userSessionsDeleteAllRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const userSessionsDeleteAllRouteOptions = (repositories: IInfrastructures): TRouteOptionsWrapper<{
 	Params: TUserSessionsDeleteAllParamsSchema;
 }> => ({
 	method: 'DELETE',
@@ -314,7 +314,7 @@ export const userSessionsDeleteAllRouteOptions = (repositories: IRepositories): 
 	},
 })
 
-export const userSessionsDeleteCurrentRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{}> => ({
+export const userSessionsDeleteCurrentRouteOptions = (repositories: IInfrastructures): TRouteOptionsWrapper<{}> => ({
 	method: 'DELETE',
 	url: '/users/:userID/sessions/current',
 	handler: async (request, reply) => {
@@ -337,7 +337,7 @@ export const userSessionsDeleteCurrentRouteOptions = (repositories: IRepositorie
 	},
 })
 
-export const userSessionDeleteRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const userSessionDeleteRouteOptions = (repositories: IInfrastructures): TRouteOptionsWrapper<{
 	Params: TUserSessionsDeleteParamsSchema;
 }> => ({
 	method: 'DELETE',
@@ -359,7 +359,7 @@ export const userSessionDeleteRouteOptions = (repositories: IRepositories): TRou
 	},
 })
 
-export const userSessionsGetAllRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const userSessionsGetAllRouteOptions = (repositories: IInfrastructures): TRouteOptionsWrapper<{
 	Params: TUserSessionsGetAllParamsSchema;
 	Reply: TUserSessionsGetAllResponseSchema;
 }> => ({

@@ -4,8 +4,8 @@ import { rootViewRouteOptions } from './viewRouteOptions.fastify';
 
 export const httpViewRouter: FastifyPluginAsync<IRouterOptions> = async (instance, options) => {
 
-	const repositories = options.repositories;
+	const infrastructures = options.infrastructures;
 
-	instance.route(rootViewRouteOptions(repositories));
+	instance.route(rootViewRouteOptions(infrastructures));
 
 }

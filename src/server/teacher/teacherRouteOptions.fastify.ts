@@ -1,5 +1,5 @@
 import { Static, Type } from '@sinclair/typebox';
-import { IRepositories } from '../http-api/IRepositories';
+import { IInfrastructures } from '../http-api/IInfrastructures';
 import { TRouteOptionsWrapper } from '../http-api/TRouteOptionsWrapper.fastify';
 import { ITeacherCreateInput } from './ITeacherCreateInput';
 import { ITeacherDeleteInput } from './ITeacherDeleteInput';
@@ -44,7 +44,7 @@ type TTeacherPutParamsSchema = Static<typeof teacherPutParamsSchema>;
 type TTeacherPutBodySchema = Static<typeof teacherPutBodySchema>;
 type TTeacherPutResponseSchema = Static<typeof teacherPutResponseSchema>;
 
-export const teacherCreateRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const teacherCreateRouteOptions = (repositories: IInfrastructures): TRouteOptionsWrapper<{
 	Body: TTeacherCreateBodySchema;
 	Reply: TTeacherCreateResponseSchema;
 }> => ({
@@ -68,7 +68,7 @@ export const teacherCreateRouteOptions = (repositories: IRepositories): TRouteOp
 	},
 })
 
-export const teacherDeleteRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const teacherDeleteRouteOptions = (repositories: IInfrastructures): TRouteOptionsWrapper<{
 	Params: TTeacherDeleteParamsSchema;
 }> => ({
 	method: 'DELETE',
@@ -90,7 +90,7 @@ export const teacherDeleteRouteOptions = (repositories: IRepositories): TRouteOp
 	},
 })
 
-export const teacherGetAllRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const teacherGetAllRouteOptions = (repositories: IInfrastructures): TRouteOptionsWrapper<{
 	Reply: TTeacherGetAllResponseSchema;
 }> => ({
 	method: 'GET',
@@ -108,7 +108,7 @@ export const teacherGetAllRouteOptions = (repositories: IRepositories): TRouteOp
 	},
 })
 
-export const teacherPutRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const teacherPutRouteOptions = (repositories: IInfrastructures): TRouteOptionsWrapper<{
 	Params: TTeacherPutParamsSchema;
 	Body: TTeacherPutBodySchema;
 	Reply: TTeacherPutResponseSchema;

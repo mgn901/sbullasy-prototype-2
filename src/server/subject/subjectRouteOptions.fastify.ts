@@ -1,5 +1,5 @@
 import { Static, Type } from '@fastify/type-provider-typebox';
-import { IRepositories } from '../http-api/IRepositories';
+import { IInfrastructures } from '../http-api/IInfrastructures';
 import { TRouteOptionsWrapper } from '../http-api/TRouteOptionsWrapper.fastify';
 import { propertyWithoutEntityKeySchema } from '../property/propertyWithoutEntityKeySchema';
 import { ISubjectDeleteInput } from './ISubjectDeleteInput';
@@ -56,7 +56,7 @@ type TSubjectPutParamsSchema = Static<typeof subjectPutParamsSchema>;
 type TSubjectPutBodySchema = Static<typeof subjectPutBodySchema>;
 type TSubjectPutResponseSchema = Static<typeof subjectPutResponseSchema>;
 
-export const subjectDeleteRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const subjectDeleteRouteOptions = (repositories: IInfrastructures): TRouteOptionsWrapper<{
 	Params: TSubjectDeleteParamsSchema;
 }> => ({
 	method: 'DELETE',
@@ -78,7 +78,7 @@ export const subjectDeleteRouteOptions = (repositories: IRepositories): TRouteOp
 	},
 })
 
-export const subjectGetAllRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const subjectGetAllRouteOptions = (repositories: IInfrastructures): TRouteOptionsWrapper<{
 	Reply: TSubjectGetAllResponseSchema;
 }> => ({
 	method: 'GET',
@@ -96,7 +96,7 @@ export const subjectGetAllRouteOptions = (repositories: IRepositories): TRouteOp
 	},
 })
 
-export const subjectGetRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const subjectGetRouteOptions = (repositories: IInfrastructures): TRouteOptionsWrapper<{
 	Params: TSubjectGetParamsSchema;
 	Reply: TSubjectGetResponseSchema;
 }> => ({
@@ -118,7 +118,7 @@ export const subjectGetRouteOptions = (repositories: IRepositories): TRouteOptio
 	},
 })
 
-export const subjectPutRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const subjectPutRouteOptions = (repositories: IInfrastructures): TRouteOptionsWrapper<{
 	Params: TSubjectPutParamsSchema;
 	Body: TSubjectPutBodySchema;
 	Reply: TSubjectPutResponseSchema;

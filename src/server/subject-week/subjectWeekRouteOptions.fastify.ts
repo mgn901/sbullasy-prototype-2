@@ -1,5 +1,5 @@
 import { Static, Type } from '@sinclair/typebox';
-import { IRepositories } from '../http-api/IRepositories';
+import { IInfrastructures } from '../http-api/IInfrastructures';
 import { TRouteOptionsWrapper } from '../http-api/TRouteOptionsWrapper.fastify';
 import { ISubjectWeekCreateInput } from './ISubjectWeekCreateInput';
 import { ISubjectWeekDeleteInput } from './ISubjectWeekDeleteInput';
@@ -44,7 +44,7 @@ type TSubjectWeekPutParamsSchema = Static<typeof subjectWeekPutParamsSchema>;
 type TSubjectWeekPutBodySchema = Static<typeof subjectWeekPutBodySchema>;
 type TSubjectWeekPutResponseSchema = Static<typeof subjectWeekPutResponseSchema>;
 
-export const subjectWeekCreateRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const subjectWeekCreateRouteOptions = (repositories: IInfrastructures): TRouteOptionsWrapper<{
 	Body: TSubjectWeekCreateBodySchema;
 	Reply: TSubjectWeekCreateResponseSchema;
 }> => ({
@@ -68,7 +68,7 @@ export const subjectWeekCreateRouteOptions = (repositories: IRepositories): TRou
 	},
 })
 
-export const subjectWeekDeleteRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const subjectWeekDeleteRouteOptions = (repositories: IInfrastructures): TRouteOptionsWrapper<{
 	Params: TSubjectWeekDeleteParamsSchema;
 }> => ({
 	method: 'DELETE',
@@ -90,7 +90,7 @@ export const subjectWeekDeleteRouteOptions = (repositories: IRepositories): TRou
 	},
 })
 
-export const subjectWeekGetAllRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const subjectWeekGetAllRouteOptions = (repositories: IInfrastructures): TRouteOptionsWrapper<{
 	Reply: TSubjectWeekGetAllResponseSchema;
 }> => ({
 	method: 'GET',
@@ -108,7 +108,7 @@ export const subjectWeekGetAllRouteOptions = (repositories: IRepositories): TRou
 	},
 })
 
-export const subjectWeekPutRouteOptions = (repositories: IRepositories): TRouteOptionsWrapper<{
+export const subjectWeekPutRouteOptions = (repositories: IInfrastructures): TRouteOptionsWrapper<{
 	Params: TSubjectWeekPutParamsSchema;
 	Body: TSubjectWeekPutBodySchema;
 	Reply: TSubjectWeekPutResponseSchema;
