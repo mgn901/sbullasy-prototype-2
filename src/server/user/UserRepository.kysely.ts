@@ -79,8 +79,8 @@ export class UserRepository implements IUserRepository {
 	}
 
 	public async save(user: IUser | TEntityAsync<IUser>): Promise<void> {
-		const { id, email, displayName, createdAt, ipAddress } = user;
-		const userPartial = { id, email, displayName, createdAt, ipAddress };
+		const { id, email, displayName, createdAt, ipAddress, isOnboarded } = user;
+		const userPartial = { id, email, displayName, createdAt, ipAddress, isOnboarded };
 		const oldProperties = await db
 			.selectFrom('user_properties')
 			.where('user_id', '==', id)

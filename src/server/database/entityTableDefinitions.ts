@@ -8,6 +8,7 @@ export const entityTableDefinitions: TEntityTableDefinitions<TDatabase> = {
 		email: { type: 'text', isPrimaryKey: false, isNotNull: true },
 		createdAt: { type: 'double precision', isPrimaryKey: false, isNotNull: true },
 		ipAddress: { type: 'text', isPrimaryKey: false, isNotNull: true },
+		isOnboarded: { type: 'boolean', isPrimaryKey: false, isNotNull: true },
 	},
 	groups: {
 		id: { type: 'text', isPrimaryKey: true, isNotNull: true },

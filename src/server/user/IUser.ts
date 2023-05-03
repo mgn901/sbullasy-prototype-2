@@ -12,6 +12,7 @@ export interface IUser {
 	displayName: string;
 	readonly createdAt: number;
 	readonly ipAddress: string;
+	isOnboarded: boolean;
 	tagRegistrations: IUserTagRegistration[];
 	properties: TProperty[];
 	sessions: ISession[];

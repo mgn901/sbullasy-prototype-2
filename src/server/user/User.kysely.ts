@@ -26,6 +26,7 @@ export class User implements TEntityAsync<IUser> {
 		this.displayName = user.displayName;
 		this.createdAt = user.createdAt;
 		this.ipAddress = user.ipAddress;
+		this.isOnboarded = user.isOnboarded;
 	}
 	
 	private readonly db: Kysely<TDatabase>;
@@ -34,6 +35,7 @@ export class User implements TEntityAsync<IUser> {
 	public displayName: string;
 	public readonly createdAt: number;
 	public readonly ipAddress: string;
+	public isOnboarded: boolean;
 	private _tagRegistrations?: Promise<TEntityAsync<IUserTagRegistration>[]>;
 	private _properties?: Promise<TEntityAsync<TProperty>[]>;
 	private _sessions?: Promise<TEntityAsync<ISession>[]>;
