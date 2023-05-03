@@ -6,10 +6,11 @@ import fastify, { FastifyHttpOptions, FastifyListenOptions, FastifyRegisterOptio
 import { Server } from 'http';
 import { createTables } from '../database/createTables.kysely';
 import { db } from '../database/db.kysely';
+import { EmailClient, IEmailClientOptions } from '../email/EmailClient.nodemailer';
 import { GroupTagRepository } from '../group-tag/GroupTagRepository.kysely';
 import { GroupRepository } from '../group/GroupRepository.kysely';
-import { httpAPIRouter } from '../http-api/httpAPIRouter.fastify';
 import { IRouterOptions } from "../http-api/IRouterOptions";
+import { httpAPIRouter } from '../http-api/httpAPIRouter.fastify';
 import { fastifyStaticOptions } from '../http-view/fastifyStaticOptions';
 import { httpViewRouter } from '../http-view/httpViewRouter.fastify';
 import { PageTagRepository } from '../page-tag/PageTagRepository.kysely';
@@ -35,6 +36,10 @@ export const start = async () => {
 		SBULLASY_APP_ADMIN_EMAIL,
 		SBULLASY_APP_ADMIN_PASSWORD,
 		SBULLASY_APP_ADMIN_DISPLAYNAME,
+		SBULLASY_APP_SMTP_HOST,
+		SBULLASY_APP_SMTP_PORT,
+		SBULLASY_APP_SMTP_USEREMAIL,
+		SBULLASY_APP_SMTP_PASSWORD,
 	} = process.env;
 	const envs = {
 		SBULLASY_APP_HOST,
@@ -46,6 +51,10 @@ export const start = async () => {
 		SBULLASY_APP_ADMIN_EMAIL,
 		SBULLASY_APP_ADMIN_PASSWORD,
 		SBULLASY_APP_ADMIN_DISPLAYNAME,
+		SBULLASY_APP_SMTP_HOST,
+		SBULLASY_APP_SMTP_PORT,
+		SBULLASY_APP_SMTP_USEREMAIL,
+		SBULLASY_APP_SMTP_PASSWORD,
 	};
 	const envsIncludesUndefined = Object.entries(envs).map(([key, value]) => value).includes(undefined);
 	if (envsIncludesUndefined) {
@@ -80,6 +89,13 @@ export const start = async () => {
 		subjectWeekRepository,
 		teacherRepository,
 	};
+	const emailClientOptions: IEmailClientOptions = {
+		host: SBULLASY_APP_SMTP_HOST!,
+		port: Number(SBULLASY_APP_SMTP_PORT)!,
+		userEmail: SBULLASY_APP_SMTP_USEREMAIL!,
+		password: SBULLASY_APP_SMTP_PASSWORD!,
+	}
+	const emailClient = new EmailClient(emailClientOptions);
 
 	await startInteractor({
 		input: {
