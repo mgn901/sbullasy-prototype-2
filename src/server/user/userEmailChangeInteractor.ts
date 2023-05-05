@@ -65,7 +65,7 @@ export const userEmailChangeInteractor = async (params: IUserEmailChangeInteract
 		email: newEmail,
 		userRepository: repository,
 	});
-	if (!isEmailNotInUseResult.status) {
+	if (!(isEmailNotInUseResult.status)) {
 		const error = isEmailNotInUseResult.error;
 		throw error;
 	}

@@ -61,11 +61,11 @@ export const userTagsPutInteractor = async (params: IUserTagsPutInteractorParams
 	const now = dateToUnixTimeMillis(new Date());
 
 	if (input.reason) {
-		const isReasonForgery = !tagIDsUserHas.includes(input.reason);
-		const isReasonUnableToGrant = !grantableBy.find(async (grantability) => {
+		const isReasonForgery = !(tagIDsUserHas.includes(input.reason));
+		const isReasonUnableToGrant = !(grantableBy.find(async (grantability) => {
 			const tagAbleToGrant = await grantability.tag;
 			return tagAbleToGrant.id === input.reason;
-		});
+		}));
 
 		if (isReasonForgery) {
 			const error = new WrongParamsError({
