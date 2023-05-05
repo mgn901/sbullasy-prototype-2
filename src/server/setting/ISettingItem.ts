@@ -1,4 +1,6 @@
+import { defaultSettings } from './defaultSettings';
+
 export interface ISettingItem {
-	id: string;
+	id: keyof typeof defaultSettings;
 	value: string;
 }
