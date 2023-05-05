@@ -179,6 +179,8 @@ export const userCreateIfNotExistsAndCreateSessionRequestCreateRouteOptions = (r
 		const output = await userCreateIfNotExistsAndCreateSessionRequestCreateInteractor({
 			input: input,
 			repository: repositories.userRepository,
+			emailClient: repositories.emailClient,
+			settingItemRepository: repositories.settingItemRepository,
 		});
 		await (async o => reply.status(204).send())(output);
 	},
