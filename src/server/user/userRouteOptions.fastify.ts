@@ -24,6 +24,7 @@ import { userSessionsDeleteCurrentInteractor } from './userSessionsDeleteCurrent
 import { userSessionsDeleteInteractor } from './userSessionsDeleteInteractor';
 import { userSessionsGetAllInteractor } from './userSessionsGetAllInteractor';
 import { userTagWithExpiresAtSchema } from './userTagWithExpiresAtSchema';
+import { UnixTimeMillis, unixTimeMillisToDate } from '@mgn901/mgn901-utils-ts';
 
 const userIDParamsSchema = Type.Object({
 	userID: Type.String(),
@@ -278,7 +279,7 @@ export const userSessionsCreateRouteOptions = (repositories: IInfrastructures): 
 			.setCookie('sessionID', output.sessionID, {
 				httpOnly: true,
 				sameSite: 'lax',
-				maxAge: 5 * 365 * 24 * 60 * 60,
+				expires: unixTimeMillisToDate(output.expiresAt as UnixTimeMillis),
 				secure: true,
 				signed: false,
 			})

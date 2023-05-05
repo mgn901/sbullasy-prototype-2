@@ -13,7 +13,7 @@ interface IUserSessionsCreateInteractorParams extends IInteractorParams<
 	IUserRepository,
 	IUserSessionsCreateInput,
 	IUser
-> { }
+> {}
 
 export const userSessionsCreateInteractor = async (params: IUserSessionsCreateInteractorParams): Promise<IUserSessionsCreateOutput> => {
 	const { repository, input } = params;
@@ -32,7 +32,7 @@ export const userSessionsCreateInteractor = async (params: IUserSessionsCreateIn
 		return !(request.isDisposed)
 			&& request.token === createSessionRequestToken;
 	});
-	if (!request || request.createdAt + 5 * 60 * 60 * 1000 < now) {
+	if (!request || request.createdAt + 5 * 60 * 1000 < now) {
 		const error = new WrongParamsError({
 			message: `Email and/or token are incorrect.`,
 		});
@@ -56,6 +56,7 @@ export const userSessionsCreateInteractor = async (params: IUserSessionsCreateIn
 
 	const output: IUserSessionsCreateOutput = {
 		sessionID: session.id,
+		expiresAt: session.expiresAt,
 		userID: user.id,
 	};
 
