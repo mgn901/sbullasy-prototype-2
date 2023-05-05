@@ -3,6 +3,7 @@
 FROM node:18-slim as deps
 WORKDIR /usr/src/app
 # 1. Install deps needed to run the app
+COPY ./fake-modules ./fake-modules
 COPY ./package.json .
 RUN npm install --omit=dev
 
@@ -12,6 +13,7 @@ FROM node:18-slim as builder
 WORKDIR /usr/src/app
 # 1. Install dev-dependencies
 COPY --from=deps /usr/src/app/node_modules ./node_modules
+COPY ./fake-modules ./fake-modules
 COPY ./package.json .
 RUN npm install
 # 2. Copy files needed to build the app
