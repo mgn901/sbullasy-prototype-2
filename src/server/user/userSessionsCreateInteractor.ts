@@ -29,7 +29,8 @@ export const userSessionsCreateInteractor = async (params: IUserSessionsCreateIn
 	}
 	const sessionRequests = await user.createSessionRequests;
 	const request = sessionRequests.find((request) => {
-		return request.token === createSessionRequestToken;
+		return !(request.isDisposed)
+			&& request.token === createSessionRequestToken;
 	});
 	if (!request || request.createdAt + 5 * 60 * 60 * 1000 < now) {
 		const error = new WrongParamsError({
@@ -50,6 +51,7 @@ export const userSessionsCreateInteractor = async (params: IUserSessionsCreateIn
 	const sessions = await user.sessions;
 	sessions.push(session);
 	user.sessions = sessions;
+	user.createSessionRequests = [];
 	await repository.save(user);
 
 	const output: IUserSessionsCreateOutput = {
