@@ -4,10 +4,10 @@ import fastifyHelmet, { FastifyHelmetOptions } from '@fastify/helmet';
 import { fastifyStatic } from '@fastify/static';
 import fastify, { FastifyHttpOptions, FastifyListenOptions, FastifyRegisterOptions } from 'fastify';
 import { Server } from 'http';
-import { SettingItemRepository } from '../setting/SettingItemRepository.kysely';
 import { createTables } from '../database/createTables.kysely';
 import { db } from '../database/db.kysely';
 import { EmailClient, IEmailClientOptions } from '../email/EmailClient.nodemailer';
+import { envs } from '../env/envs';
 import { GroupTagRepository } from '../group-tag/GroupTagRepository.kysely';
 import { GroupRepository } from '../group/GroupRepository.kysely';
 import { IInfrastructures } from '../http-api/IInfrastructures';
@@ -18,6 +18,7 @@ import { httpViewRouter } from '../http-view/httpViewRouter.fastify';
 import { PageTagRepository } from '../page-tag/PageTagRepository.kysely';
 import { PageRepository } from '../page/PageRepository.kysely';
 import { PlaceRepository } from '../place/PlaceRepository.kysely';
+import { SettingItemRepository } from '../setting/SettingItemRepository.kysely';
 import { SubjectCategoryRepository } from '../subject-category/SubjectCategoryRepository.kysely';
 import { SubjectSemesterRepository } from '../subject-semester/SubjectSemesterRepository.kysely';
 import { SubjectWeekRepository } from '../subject-week/SubjectWeekRepository.kysely';
@@ -28,48 +29,13 @@ import { UserRepository } from '../user/UserRepository.kysely';
 import { startInteractor } from './startInteractor';
 
 export const start = async () => {
-	const {
-		SBULLASY_APP_HOST,
-		SBULLASY_APP_PORT,
-		SBULLASY_APP_DB_HOST,
-		SBULLASY_APP_DB_PORT,
-		SBULLASY_APP_DB_USERNAME,
-		SBULLASY_APP_DB_DB,
-		SBULLASY_APP_ADMIN_EMAIL,
-		SBULLASY_APP_ADMIN_PASSWORD,
-		SBULLASY_APP_ADMIN_DISPLAYNAME,
-		SBULLASY_APP_SMTP_HOST,
-		SBULLASY_APP_SMTP_PORT,
-		SBULLASY_APP_SMTP_USEREMAIL,
-		SBULLASY_APP_SMTP_PASSWORD,
-	} = process.env;
-	const envs = {
-		SBULLASY_APP_HOST,
-		SBULLASY_APP_PORT,
-		SBULLASY_APP_DB_HOST,
-		SBULLASY_APP_DB_PORT,
-		SBULLASY_APP_DB_USERNAME,
-		SBULLASY_APP_DB_DB,
-		SBULLASY_APP_ADMIN_EMAIL,
-		SBULLASY_APP_ADMIN_PASSWORD,
-		SBULLASY_APP_ADMIN_DISPLAYNAME,
-		SBULLASY_APP_SMTP_HOST,
-		SBULLASY_APP_SMTP_PORT,
-		SBULLASY_APP_SMTP_USEREMAIL,
-		SBULLASY_APP_SMTP_PASSWORD,
-	};
-	const envsIncludesUndefined = Object.entries(envs).map(([key, value]) => value).includes(undefined);
-	if (envsIncludesUndefined) {
-		throw new Error('Necessary envs are not passed');
-	}
-
 	await createTables(db);
 
 	const emailClientOptions: IEmailClientOptions = {
-		host: SBULLASY_APP_SMTP_HOST!,
-		port: Number(SBULLASY_APP_SMTP_PORT)!,
-		userEmail: SBULLASY_APP_SMTP_USEREMAIL!,
-		password: SBULLASY_APP_SMTP_PASSWORD!,
+		host: envs.SBULLASY_APP_SMTP_HOST,
+		port: Number(envs.SBULLASY_APP_SMTP_PORT),
+		userEmail: envs.SBULLASY_APP_SMTP_USEREMAIL,
+		password: envs.SBULLASY_APP_SMTP_PASSWORD,
 	};
 	const userRepository = new UserRepository();
 	const groupRepository = new GroupRepository();
@@ -105,8 +71,8 @@ export const start = async () => {
 	await startInteractor({
 		input: {
 			user: {
-				email: SBULLASY_APP_ADMIN_EMAIL!,
-				displayName: SBULLASY_APP_ADMIN_DISPLAYNAME!,
+				email: envs.SBULLASY_APP_ADMIN_EMAIL,
+				displayName: envs.SBULLASY_APP_ADMIN_DISPLAYNAME,
 			},
 		},
 		repository: userRepository,
@@ -127,8 +93,8 @@ export const start = async () => {
 		},
 	};
 	const listenOptions: FastifyListenOptions = {
-		host: SBULLASY_APP_HOST!,
-		port: Number(SBULLASY_APP_PORT!),
+		host: envs.SBULLASY_APP_HOST,
+		port: Number(envs.SBULLASY_APP_PORT),
 	};
 	const httpAPIRouterOptions: FastifyRegisterOptions<IRouterOptions> = {
 		infrastructures: repositories,
