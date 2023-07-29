@@ -1,0 +1,87 @@
+@startuml "Class Diagram"
+
+title "Class Diagram"
+
+class User {
+  + readonly id: string
+  + email: string
+  + displayName: string
+  + readonly createdAt: number
+  + readonly ipRegisteredFrom: string
+  + isRegistrationCompleted: boolean
+  + canCreateGroup: boolean
+}
+
+class Group {
+  + readonly id: string
+  + name: string
+  + displayName: string
+  + readonly createdAt: number
+  + updatedAt: number
+  + isAdmin: boolean
+  + invitationCode: string
+}
+
+class InterUserGroup {
+  type: 'admin' | 'member'
+}
+
+rectangle "Entities about Authentication" {
+  class Token {
+    + readonly id: string
+    + readonly secret: string
+    + type: 'cookie' | 'bearer'
+  }
+
+  class TokenRequest {
+    + readonly id: string
+    + readonly secret: string
+  }
+}
+
+class Permission {
+  + type: 'read' | 'write'
+}
+
+rectangle "Entities about Item" {
+  class Item {
+    + readonly id: string
+    + name: string
+    + readonly createdAt: number
+    + updatedAt: number
+  }
+
+  class Attribute {
+    + parentItemType: Item['type']
+    + key: string
+    + value: string
+    + showOnSummary: boolean
+  }
+
+  class AttributeWithItem {
+    + parentItemType: Item['type']
+    + key: string
+    + showOnSummary: boolean
+  }
+
+  diamond AttributeWithItemDiamond
+}
+
+User "1" *-- "0..*" Token : owner <
+User "1" *-- "0..5" TokenRequest : attemptToLogIn <
+User "1..*" -- "0..*" Group : belongs >
+InterUserGroup . (User, Group)
+
+Group "1" -- "0..*" Item : grantsTo <
+Permission . (Group, Item)
+Group "1" *-- "0..*" Item : owner <
+
+Token "0..*" -- "0..1" Permission : has >
+
+Item "0..*" -- "1" Item : type >
+Item "1" *-l- "0..*" Attribute : parent <
+Item "1" *-d- "0..*" AttributeWithItemDiamond : parent <
+Item "1" -d- "0..*" AttributeWithItemDiamond : value <
+AttributeWithItemDiamond .. AttributeWithItem
+
+@enduml
