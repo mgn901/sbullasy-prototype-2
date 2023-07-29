@@ -1,3 +1,3 @@
 declare module '*.worker.ts' {
-	export default (() => new Worker());
+  export default () => new Worker();
 }
