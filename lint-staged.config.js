@@ -1,7 +1,3 @@
 module.exports = {
-  '*.{js,jsx,ts,tsx}': [
-    () => 'tsc --noEmit',
-    'jest --passWithNoTests',
-    'eslint --fix',
-  ],
+  '*.{js,jsx,ts,tsx}': [() => 'tsc --noEmit', 'jest --passWithNoTests', 'pnpm run lint'],
 };
