@@ -1,32 +1,35 @@
 /* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable @typescript-eslint/no-var-requires */
 
-import esbuild from 'esbuild';
-import inlineWorkerPlugin from 'esbuild-plugin-inline-worker';
+import { cpSync, existsSync } from 'fs';
+import { createRequire } from 'module';
+import autoprefixer from 'autoprefixer';
+import esbuild, { BuildOptions } from 'esbuild';
 import stylePlugin from 'esbuild-style-plugin';
-import tailwindcss from 'tailwindcss';
+import tailwindcss, { Config } from 'tailwindcss';
 
-const autoprefiexer = require('autoprefixer');
-const copyPlugin = require('esbuild-copy-static-files');
-const tailwindConfig = require('../tailwindcss.config');
-const packageJSON = require('../package.json');
+const require = createRequire(import.meta.url);
+const tailwindConfig = require('../tailwind.config.cjs') as unknown as Config;
+const packageJSON = require('../package.json') as unknown as Record<string, any>;
 
 const NODE_ENV = process.env.NODE_ENV ?? 'development';
 const APP_VERSION = process.env.APP_VERSION ?? (packageJSON.version as string) ?? '1.0.0';
 const isDev = NODE_ENV === 'development';
 const outDir = NODE_ENV;
 
-const optionsClient: esbuild.BuildOptions = {
+const optionsClient: BuildOptions = {
   entryPoints: [
     'src/client/index.tsx',
     // 'src/client/serviceWorker.ts',
   ],
   outdir: `${outDir}/client`,
   assetNames: 'assets/[name]',
+  chunkNames: '[name]',
   loader: {
     '.woff': 'file',
     '.woff2': 'file',
   },
+  platform: 'browser',
+  format: 'iife',
   bundle: true,
   define: {
     'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
@@ -36,15 +39,10 @@ const optionsClient: esbuild.BuildOptions = {
   sourcemap: isDev,
   target: ['chrome98', 'firefox97', 'edge98', 'safari14'],
   plugins: [
-    inlineWorkerPlugin(),
     stylePlugin({
       postcss: {
-        plugins: [tailwindcss(tailwindConfig), autoprefiexer()],
+        plugins: [tailwindcss(tailwindConfig), autoprefixer()],
       },
-    }),
-    copyPlugin({
-      src: 'src/client/static',
-      dest: `${outDir}/client`,
     }),
   ],
 };
@@ -53,6 +51,7 @@ const optionsServer: esbuild.BuildOptions = {
   entryPoints: ['src/server/index.ts'],
   outdir: `${outDir}/server`,
   platform: 'node',
+  format: 'esm',
   bundle: true,
   define: {
     'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
@@ -65,6 +64,12 @@ const optionsServer: esbuild.BuildOptions = {
 const start = () => {
   esbuild.build(optionsClient);
   esbuild.build(optionsServer);
+  if (existsSync('src/client/static')) {
+    cpSync('src/client/static/', `${outDir}/client/`, {
+      recursive: true,
+      errorOnExist: false,
+    });
+  }
 };
 
 start();
