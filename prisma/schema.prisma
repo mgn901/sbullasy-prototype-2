@@ -19,8 +19,9 @@ model User {
   ipRegisteredFrom        String
   isRegistrationCompleted Boolean
   canCreateGroup          Boolean
-  belongsTo               Membership[]   @relation(name: "member")
-  tokenRequests           TokenRequest[] @relation(name: "requestedFrom")
+  belongsTo               Membership[]   @relation(name: "groupMember")
+  tokens                  Token[]        @relation(name: "tokenOwner")
+  tokenRequests           TokenRequest[] @relation(name: "tokenRequestedFrom")
 
   @@index(fields: [id])
   @@index(fields: [email])
@@ -35,9 +36,9 @@ model Group {
   updatedAt      Int
   isAdmin        Boolean
   invitationCode String
-  members        Membership[] @relation(name: "belongsTo")
-  permissions    Permission[] @relation(name: "grantsTo")
-  items          Item[]       @relation(name: "owner")
+  members        Membership[] @relation(name: "userBelongsTo")
+  permissions    Permission[] @relation(name: "permissionGrantsTo")
+  items          Item[]       @relation(name: "itemOwner")
 
   @@index(fields: [id])
   @@index(fields: [name])
@@ -46,12 +47,12 @@ model Group {
 
 model Membership {
   userId  String
-  user    User           @relation(name: "member", fields: [userId], references: [id], onDelete: Cascade)
+  user    User           @relation(name: "groupMember", fields: [userId], references: [id], onDelete: Cascade)
   groupId String
-  group   Group          @relation(name: "belongsTo", fields: [groupId], references: [id], onDelete: Cascade)
+  group   Group          @relation(name: "userBelongsTo", fields: [groupId], references: [id], onDelete: Cascade)
   type    MembershipType
 
-  @@id([userId, groupId])
+  @@id(fields: [userId, groupId])
   @@index(fields: [userId])
   @@index(fields: [groupId])
   @@map("memberships")
@@ -61,9 +62,12 @@ model Token {
   id           String      @id
   secret       String      @unique
   type         TokenType
+  expiresAt    Int
+  ownerId      String
+  owner        User        @relation(name: "tokenOwner", fields: [ownerId], references: [id], onDelete: Cascade)
   grantsToId   String
   targetTypeId String?
-  permission   Permission? @relation(name: "tokens_permission", fields: [grantsToId, targetTypeId], references: [grantsToId, targetTypeId], onDelete: Cascade)
+  permission   Permission? @relation(name: "tokenPermission", fields: [grantsToId, targetTypeId], references: [grantsToId, targetTypeId], onDelete: Cascade)
 
   @@index(fields: [id])
   @@index(fields: [type, secret])
@@ -76,7 +80,7 @@ model TokenRequest {
   email           String?
   expiresAt       Int
   requestedFromId String
-  requestedFrom   User    @relation(name: "requestedFrom", fields: [requestedFromId], references: [id], onDelete: Cascade)
+  requestedFrom   User    @relation(name: "tokenRequestedFrom", fields: [requestedFromId], references: [id], onDelete: Cascade)
 
   @@index(fields: [id])
   @@map("tokenRequests")
@@ -85,13 +89,13 @@ model TokenRequest {
 model Permission {
   type         PermissionType
   expiresAt    Int
-  tokens       Token[]        @relation(name: "tokens_permission")
+  tokens       Token[]        @relation(name: "tokenPermission")
   grantsToId   String
-  grantsTo     Group          @relation(name: "grantsTo", fields: [grantsToId], references: [id], onDelete: Cascade)
+  grantsTo     Group          @relation(name: "permissionGrantsTo", fields: [grantsToId], references: [id], onDelete: Cascade)
   targetTypeId String
-  targetType   Item           @relation(name: "targetType", fields: [targetTypeId], references: [id], onDelete: Cascade)
+  targetType   Item           @relation(name: "permissionTargetType", fields: [targetTypeId], references: [id], onDelete: Cascade)
 
-  @@id([grantsToId, targetTypeId])
+  @@id(fields: [grantsToId, targetTypeId])
   @@index(fields: [grantsToId, targetTypeId])
   @@map("permissions")
 }
@@ -102,14 +106,14 @@ model Item {
   createdAt             Int
   updatedAt             Int
   ownerId               String?
-  owner                 Group?       @relation(name: "owner", fields: [ownerId], references: [id], onDelete: SetNull)
+  owner                 Group?       @relation(name: "itemOwner", fields: [ownerId], references: [id], onDelete: SetNull)
   typeId                String?
-  type                  Item?        @relation(name: "type", fields: [typeId], references: [id], onDelete: Restrict)
-  attributes            Attribute[]  @relation(name: "parent")
-  referrers             Attribute[]  @relation(name: "value")
-  instances             Item[]       @relation(name: "type")
-  attributesOfInstances Attribute[]  @relation(name: "parentItemType")
-  accessibleFrom        Permission[] @relation(name: "targetType")
+  type                  Item?        @relation(name: "itemType", fields: [typeId], references: [id], onDelete: Restrict)
+  attributes            Attribute[]  @relation(name: "itemParent")
+  referrers             Attribute[]  @relation(name: "itemValue")
+  instances             Item[]       @relation(name: "itemType")
+  attributesOfInstances Attribute[]  @relation(name: "itemParentItemType")
+  accessibleFrom        Permission[] @relation(name: "permissionTargetType")
   groupId               String
 
   @@index(fields: [typeId, id])
@@ -119,13 +123,13 @@ model Item {
 model Attribute {
   id               String  @id
   parentId         String
-  parent           Item    @relation(name: "parent", fields: [parentId], references: [id], onDelete: Cascade)
+  parent           Item    @relation(name: "itemParent", fields: [parentId], references: [id], onDelete: Cascade)
   parentItemTypeId String
-  parentItemType   Item    @relation(name: "parentItemType", references: [id], fields: [parentItemTypeId], onDelete: Restrict)
+  parentItemType   Item    @relation(name: "itemParentItemType", references: [id], fields: [parentItemTypeId], onDelete: Restrict)
   key              String
   valuePrimitive   String?
   valueItemId      String?
-  valueItem        Item?   @relation(name: "value", fields: [valueItemId], references: [id], onDelete: SetNull)
+  valueItem        Item?   @relation(name: "itemValue", fields: [valueItemId], references: [id], onDelete: SetNull)
   showOnSummary    Boolean
 
   @@index(fields: [parentItemTypeId, parentId])

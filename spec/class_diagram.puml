@@ -5,6 +5,7 @@ title "Class Diagram"
 class User {
   + readonly id: string
   + email: string
+  + name: string
   + displayName: string
   + readonly createdAt: number
   + readonly ipRegisteredFrom: string
@@ -22,7 +23,7 @@ class Group {
   + invitationCode: string
 }
 
-class InterUserGroup {
+class Membership {
   type: 'admin' | 'member'
 }
 
@@ -30,12 +31,15 @@ rectangle "Entities about Authentication" {
   class Token {
     + readonly id: string
     + readonly secret: string
-    + type: 'cookie' | 'bearer'
+    + readonly type: 'cookie' | 'bearer'
+    + readonly expiresAt: number
   }
 
   class TokenRequest {
     + readonly id: string
     + readonly secret: string
+    + readonly email: string
+    + readonly expiresAt: number
   }
 }
 
@@ -54,34 +58,27 @@ rectangle "Entities about Item" {
   class Attribute {
     + parentItemType: Item['type']
     + key: string
-    + value: string
+    + valuePrimitive?: string
     + showOnSummary: boolean
   }
 
-  class AttributeWithItem {
-    + parentItemType: Item['type']
-    + key: string
-    + showOnSummary: boolean
-  }
-
-  diamond AttributeWithItemDiamond
+  diamond AttributeDiamond
 }
 
 User "1" *-- "0..*" Token : owner <
 User "1" *-- "0..5" TokenRequest : attemptToLogIn <
-User "1..*" -- "0..*" Group : belongs >
-InterUserGroup . (User, Group)
+User "1..*" -- "0..*" Group : belongsTo >
+Membership . (User, Group)
 
-Group "1" -- "0..*" Item : grantsTo <
+Group "1" *--* "0..*" Item : grantsTo <
 Permission . (Group, Item)
 Group "1" *-- "0..*" Item : owner <
 
-Token "0..*" -- "0..1" Permission : has >
+Token "0..*" --* "0..1" Permission : has >
 
 Item "0..*" -- "1" Item : type >
-Item "1" *-l- "0..*" Attribute : parent <
-Item "1" *-d- "0..*" AttributeWithItemDiamond : parent <
-Item "1" -d- "0..*" AttributeWithItemDiamond : value <
-AttributeWithItemDiamond .. AttributeWithItem
+Item "1" *-d- "0..*" AttributeDiamond : parent <
+Item "0..1" -d- "0..*" AttributeDiamond : valueItem? <
+AttributeDiamond .. Attribute
 
 @enduml
