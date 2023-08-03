@@ -26,6 +26,9 @@ dependencies:
   '@mgn901/mgn901-utils-ts':
     specifier: ^0.6.0
     version: 0.6.0
+  '@prisma/client':
+    specifier: 5.1.0
+    version: 5.1.0(prisma@5.1.1)
   '@progfay/scrapbox-parser':
     specifier: ^8.1.0
     version: 8.1.0
@@ -63,8 +66,8 @@ dependencies:
     specifier: ^4.4.5
     version: 4.4.5(react-dom@18.2.0)(react@18.2.0)
   typia:
-    specifier: ^4.1.14
-    version: 4.1.14(typescript@5.1.6)
+    specifier: ^4.1.15
+    version: 4.1.15(typescript@5.1.6)
 
 devDependencies:
   '@jest/globals':
@@ -136,6 +139,9 @@ devDependencies:
   prettier:
     specifier: ^3.0.1
     version: 3.0.1
+  prisma:
+    specifier: ^5.1.1
+    version: 5.1.1
   tailwindcss:
     specifier: ^3.3.3
     version: 3.3.3
@@ -1424,6 +1430,28 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  /@prisma/client@5.1.0(prisma@5.1.1):
+    resolution: {integrity: sha512-aIxuXlH3p3Vy91buodQhYgAD9m0yuxJzpXMhc1ejQ/WN3pNNWzBA0iDcBObLq8DMdszcXmoLAk3hiRq/ZwBsOw==}
+    engines: {node: '>=16.13'}
+    requiresBuild: true
+    peerDependencies:
+      prisma: '*'
+    peerDependenciesMeta:
+      prisma:
+        optional: true
+    dependencies:
+      '@prisma/engines-version': 5.1.0-28.a9b7003df90aa623086e4d6f4e43c72468e6339b
+      prisma: 5.1.1
+    dev: false
+
+  /@prisma/engines-version@5.1.0-28.a9b7003df90aa623086e4d6f4e43c72468e6339b:
+    resolution: {integrity: sha512-jTwE2oy1yjICmTfnCR0ASIpuMZXZ18sUzQXB7V0RMbrM9OlcmbUwXPuYhnxXuWN8XwRmujeIhsXs/Zeh+fjPOQ==}
+    dev: false
+
+  /@prisma/engines@5.1.1:
+    resolution: {integrity: sha512-NV/4nVNWFZSJCCIA3HIFJbbDKO/NARc9ej0tX5S9k2EVbkrFJC4Xt9b0u4rNZWL4V+F5LAjvta8vzEUw0rw+HA==}
+    requiresBuild: true
 
   /@progfay/scrapbox-parser@8.1.0:
     resolution: {integrity: sha512-egMX92PZp4vWwmUkEp+xBruQo7OU3qT80/AvWTUUH4UuPXsMewWu0XNckxGtxby3HEcJ2VObSp5IaUdLyBL4OA==}
@@ -5889,6 +5917,14 @@ packages:
       react-is: 18.2.0
     dev: true
 
+  /prisma@5.1.1:
+    resolution: {integrity: sha512-WJFG/U7sMmcc6TjJTTifTfpI6Wjoh55xl4AzopVwAdyK68L9/ogNo8QQ2cxuUjJf/Wa82z/uhyh3wMzvRIBphg==}
+    engines: {node: '>=16.13'}
+    hasBin: true
+    requiresBuild: true
+    dependencies:
+      '@prisma/engines': 5.1.1
+
   /process-warning@2.2.0:
     resolution: {integrity: sha512-/1WZ8+VQjR6avWOgHeEPd7SDQmFQ1B5mC1eRXsCm5TarlNmx/wCsa5GEaxGm05BORRtyG/Ex/3xq3TuRvq57qg==}
     dev: false
@@ -6905,8 +6941,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typia@4.1.14(typescript@5.1.6):
-    resolution: {integrity: sha512-/YxlOogdO9JyzfzxdO9w9ivUWCiuyIRIZdaWZiBs0lG1T7BTdbjKvKlVEnkUQxPKP6TUVKqXMW+GmVBfbzCtJw==}
+  /typia@4.1.15(typescript@5.1.6):
+    resolution: {integrity: sha512-u4sZVzg9g1kvgHaKmBhUR+RRnYiJ4VNFmey/RmZX/85rEuRCPOGcIdFnHe8ywCJvwON3+kxbW+phwF/JlobJ7Q==}
     hasBin: true
     peerDependencies:
       typescript: '>= 4.7.4'

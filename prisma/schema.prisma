@@ -1,0 +1,148 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("SBULLASY_APP_DB_URL")
+}
+
+model User {
+  id                      String         @id
+  email                   String         @unique
+  name                    String         @unique
+  displayName             String
+  createdAt               Int
+  ipRegisteredFrom        String
+  isRegistrationCompleted Boolean
+  canCreateGroup          Boolean
+  belongsTo               Membership[]   @relation(name: "member")
+  tokenRequests           TokenRequest[] @relation(name: "requestedFrom")
+
+  @@index(fields: [id])
+  @@index(fields: [email])
+  @@map("users")
+}
+
+model Group {
+  id             String       @id
+  name           String       @unique
+  displayName    String
+  createdAt      Int
+  updatedAt      Int
+  isAdmin        Boolean
+  invitationCode String
+  members        Membership[] @relation(name: "belongsTo")
+  permissions    Permission[] @relation(name: "grantsTo")
+  items          Item[]       @relation(name: "owner")
+
+  @@index(fields: [id])
+  @@index(fields: [name])
+  @@map("groups")
+}
+
+model Membership {
+  userId  String
+  user    User           @relation(name: "member", fields: [userId], references: [id], onDelete: Cascade)
+  groupId String
+  group   Group          @relation(name: "belongsTo", fields: [groupId], references: [id], onDelete: Cascade)
+  type    MembershipType
+
+  @@id([userId, groupId])
+  @@index(fields: [userId])
+  @@index(fields: [groupId])
+  @@map("memberships")
+}
+
+model Token {
+  id           String      @id
+  secret       String      @unique
+  type         TokenType
+  grantsToId   String
+  targetTypeId String?
+  permission   Permission? @relation(name: "tokens_permission", fields: [grantsToId, targetTypeId], references: [grantsToId, targetTypeId], onDelete: Cascade)
+
+  @@index(fields: [id])
+  @@index(fields: [type, secret])
+  @@map("tokens")
+}
+
+model TokenRequest {
+  id              String  @id
+  secret          String  @unique
+  email           String?
+  expiresAt       Int
+  requestedFromId String
+  requestedFrom   User    @relation(name: "requestedFrom", fields: [requestedFromId], references: [id], onDelete: Cascade)
+
+  @@index(fields: [id])
+  @@map("tokenRequests")
+}
+
+model Permission {
+  type         PermissionType
+  expiresAt    Int
+  tokens       Token[]        @relation(name: "tokens_permission")
+  grantsToId   String
+  grantsTo     Group          @relation(name: "grantsTo", fields: [grantsToId], references: [id], onDelete: Cascade)
+  targetTypeId String
+  targetType   Item           @relation(name: "targetType", fields: [targetTypeId], references: [id], onDelete: Cascade)
+
+  @@id([grantsToId, targetTypeId])
+  @@index(fields: [grantsToId, targetTypeId])
+  @@map("permissions")
+}
+
+model Item {
+  id                    String       @id
+  name                  String
+  createdAt             Int
+  updatedAt             Int
+  ownerId               String?
+  owner                 Group?       @relation(name: "owner", fields: [ownerId], references: [id], onDelete: SetNull)
+  typeId                String?
+  type                  Item?        @relation(name: "type", fields: [typeId], references: [id], onDelete: Restrict)
+  attributes            Attribute[]  @relation(name: "parent")
+  referrers             Attribute[]  @relation(name: "value")
+  instances             Item[]       @relation(name: "type")
+  attributesOfInstances Attribute[]  @relation(name: "parentItemType")
+  accessibleFrom        Permission[] @relation(name: "targetType")
+  groupId               String
+
+  @@index(fields: [typeId, id])
+  @@map("items")
+}
+
+model Attribute {
+  id               String  @id
+  parentId         String
+  parent           Item    @relation(name: "parent", fields: [parentId], references: [id], onDelete: Cascade)
+  parentItemTypeId String
+  parentItemType   Item    @relation(name: "parentItemType", references: [id], fields: [parentItemTypeId], onDelete: Restrict)
+  key              String
+  valuePrimitive   String?
+  valueItemId      String?
+  valueItem        Item?   @relation(name: "value", fields: [valueItemId], references: [id], onDelete: SetNull)
+  showOnSummary    Boolean
+
+  @@index(fields: [parentItemTypeId, parentId])
+  @@map("attributes")
+}
+
+enum MembershipType {
+  admin
+  member
+}
+
+enum TokenType {
+  cookie
+  bearer
+}
+
+enum PermissionType {
+  read
+  write
+}
