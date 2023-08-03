@@ -25,5 +25,14 @@ module.exports = {
   plugins: ['@typescript-eslint'],
   rules: {
     'import/extensions': ['off'],
+    'import/prefer-default-export': ['off'],
+    'react/function-component-definition': [
+      'error',
+      {
+        namedComponents: 'arrow-function',
+        unnamedComponents: 'arrow-function',
+      },
+    ],
+    'react/react-in-jsx-scope': ['off'],
   },
 };

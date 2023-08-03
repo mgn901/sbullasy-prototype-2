@@ -8,4 +8,4 @@ const config = {
   coverageReporters: ['text'],
 };
 
-module.exports = config;
+export default config;
