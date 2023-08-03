@@ -5,7 +5,7 @@
   "type": "module",
   "exports": "./production/server/index.js",
   "scripts": {
-    "prepare": "husky install",
+    "prepare": "husky install && prisma generate",
     "build": "cross-env NODE_ENV=production tsx ./scripts/build.ts",
     "prisma:migrate": "prisma migrate dev",
     "lint": "eslint --cache --fix src scripts && prettier --write src scripts",
