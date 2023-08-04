@@ -9,8 +9,8 @@ class User {
   + displayName: string
   + readonly createdAt: number
   + readonly ipRegisteredFrom: string
-  + isRegistrationCompleted: boolean
-  + canCreateGroup: boolean
+  + registrationExpiresAt?: number
+  + verificationExpiresAt?: number
 }
 
 class Group {
@@ -18,7 +18,6 @@ class Group {
   + name: string
   + displayName: string
   + readonly createdAt: number
-  + updatedAt: number
   + isAdmin: boolean
   + invitationCode: string
 }
@@ -35,16 +34,18 @@ rectangle "Entities about Authentication" {
     + readonly expiresAt: number
   }
 
-  class TokenRequest {
+  class RequestFromUser {
     + readonly id: string
     + readonly secret: string
-    + readonly email: string
     + readonly expiresAt: number
+    + readonly type: 'token' | 'verification'
   }
 }
 
 class Permission {
+  + readonly id: string
   + type: 'read' | 'write'
+  + readonly expiresAt: number
 }
 
 rectangle "Entities about Item" {
@@ -53,6 +54,7 @@ rectangle "Entities about Item" {
     + name: string
     + readonly createdAt: number
     + updatedAt: number
+    + isPublic: boolean
   }
 
   class Attribute {
@@ -66,7 +68,7 @@ rectangle "Entities about Item" {
 }
 
 User "1" *-- "0..*" Token : owner <
-User "1" *-- "0..5" TokenRequest : attemptToLogIn <
+User "1" *-- "0..5" RequestFromUser : requestedFrom <
 User "1..*" -- "0..*" Group : belongsTo >
 Membership . (User, Group)
 

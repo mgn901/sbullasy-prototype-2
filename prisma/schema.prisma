@@ -11,17 +11,17 @@ datasource db {
 }
 
 model User {
-  id                      String         @id
-  email                   String         @unique
-  name                    String         @unique
-  displayName             String
-  createdAt               Int
-  ipRegisteredFrom        String
-  isRegistrationCompleted Boolean
-  canCreateGroup          Boolean
-  belongsTo               Membership[]   @relation(name: "groupMember")
-  tokens                  Token[]        @relation(name: "tokenOwner")
-  tokenRequests           TokenRequest[] @relation(name: "tokenRequestedFrom")
+  id                    String            @id
+  email                 String            @unique
+  name                  String            @unique
+  displayName           String
+  createdAt             Int
+  ipRegisteredFrom      String
+  registrationExpiresAt Int
+  verificationExpiresAt Int
+  belongsTo             Membership[]      @relation(name: "groupMember")
+  tokens                Token[]           @relation(name: "tokenOwner")
+  requests              RequestFromUser[] @relation(name: "requestRequestedFrom")
 
   @@index(fields: [id])
   @@index(fields: [email])
@@ -33,7 +33,6 @@ model Group {
   name           String       @unique
   displayName    String
   createdAt      Int
-  updatedAt      Int
   isAdmin        Boolean
   invitationCode String
   members        Membership[] @relation(name: "userBelongsTo")
@@ -65,28 +64,29 @@ model Token {
   expiresAt    Int
   ownerId      String
   owner        User        @relation(name: "tokenOwner", fields: [ownerId], references: [id], onDelete: Cascade)
-  grantsToId   String
-  targetTypeId String?
-  permission   Permission? @relation(name: "tokenPermission", fields: [grantsToId, targetTypeId], references: [grantsToId, targetTypeId], onDelete: Cascade)
+  permissionId String?
+  permission   Permission? @relation(name: "tokenPermission", fields: [permissionId], references: [id], onDelete: Cascade)
 
   @@index(fields: [id])
   @@index(fields: [type, secret])
   @@map("tokens")
 }
 
-model TokenRequest {
-  id              String  @id
-  secret          String  @unique
+model RequestFromUser {
+  id              String      @id
+  secret          String      @unique
   email           String?
   expiresAt       Int
+  type            RequestType
   requestedFromId String
-  requestedFrom   User    @relation(name: "tokenRequestedFrom", fields: [requestedFromId], references: [id], onDelete: Cascade)
+  requestedFrom   User        @relation(name: "requestRequestedFrom", fields: [requestedFromId], references: [id], onDelete: Cascade)
 
   @@index(fields: [id])
-  @@map("tokenRequests")
+  @@map("requestsFromUser")
 }
 
 model Permission {
+  id           String         @id
   type         PermissionType
   expiresAt    Int
   tokens       Token[]        @relation(name: "tokenPermission")
@@ -95,7 +95,6 @@ model Permission {
   targetTypeId String
   targetType   Item           @relation(name: "permissionTargetType", fields: [targetTypeId], references: [id], onDelete: Cascade)
 
-  @@id(fields: [grantsToId, targetTypeId])
   @@index(fields: [grantsToId, targetTypeId])
   @@map("permissions")
 }
@@ -105,6 +104,7 @@ model Item {
   name                  String
   createdAt             Int
   updatedAt             Int
+  isPublic              Boolean
   ownerId               String?
   owner                 Group?       @relation(name: "itemOwner", fields: [ownerId], references: [id], onDelete: SetNull)
   typeId                String?
@@ -114,7 +114,6 @@ model Item {
   instances             Item[]       @relation(name: "itemType")
   attributesOfInstances Attribute[]  @relation(name: "itemParentItemType")
   accessibleFrom        Permission[] @relation(name: "permissionTargetType")
-  groupId               String
 
   @@index(fields: [typeId, id])
   @@map("items")
@@ -144,6 +143,11 @@ enum MembershipType {
 enum TokenType {
   cookie
   bearer
+}
+
+enum RequestType {
+  token
+  verification
 }
 
 enum PermissionType {
