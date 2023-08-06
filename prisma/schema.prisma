@@ -120,18 +120,23 @@ model Item {
 }
 
 model Attribute {
-  id               String  @id
+  id               String   @id
   parentId         String
-  parent           Item    @relation(name: "itemParent", fields: [parentId], references: [id], onDelete: Cascade)
+  parent           Item     @relation(name: "itemParent", fields: [parentId], references: [id], onDelete: Cascade)
   parentItemTypeId String
-  parentItemType   Item    @relation(name: "itemParentItemType", references: [id], fields: [parentItemTypeId], onDelete: Restrict)
+  parentItemType   Item     @relation(name: "itemParentItemType", references: [id], fields: [parentItemTypeId], onDelete: Restrict)
   key              String
-  valuePrimitive   String?
+  valueString      String?
+  valueNumber      Float?
+  valueBoolean     Boolean?
   valueItemId      String?
-  valueItem        Item?   @relation(name: "itemValue", fields: [valueItemId], references: [id], onDelete: SetNull)
+  valueItem        Item?    @relation(name: "itemValue", fields: [valueItemId], references: [id], onDelete: SetNull)
   showOnSummary    Boolean
 
   @@index(fields: [parentItemTypeId, parentId])
+  @@index(fields: [parentItemTypeId, key, valueString])
+  @@index(fields: [parentItemTypeId, key, valueNumber])
+  @@index(fields: [parentItemTypeId, key, valueBoolean])
   @@map("attributes")
 }
 

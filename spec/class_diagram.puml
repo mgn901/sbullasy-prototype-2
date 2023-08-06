@@ -60,7 +60,9 @@ rectangle "Entities about Item" {
   class Attribute {
     + parentItemType: Item['type']
     + key: string
-    + valuePrimitive?: string
+    + valueString?: string
+    + valueNumber?: number
+    + valueBoolean?: boolean
     + showOnSummary: boolean
   }
 
@@ -79,8 +81,8 @@ Group "1" *-- "0..*" Item : owner <
 Token "0..*" --* "0..1" Permission : has >
 
 Item "0..*" -- "1" Item : type >
-Item "1" *-d- "0..*" AttributeDiamond : parent <
-Item "0..1" -d- "0..*" AttributeDiamond : valueItem? <
+Item "1" *-- "0..*" AttributeDiamond : parent <
+Item "0..1" -- "0..*" AttributeDiamond : valueItem? <
 AttributeDiamond .. Attribute
 
 @enduml
