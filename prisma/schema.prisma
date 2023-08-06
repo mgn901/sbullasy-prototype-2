@@ -20,6 +20,7 @@ model User {
   registrationExpiresAt Int
   verificationExpiresAt Int
   belongsTo             Membership[]      @relation(name: "groupMember")
+  bookmarks             Bookmark[]        @relation(name: "bookmarkOwner")
   tokens                Token[]           @relation(name: "tokenOwner")
   requests              RequestFromUser[] @relation(name: "requestRequestedFrom")
 
@@ -55,6 +56,17 @@ model Membership {
   @@index(fields: [userId])
   @@index(fields: [groupId])
   @@map("memberships")
+}
+
+model Bookmark {
+  userId String
+  user   User   @relation(name: "bookmarkOwner", fields: [userId], references: [id])
+  itemId String
+  item   Item   @relation(name: "bookmarkItem", fields: [itemId], references: [id])
+
+  @@id(fields: [userId, itemId])
+  @@index(fields: [userId])
+  @@map("bookmarks")
 }
 
 model Token {
@@ -113,6 +125,7 @@ model Item {
   referrers             Attribute[]  @relation(name: "itemValue")
   instances             Item[]       @relation(name: "itemType")
   attributesOfInstances Attribute[]  @relation(name: "itemParentItemType")
+  bookmarkedBy          Bookmark[]   @relation(name: "bookmarkItem")
   accessibleFrom        Permission[] @relation(name: "permissionTargetType")
 
   @@index(fields: [typeId, id])

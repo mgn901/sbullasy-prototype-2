@@ -26,6 +26,9 @@ class Membership {
   type: 'admin' | 'member'
 }
 
+class Bookmark {
+}
+
 rectangle "Entities about Authentication" {
   class Token {
     + readonly id: string
@@ -73,6 +76,8 @@ User "1" *-- "0..*" Token : owner <
 User "1" *-- "0..5" RequestFromUser : requestedFrom <
 User "1..*" -- "0..*" Group : belongsTo >
 Membership . (User, Group)
+User "0..*" -- "0..*" Item : likes >
+Bookmark . (User, Item)
 
 Group "1" *--* "0..*" Item : grantsTo <
 Permission . (Group, Item)
