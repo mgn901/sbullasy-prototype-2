@@ -1,0 +1,13 @@
+type: object
+
+properties:
+  email:
+    type: string
+  type:
+    enum:
+      - token
+      - verification
+
+required:
+  - email
+  - type

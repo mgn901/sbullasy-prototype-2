@@ -1,0 +1,13 @@
+allOf:
+  - $ref: user-serialized-owner.yaml
+
+type: object
+
+properties:
+  requests:
+    type: array
+    items:
+      $ref: request-from-user-serialized-owner.yaml
+
+required:
+  - requests

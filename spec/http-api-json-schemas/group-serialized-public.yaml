@@ -1,0 +1,20 @@
+type: object
+
+properties:
+  id:
+    type: string
+  name:
+    type: string
+  displayName:
+    type: string
+  createdAt:
+    type: number
+  isAdmin:
+    type: boolean
+
+required:
+  - id
+  - name
+  - displayName
+  - createdAt
+  - isAdmin

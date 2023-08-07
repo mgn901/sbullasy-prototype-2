@@ -1,0 +1,20 @@
+type: object
+
+properties:
+  id:
+    type: string
+  name:
+    type: string
+  createdAt:
+    type: number
+  updatedAt:
+    type: number
+  isPubic:
+    type: boolean
+
+required:
+  - id
+  - name
+  - createdAt
+  - updatedAt
+  - isPublic

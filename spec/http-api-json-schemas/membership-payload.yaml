@@ -1,0 +1,12 @@
+type: object
+
+properties:
+  type:
+    enum:
+      - admin
+      - member
+  invitationCode:
+    type: string
+
+required:
+  - type

@@ -1,0 +1,13 @@
+allOf:
+  - $ref: user-serialized-owner.yaml
+
+type: object
+
+properties:
+  tokens:
+    type: array
+    items:
+      $ref: token-serialized-owner.yaml
+
+required:
+  - tokens

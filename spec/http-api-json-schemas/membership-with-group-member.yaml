@@ -1,0 +1,13 @@
+type: object
+
+properties:
+  group:
+    $ref: group-serialized-public.yaml
+  type:
+    enum:
+      - admin
+      - member
+
+required:
+  - group
+  - type

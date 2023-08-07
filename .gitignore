@@ -132,3 +132,4 @@ dist
 # Added by mgn901
 development
 production
+src/server/schemas/

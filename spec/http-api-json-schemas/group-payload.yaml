@@ -1,0 +1,14 @@
+type: object
+
+properties:
+  name:
+    type: string
+  displayName:
+    type: string
+  resetInvitationCode:
+    type: boolean
+
+required:
+  - name
+  - displayName
+  - resetInvitationCode

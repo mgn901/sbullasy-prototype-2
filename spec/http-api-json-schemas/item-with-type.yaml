@@ -1,0 +1,8 @@
+allOf:
+  - $ref: item-serialized-public.yaml
+
+type: object
+
+properties:
+  type:
+    $ref: item-serialized-public.yaml

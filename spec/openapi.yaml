@@ -1,0 +1,964 @@
+openapi: '3.0.2'
+
+info:
+  title: Sbullasy HTTP API Specification
+  # summary:
+  description: This is the specification of Sbullasy HTTP API.
+  # termsOfService:
+  # contact:
+  # license:
+  version: '0.1.0'
+
+# jsonSchemaDialect:
+
+servers:
+  - url: https://{host}/api/v1
+    variables:
+      host:
+        # enum:
+        default: sbullasy.mgn901.com
+        # description:
+
+paths:
+  /users:
+    get:
+      tags:
+        - users
+      description: Get users registered in the Sbullasy instance.
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/order'
+      responses:
+        200:
+          description: Users to be returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: './http-api-json-schemas/user-serialized-owner.yaml'
+              # example:
+              # examples:
+        401:
+          $ref: '#/components/responses/e401NoToken'
+        403:
+          $ref: '#/components/responses/e403NotInAdminGroup'
+      security:
+        - cookie_auth: []
+    post:
+      tags:
+        - users
+      description: Register an user.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: './http-api-json-schemas/user-payload.yaml'
+      responses:
+        201:
+          description: The user created
+          content:
+            application/json:
+              schema:
+                $ref: './http-api-json-schemas/user-serialized-owner.yaml'
+        401:
+          $ref: '#/components/responses/e401NoToken'
+        403:
+          $ref: '#/components/responses/e403NotInAdminGroup'
+      security:
+        - cookie_auth: []
+  /users/{userId}:
+    get:
+      tags:
+        - users
+      description: Get an user.
+      parameters:
+        - $ref: '#/components/parameters/userId'
+      responses:
+        200:
+          description: The user to be returned
+          content:
+            application/json:
+              schema:
+                $ref: './http-api-json-schemas/user-serialized-owner.yaml'
+        401:
+          $ref: '#/components/responses/e401NoToken'
+        403:
+          $ref: '#/components/responses/e403NotInAdminGroup'
+        404:
+          $ref: '#/components/responses/e404NotFound'
+      security:
+        - cookie_auth: []
+    put:
+      tags:
+        - users
+      description: Update an user.
+      parameters:
+        - $ref: '#/components/parameters/userId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: './http-api-json-schemas/user-payload.yaml'
+      responses:
+        201:
+          description: Indicates the user has been created.
+        204:
+          description: Indicates the user has been updated.
+        401:
+          $ref: '#/components/responses/e401NoToken'
+        403:
+          $ref: '#/components/responses/e403NotInAdminGroup'
+        404:
+          $ref: '#/components/responses/e404NotFound'
+      security:
+        - cookie_auth: []
+    delete:
+      tags:
+        - users
+      description: Delete an user.
+      parameters:
+        - $ref: '#/components/parameters/userId'
+      responses:
+        204:
+          description: Indicates the user has been deleted.
+        401:
+          $ref: '#/components/responses/e401NoToken'
+        403:
+          $ref: '#/components/responses/e403NotInAdminGroup'
+        404:
+          $ref: '#/components/responses/e404NotFound'
+      security:
+        - cookie_auth: []
+  /users/{userId}/belongsTo:
+    get:
+      tags:
+        - users
+      description: Get groups the user belongs to.
+      parameters:
+        - $ref: '#/components/parameters/userId'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/order'
+      responses:
+        200:
+          description: Groups the user belongs to
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: './http-api-json-schemas/membership-with-group-member.yaml'
+        401:
+          $ref: '#/components/responses/e401NoToken'
+        403:
+          $ref: '#/components/responses/e403NotInAdminGroup'
+        404:
+          $ref: '#/components/responses/e404NotFound'
+      security:
+        - cookie_auth: []
+  /users/{userId}/tokens:
+    get:
+      tags:
+        - users
+      description: Get tokens the user has.
+      parameters:
+        - $ref: '#/components/parameters/userId'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/order'
+      responses:
+        200:
+          description: Tokens the user has
+          content:
+            application/json:
+              schema:
+                type: array
+                $ref: './http-api-json-schemas/token-serialized-owner.yaml'
+        401:
+          $ref: '#/components/responses/e401NoToken'
+        403:
+          $ref: '#/components/responses/e403NotInAdminGroup'
+        404:
+          $ref: '#/components/responses/e404NotFound'
+      security:
+        - cookie_auth: []
+    post:
+      tags:
+        - users
+      description: Create a token for the user.
+      parameters:
+        - $ref: '#/components/parameters/userId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: './http-api-json-schemas/token-payload.yaml'
+      responses:
+        201:
+          description: The token created
+          content:
+            application/json:
+              schema:
+                $ref: './http-api-json-schemas/token-serialized-owner.yaml'
+              examples:
+                cookie:
+                  description: Represents the token which type is "cookie"
+                  value:
+                    id: 'string'
+                    type: 'cookie'
+        401:
+          $ref: '#/components/responses/e401NoToken'
+        403:
+          $ref: '#/components/responses/e403NotInAdminGroup'
+        404:
+          $ref: '#/components/responses/e404NotFound'
+  /users/{userId}/tokens/{tokenId}:
+    delete:
+      tags:
+        - users
+      description: Delete a token.
+      parameters:
+        - $ref: '#/components/parameters/userId'
+        - name: tokenId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        204:
+          description: Indicates the token has been deleted
+        401:
+          $ref: '#/components/responses/e401NoToken'
+        403:
+          $ref: '#/components/responses/e403NotInAdminGroup'
+        404:
+          $ref: '#/components/responses/e404NotFound'
+      security:
+        - cookie_auth: []
+  /users/{userId}/requests:
+    get:
+      tags:
+        - users
+      description: Get requests from the user.
+      parameters:
+        - $ref: '#/components/parameters/userId'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/order'
+      responses:
+        200:
+          description: Requests from the user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: './http-api-json-schemas/request-from-user-serialized-owner.yaml'
+        401:
+          $ref: '#/components/responses/e401NoToken'
+        403:
+          $ref: '#/components/responses/e403NotInAdminGroup'
+        404:
+          $ref: '#/components/responses/e404NotFound'
+      security:
+        - cookie_auth: []
+    post:
+      tags:
+        - users
+      description: Create request from the user.
+      parameters:
+        - $ref: '#/components/parameters/userId'
+      responses:
+        201:
+          description: The request created
+          content:
+            application/json:
+              schema:
+                $ref: './http-api-json-schemas/request-from-user-payload.yaml'
+        401:
+          $ref: '#/components/responses/e401NoToken'
+        403:
+          $ref: '#/components/responses/e403NotInAdminGroup'
+        404:
+          $ref: '#/components/responses/e404NotFound'
+  /users/{userId}/likes/{typeName}:
+    get:
+      tags:
+        - users
+      description: Get items the user likes.
+      parameters:
+        - $ref: '#/components/parameters/userId'
+        - $ref: '#/components/parameters/typeName'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/order'
+      responses:
+        200:
+          description: Items the user likes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: './http-api-json-schemas/item-with-owner.yaml'
+        401:
+          $ref: '#/components/responses/e401NoToken'
+        403:
+          $ref: '#/components/responses/e403NotInAdminGroup'
+        404:
+          $ref: '#/components/responses/e404NotFound'
+      security:
+        - cookie_auth: []
+  /users/{userId}/likes/{typeName}/{itemId}:
+    put:
+      tags:
+        - users
+      description: Register an item as the user likes.
+      parameters:
+        - $ref: '#/components/parameters/userId'
+        - $ref: '#/components/parameters/typeName'
+        - $ref: '#/components/parameters/itemId'
+      responses:
+        201:
+          description: Indicates the item has been registered as the user likes.
+        401:
+          $ref: '#/components/responses/e401NoToken'
+        403:
+          $ref: '#/components/responses/e403NotInAdminGroup'
+        404:
+          $ref: '#/components/responses/e404NotFound'
+      security:
+        - cookie_auth: []
+    delete:
+      tags:
+        - users
+      description: Unregister an item as the user don't likes.
+      parameters:
+        - $ref: '#/components/parameters/userId'
+        - $ref: '#/components/parameters/typeName'
+        - $ref: '#/components/parameters/itemId'
+      responses:
+        204:
+          description: Indicates the item has been unregistered.
+        401:
+          $ref: '#/components/responses/e401NoToken'
+        403:
+          $ref: '#/components/responses/e403NotInAdminGroup'
+        404:
+          $ref: '#/components/responses/e404NotFound'
+      security:
+        - cookie_auth: []
+  /groups:
+    get:
+      tags:
+        - groups
+      description: Get groups registered in the Sbullasy instance.
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/order'
+      responses:
+        200:
+          description: Groups to be returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: './http-api-json-schemas/group-serialized-public.yaml'
+    post:
+      tags:
+        - groups
+      description: Create a group.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: './http-api-json-schemas/group-payload.yaml'
+      responses:
+        201:
+          description: The group created
+          content:
+            application/json:
+              schema:
+                $ref: './http-api-json-schemas/group-serialized-public.yaml'
+        401:
+          $ref: '#/components/responses/e401NoToken'
+        403:
+          $ref: '#/components/responses/e403NotVerified'
+      security:
+        - cookie_auth: []
+  /groups/{groupId}/:
+    get:
+      tags:
+        - groups
+      description: Get a group.
+      parameters:
+        - $ref: '#/components/parameters/groupId'
+      responses:
+        200:
+          description: The group to be returned
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: './http-api-json-schemas/group-serialized-public.yaml'
+                  - $ref: './http-api-json-schemas/group-serialized-admin.yaml'
+        404:
+          $ref: '#/components/responses/e404NotFound'
+    put:
+      tags:
+        - groups
+      description: Update a group.
+      parameters:
+        - $ref: '#/components/parameters/groupId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: './http-api-json-schemas/group-payload.yaml'
+      responses:
+        201:
+          description: Indicates the group has been created.
+        204:
+          description: Indicates the group has been updated.
+        401:
+          $ref: '#/components/responses/e401NoToken'
+        403:
+          $ref: '#/components/responses/e403NotGroupAdmin'
+        404:
+          $ref: '#/components/responses/e404NotFound'
+      security:
+        - cookie_auth: []
+    delete:
+      tags:
+        - groups
+      description: Delete a group.
+      parameters:
+        - $ref: '#/components/parameters/groupId'
+      responses:
+        204:
+          description: Indicates the group has been deleted.
+        401:
+          $ref: '#/components/responses/e401NoToken'
+        403:
+          $ref: '#/components/responses/e403NotInGroup'
+        404:
+          $ref: '#/components/responses/e404NotFound'
+      security:
+        - cookie_auth: []
+  /groups/{groupId}/members:
+    get:
+      tags:
+        - groups
+      description: Get members belongs to the group.
+      parameters:
+        - $ref: '#/components/parameters/groupId'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/order'
+      responses:
+        200:
+          description: Members belongs to the group
+          content:
+            application/json:
+              schema:
+                $ref: './http-api-json-schemas/membership-with-user-member.yaml'
+        401:
+          $ref: '#/components/responses/e401NoToken'
+        403:
+          $ref: '#/components/responses/e403NotInGroup'
+        404:
+          $ref: '#/components/responses/e404NotFound'
+      security:
+        - cookie_auth: []
+  /groups/{groupId}/members/{userId}:
+    put:
+      tags:
+        - groups
+      description: Add a user to the group or update a membership.
+      parameters:
+        - $ref: '#/components/parameters/groupId'
+        - $ref: '#/components/parameters/userId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: './http-api-json-schemas/membership-payload.yaml'
+      responses:
+        201:
+          description: Indicates the membership has been created.
+        204:
+          description: Indicates the membership has been updated.
+        401:
+          $ref: '#/components/responses/e401NoToken'
+        403:
+          $ref: '#/components/responses/e403NotGroupAdmin'
+        404:
+          $ref: '#/components/responses/e404NotFound'
+      security:
+        - cookie_auth: []
+    delete:
+      tags:
+        - groups
+      description: Delete a user from the group.
+      parameters:
+        - $ref: '#/components/parameters/groupId'
+        - $ref: '#/components/parameters/userId'
+      responses:
+        204:
+          description: Indicates the user has been deleted from the group.
+        401:
+          $ref: '#/components/responses/e401NoToken'
+        403:
+          $ref: '#/components/responses/e403NotGroupAdmin'
+        404:
+          $ref: '#/components/responses/e404NotFound'
+      security:
+        - cookie_auth: []
+  /groups/{groupId}/permissions:
+    get:
+      tags:
+        - groups
+      description: Get permissions the group has.
+      parameters:
+        - $ref: '#/components/parameters/groupId'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/order'
+      responses:
+        200:
+          description: Permissions the group has
+          content:
+            application/json:
+              schema:
+                $ref: './http-api-json-schemas/permission-with-item-member.yaml'
+        401:
+          $ref: '#/components/responses/e401NoToken'
+        403:
+          $ref: '#/components/responses/e403NotInGroup'
+        404:
+          $ref: '#/components/responses/e404NotFound'
+      security:
+        - cookie_auth: []
+    post:
+      tags:
+        - groups
+      description: Grant a permission to the group.
+      parameters:
+        - $ref: '#/components/parameters/groupId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: './http-api-json-schemas/permission-payload.yaml'
+      responses:
+        201:
+          description: The permission granted to the group
+          content:
+            application/json:
+              schema:
+                $ref: './http-api-json-schemas/permission-with-item-member.yaml'
+        401:
+          $ref: '#/components/responses/e401NoToken'
+        403:
+          $ref: '#/components/responses/e403NotInAdminGroup'
+        404:
+          $ref: '#/components/responses/e404NotFound'
+      security:
+        - cookie_auth: []
+  /groups/{groupId}/permissions/{permissionId}:
+    delete:
+      tags:
+        - groups
+      description: Ungrant a permission from the group.
+      parameters:
+        - $ref: '#/components/parameters/groupId'
+        - $ref: '#/components/parameters/permissionId'
+      responses:
+        204:
+          description: Indicates the permission has been ungranted from the group.
+        401:
+          $ref: '#/components/responses/e401NoToken'
+        403:
+          $ref: '#/components/responses/e403NotInAdminGroup'
+        404:
+          $ref: '#/components/responses/e404NotFound'
+      security:
+        - cookie_auth: []
+  /groups/{groupId}/{typeName}:
+    get:
+      tags:
+        - groups
+      description: Get items the group owns.
+      parameters:
+        - $ref: '#/components/parameters/groupId'
+        - $ref: '#/components/parameters/typeName'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/order'
+      responses:
+        200:
+          description: Items the group owns
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./http-api-json-schemas/item-with-attributes.yaml
+        404:
+          $ref: '#/components/responses/e404NotFound'
+    post:
+      tags:
+        - groups
+      description: Create an item as the group.
+      parameters:
+        - $ref: '#/components/parameters/groupId'
+        - $ref: '#/components/parameters/typeName'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: './http-api-json-schemas/item-payload.yaml'
+      responses:
+        201:
+          description: The item created
+          content:
+            application/json:
+              schema:
+                $ref: './http-api-json-schemas/item-serialized-public.yaml'
+        401:
+          $ref: '#/components/responses/e401NoToken'
+        403:
+          $ref: '#/components/responses/e403NotInGroup'
+        404:
+          $ref: '#/components/responses/e404NotFound'
+      security:
+        - cookie_auth: []
+        - bearer_auth: []
+  /groups/{groupId}/{typeName}/{itemId}:
+    get:
+      tags:
+        - groups
+      description: Get an item the group owns.
+      parameters:
+        - $ref: '#/components/parameters/userId'
+        - $ref: '#/components/parameters/typeName'
+        - $ref: '#/components/parameters/itemId'
+      responses:
+        200:
+          description: The item to be returned
+          content:
+            application/json:
+              schema:
+                $ref: './http-api-json-schemas/item-with-attributes.yaml'
+        404:
+          $ref: '#/components/responses/e404NotFound'
+    put:
+      tags:
+        - groups
+      description: Update an item the group owns.
+      parameters:
+        - $ref: '#/components/parameters/groupId'
+        - $ref: '#/components/parameters/typeName'
+        - $ref: '#/components/parameters/itemId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: './http-api-json-schemas/item-payload.yaml'
+      responses:
+        201:
+          description: Indicates the item has been created.
+        204:
+          description: Indicates the item has been updated.
+        401:
+          $ref: '#/components/responses/e401NoToken'
+        403:
+          $ref: '#/components/responses/e403NotInGroup'
+        404:
+          $ref: '#/components/responses/e404NotFound'
+      security:
+        - cookie_auth: []
+        - bearer_auth: []
+    delete:
+      tags:
+        - groups
+      description: Delete an item the group owns.
+      parameters:
+        - $ref: '#/components/parameters/groupId'
+        - $ref: '#/components/parameters/typeName'
+        - $ref: '#/components/parameters/itemId'
+      responses:
+        204:
+          description: Indicates the item has been deleted.
+        401:
+          $ref: '#/components/responses/e401NoToken'
+        403:
+          $ref: '#/components/responses/e403NotInGroup'
+        404:
+          $ref: '#/components/responses/e404NotFound'
+      security:
+        - cookie_auth: []
+        - bearer_auth: []
+  /{typeName}:
+    get:
+      tags:
+        - items
+      description: Get items registered in the Sbullasy instance.
+      parameters:
+        - $ref: '#/components/parameters/typeName'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/order'
+      responses:
+        200:
+          description: Items to be returned
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: './http-api-json-schemas/item-with-owner.yaml'
+                  - $ref: './http-api-json-schemas/item-with-attributes.yaml'
+        404:
+          $ref: '#/components/responses/e404NotFound'
+  /{typeName}/{itemId}:
+    get:
+      tags:
+        - items
+      description: Get an item.
+      parameters:
+        - $ref: '#/components/parameters/typeName'
+        - $ref: '#/components/parameters/itemId'
+      responses:
+        200:
+          description: Item to be returned
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: './http-api-json-schemas/item-with-owner.yaml'
+                  - $ref: './http-api-json-schemas/item-with-attributes.yaml'
+        404:
+          $ref: '#/components/responses/e404NotFound'
+  /types/:
+    get:
+      tags:
+        - types
+      description: Get available item-types in the Sbullasy instance.
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/order'
+      responses:
+        200:
+          description: Item-types to be returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: './http-api-json-schemas/item-with-attributes.yaml'
+        404:
+          $ref: '#/components/responses/e404NotFound'
+  /types/{typeName}:
+    get:
+      tags:
+        - types
+      description: Get an item-type.
+      parameters:
+        - $ref: '#/components/parameters/typeName'
+      responses:
+        200:
+          description: The item-type to be returned
+          content:
+            application/json:
+              schema:
+                $ref: './http-api-json-schemas/item-with-attributes.yaml'
+        404:
+          $ref: '#/components/responses/e404NotFound'
+    put:
+      tags:
+        - types
+      description: Create or update an item-type.
+      parameters:
+        - $ref: '#/components/parameters/typeName'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: './http-api-json-schemas/item-payload.yaml'
+      responses:
+        201:
+          description: Indicates the item-type has been created.
+        204:
+          description: Indicates the item-type has been updated.
+        401:
+          $ref: '#/components/responses/e401NoToken'
+        403:
+          $ref: '#/components/responses/e403NotInAdminGroup'
+      security:
+        - cookie_auth: []
+    delete:
+      tags:
+        - types
+      description: Delete an item-type.
+      parameters:
+        - $ref: '#/components/parameters/typeName'
+      responses:
+        204:
+          description: Indicates the item-type has been deleted.
+        401:
+          $ref: '#/components/responses/e401NoToken'
+        403:
+          $ref: '#/components/responses/e403NotInAdminGroup'
+        404:
+          $ref: '#/components/responses/e404NotFound'
+      security:
+        - cookie_auth: []
+
+# webhooks:
+
+components:
+  # schemas:
+  responses:
+    e401NoToken:
+      description: Indicates the client doesn't have any tokens.
+      content:
+        application/json:
+          schema:
+            $ref: './http-api-json-schemas/error.yaml'
+    e403NotInAdminGroup:
+      description: Indicates the client doesn't have a token for an `admin` group.
+      content:
+        application/json:
+          schema:
+            $ref: './http-api-json-schemas/error.yaml'
+    e403NotInGroup:
+      description: Indicates the client doesn't have a token for the group.
+      content:
+        application/json:
+          schema:
+            $ref: './http-api-json-schemas/error.yaml'
+    e403NoPermission:
+      description: Indicates the client doesn't have a token for the permission.
+      content:
+        application/json:
+          schema:
+            $ref: './http-api-json-schemas/error.yaml'
+    e403NotGroupAdmin:
+      description: Indicates the client doesn't have a token for a admin user of the group.
+      content:
+        application/json:
+          schema:
+            $ref: './http-api-json-schemas/error.yaml'
+    e403NotVerified:
+      description: Indicates the client doesn't have a token for a verified user.
+      content:
+        application/json:
+          schema:
+            $ref: './http-api-json-schemas/error.yaml'
+    e404NotFound:
+      description: Indicates the resource is not found. Returned only if the client has appropriate token and permission.
+      content:
+        application/json:
+          schema:
+            $ref: './http-api-json-schemas/error.yaml'
+  parameters:
+    limit:
+      name: limit
+      in: query
+      # description:
+      # required: false # default
+      # deprecated:
+      # allowEmptyValue: false # default
+      # style: form # default
+      # explode: true # default
+      # allowReserved: false # default
+      schema:
+        type: number
+      # example:
+      # examples:
+    offset:
+      name: offset
+      in: query
+      schema:
+        type: number
+    cursor:
+      name: cursor
+      in: query
+      schema:
+        type: string
+    order:
+      name: order
+      in: query
+      schema:
+        type: string
+      examples:
+        id_asc:
+          value: id_asc
+        id_desc:
+          value: id_desc
+    userId:
+      name: userId
+      in: path
+      schema:
+        type: string
+      required: true
+    groupId:
+      name: itemId
+      in: path
+      schema:
+        type: string
+      required: true
+    permissionId:
+      name: itemId
+      in: path
+      schema:
+        type: string
+      required: true
+    itemId:
+      name: itemId
+      in: path
+      schema:
+        type: string
+      required: true
+    typeName:
+      name: typeName
+      in: path
+      schema:
+        type: string
+      required: true
+  # examples:
+  # requestBodies:
+  # headers:
+  securitySchemes:
+    cookie_auth:
+      type: apiKey
+      # description:
+      name: token
+      in: cookie
+    bearer_auth:
+      type: http
+      scheme: bearer
+  # links:
+  # callbacks:
+  # pathItems:
+# security:
+
+# tags:
+
+# externalDocs:

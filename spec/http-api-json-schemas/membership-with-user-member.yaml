@@ -1,0 +1,13 @@
+type: object
+
+properties:
+  user:
+    $ref: user-serialized-member.yaml
+  type:
+    enum:
+      - admin
+      - member
+
+required:
+  - user
+  - type

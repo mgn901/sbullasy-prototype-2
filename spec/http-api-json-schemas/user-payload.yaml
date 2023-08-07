@@ -1,0 +1,14 @@
+type: object
+
+properties:
+  email:
+    type: string
+  name:
+    type: string
+  displayName:
+    type: string
+
+required:
+  - name
+  - displayName
+  - email

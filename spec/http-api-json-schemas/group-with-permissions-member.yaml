@@ -1,0 +1,13 @@
+allOf:
+  - $ref: group-serialized-public.yaml
+
+type: object
+
+properties:
+  permissions:
+    type: array
+    items:
+      $ref: permission-with-item-member.yaml
+
+required:
+  - permissions

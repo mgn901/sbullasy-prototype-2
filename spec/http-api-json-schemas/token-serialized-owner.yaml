@@ -1,0 +1,21 @@
+type: object
+
+properties:
+  id:
+    type: string
+  secret:
+    type: string
+  type:
+    enum:
+      - cookie
+      - bearer
+  expiresAt:
+    type: number
+  permission:
+    allOf:
+      - $ref: permission-with-group-member.yaml
+      - $ref: permission-with-item-member.yaml
+
+required:
+  - id
+  - type

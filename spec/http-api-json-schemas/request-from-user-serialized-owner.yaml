@@ -1,0 +1,19 @@
+type: object
+
+properties:
+  id:
+    type: string
+  email:
+    type: string
+  expiresAt:
+    type: number
+  type:
+    enum:
+      - token
+      - verification
+
+required:
+  - id
+  - email
+  - expiresAt
+  - type

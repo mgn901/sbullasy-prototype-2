@@ -1,0 +1,19 @@
+type: object
+
+properties:
+  id:
+    type: string
+  type:
+    enum:
+      - read
+      - write
+  expiresAt:
+    type: number
+  grantsTo:
+    $ref: group-serialized-public.yaml
+
+required:
+  - id
+  - type
+  - expiresAt
+  - grantsTo

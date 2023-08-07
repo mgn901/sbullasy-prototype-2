@@ -1,0 +1,34 @@
+allOf:
+  - $ref: item-serialized-public.yaml
+
+type: object
+
+properties:
+  attributes:
+    type: object
+    patternProperties:
+      '.*':
+        oneOf:
+          - type: string
+          - type: number
+          - type: boolean
+          # - $ref: '#'
+          - $ref: item-serialized-public.yaml
+      '.*\[\]':
+        oneOf:
+          - type: array
+            items:
+              type: string
+          - type: array
+            items:
+              type: number
+          - type: array
+            items:
+              type: boolean
+          - type: array
+            items:
+              # $ref: '#'
+              $ref: item-serialized-public.yaml
+
+required:
+  - attributes

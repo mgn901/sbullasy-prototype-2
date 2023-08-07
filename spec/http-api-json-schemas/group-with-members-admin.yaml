@@ -1,0 +1,13 @@
+allOf:
+  - $ref: group-serialized-admin.yaml
+
+type: object
+
+properties:
+  members:
+    type: array
+    items:
+      $ref: user-serialized-member.yaml
+
+required:
+  - members

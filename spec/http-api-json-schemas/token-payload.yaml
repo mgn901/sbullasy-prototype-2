@@ -1,0 +1,16 @@
+type: object
+
+properties:
+  type:
+    enum:
+      - cookie
+      - bearer
+  permissionId:
+    type: string
+  requestId:
+    type: string
+  requestSecret:
+    type: string
+
+required:
+  - type

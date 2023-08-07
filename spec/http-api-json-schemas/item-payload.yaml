@@ -1,0 +1,41 @@
+type: object
+
+properties:
+  name:
+    type: string
+  isPubic:
+    type: boolean
+  attributes:
+    type: object
+    patternProperties:
+      '.*':
+        oneOf:
+          - type: string
+          - type: number
+          - type: boolean
+          - type: object
+            properties:
+              id:
+                type: string
+      '.*\[\]':
+        oneOf:
+          - type: array
+            items:
+              type: string
+          - type: array
+            items:
+              type: number
+          - type: array
+            items:
+              type: boolean
+          - type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+
+required:
+  - name
+  - isPublic
+  - attributes
