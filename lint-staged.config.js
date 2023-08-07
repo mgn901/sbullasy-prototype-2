@@ -1,3 +1,3 @@
 export default {
-  '*.{js,jsx,ts,tsx}': [() => 'tsc --noEmit', 'jest --passWithNoTests', 'pnpm run lint'],
+  '*.{js,jsx,ts,tsx}': [() => 'pnpm run generate-schemas',  'tsc --noEmit', 'jest --passWithNoTests', 'pnpm run lint'],
 };
