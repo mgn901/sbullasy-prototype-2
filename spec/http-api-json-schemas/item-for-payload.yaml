@@ -5,7 +5,7 @@ type: object
 properties:
   name:
     type: string
-  isPubic:
+  isPublic:
     type: boolean
   attributes:
     type: object

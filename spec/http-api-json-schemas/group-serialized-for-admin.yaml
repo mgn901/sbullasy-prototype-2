@@ -14,8 +14,7 @@ properties:
   isAdmin:
     type: boolean
   invitationCode:
-    oneOf:
-      type: string
+    type: string
 
 required:
   - id

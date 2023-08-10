@@ -11,7 +11,7 @@ properties:
     type: number
   updatedAt:
     type: number
-  isPubic:
+  isPublic:
     type: boolean
 
 required:

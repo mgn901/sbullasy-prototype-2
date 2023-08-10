@@ -10,4 +10,5 @@ properties:
       - type: boolean
       - type: object
         properties:
-          id: string
+          id:
+            type: string
