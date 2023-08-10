@@ -15,10 +15,9 @@ model User {
   email                 String            @unique
   name                  String            @unique
   displayName           String
-  createdAt             Int
-  ipRegisteredFrom      String
-  registrationExpiresAt Int
-  verificationExpiresAt Int
+  registeredAt          Int?
+  registrationExpiresAt Int?
+  verificationExpiresAt Int?
   belongsTo             Membership[]      @relation(name: "groupMember")
   bookmarks             Bookmark[]        @relation(name: "bookmarkOwner")
   tokens                Token[]           @relation(name: "tokenOwner")
@@ -35,7 +34,7 @@ model Group {
   displayName    String
   createdAt      Int
   isAdmin        Boolean
-  invitationCode String
+  invitationCode String       @unique
   members        Membership[] @relation(name: "userBelongsTo")
   permissions    Permission[] @relation(name: "permissionGrantsTo")
   items          Item[]       @relation(name: "itemOwner")
@@ -80,7 +79,7 @@ model Token {
   permission   Permission? @relation(name: "tokenPermission", fields: [permissionId], references: [id], onDelete: Cascade)
 
   @@index(fields: [id])
-  @@index(fields: [type, secret])
+  @@index(fields: [secret])
   @@map("tokens")
 }
 
@@ -107,7 +106,8 @@ model Permission {
   targetTypeId String
   targetType   Item           @relation(name: "permissionTargetType", fields: [targetTypeId], references: [id], onDelete: Cascade)
 
-  @@index(fields: [grantsToId, targetTypeId])
+  @@index(fields: [grantsToId])
+  @@index(fields: [targetTypeId])
   @@map("permissions")
 }
 
@@ -128,7 +128,7 @@ model Item {
   bookmarkedBy          Bookmark[]   @relation(name: "bookmarkItem")
   accessibleFrom        Permission[] @relation(name: "permissionTargetType")
 
-  @@index(fields: [typeId, id])
+  @@index(fields: [id])
   @@map("items")
 }
 
@@ -146,10 +146,11 @@ model Attribute {
   valueItem        Item?    @relation(name: "itemValue", fields: [valueItemId], references: [id], onDelete: SetNull)
   showOnSummary    Boolean
 
-  @@index(fields: [parentItemTypeId, parentId])
-  @@index(fields: [parentItemTypeId, key, valueString])
-  @@index(fields: [parentItemTypeId, key, valueNumber])
-  @@index(fields: [parentItemTypeId, key, valueBoolean])
+  @@index(fields: [parentId])
+  @@index(fields: [valueString])
+  @@index(fields: [valueNumber])
+  @@index(fields: [valueBoolean])
+  @@index(fields: [valueItemId])
   @@map("attributes")
 }
 
