@@ -1,0 +1,15 @@
+$id: group-with-members-for-admin.yaml
+
+allOf:
+  - $ref: group-serialized-for-admin.yaml
+
+type: object
+
+properties:
+  members:
+    type: array
+    items:
+      $ref: user-serialized-for-member.yaml
+
+required:
+  - members

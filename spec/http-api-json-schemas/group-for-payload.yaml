@@ -1,20 +1,16 @@
+$id: group-for-payload.yaml
+
 type: object
 
 properties:
-  id:
-    type: string
   name:
     type: string
   displayName:
     type: string
-  createdAt:
-    type: number
-  isAdmin:
+  resetInvitationCode:
     type: boolean
 
 required:
-  - id
   - name
   - displayName
-  - createdAt
-  - isAdmin
+  - resetInvitationCode

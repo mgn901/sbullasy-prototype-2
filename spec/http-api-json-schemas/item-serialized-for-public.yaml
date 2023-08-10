@@ -1,3 +1,5 @@
+$id: item-serialized-for-public.yaml
+
 type: object
 
 properties:

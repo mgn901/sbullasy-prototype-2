@@ -1,3 +1,5 @@
+$id: error.yaml
+
 type: object
 
 properties:

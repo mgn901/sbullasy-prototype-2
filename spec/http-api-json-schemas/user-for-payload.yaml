@@ -1,3 +1,5 @@
+$id: user-for-payload.yaml
+
 type: object
 
 properties:

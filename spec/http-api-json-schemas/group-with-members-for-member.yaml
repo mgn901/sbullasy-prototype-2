@@ -1,0 +1,15 @@
+$id: group-with-members-for-member.yaml
+
+allOf:
+  - $ref: group-serialized-for-public.yaml
+
+type: object
+
+properties:
+  members:
+    type: array
+    items:
+      $ref: user-serialized-for-member.yaml
+
+required:
+  - members

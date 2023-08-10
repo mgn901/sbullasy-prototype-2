@@ -1,8 +1,10 @@
+$id: item-with-type.yaml
+
 allOf:
-  - $ref: item-serialized-public.yaml
+  - $ref: item-serialized-for-public.yaml
 
 type: object
 
 properties:
   type:
-    $ref: item-serialized-public.yaml
+    $ref: item-serialized-for-public.yaml

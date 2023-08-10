@@ -1,0 +1,15 @@
+$id: group-with-permissions-for-member.yaml
+
+allOf:
+  - $ref: group-serialized-for-public.yaml
+
+type: object
+
+properties:
+  permissions:
+    type: array
+    items:
+      $ref: permission-with-item-for-member.yaml
+
+required:
+  - permissions

@@ -38,7 +38,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: './http-api-json-schemas/user-serialized-owner.yaml'
+                  $ref: './http-api-json-schemas/user-serialized-for-owner.yaml'
               # example:
               # examples:
         401:
@@ -60,7 +60,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './http-api-json-schemas/user-serialized-owner.yaml'
+                $ref: './http-api-json-schemas/user-serialized-for-owner.yaml'
         401:
           $ref: '#/components/responses/e401NoToken'
         403:
@@ -79,7 +79,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './http-api-json-schemas/user-payload.yaml'
+              $ref: './http-api-json-schemas/user-for-payload.yaml'
       responses:
         201:
           description: Indicates the user has been created.
@@ -128,7 +128,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: './http-api-json-schemas/membership-with-group-member.yaml'
+                  $ref: './http-api-json-schemas/membership-with-group-for-member.yaml'
         401:
           $ref: '#/components/responses/e401NoToken'
         403:
@@ -154,7 +154,7 @@ paths:
             application/json:
               schema:
                 type: array
-                $ref: './http-api-json-schemas/token-serialized-owner.yaml'
+                $ref: './http-api-json-schemas/token-serialized-for-owner.yaml'
         401:
           $ref: '#/components/responses/e401NoToken'
         404:
@@ -171,14 +171,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './http-api-json-schemas/token-payload.yaml'
+              $ref: './http-api-json-schemas/token-for-payload.yaml'
       responses:
         201:
           description: The token created
           content:
             application/json:
               schema:
-                $ref: './http-api-json-schemas/token-serialized-owner.yaml'
+                $ref: './http-api-json-schemas/token-serialized-for-owner.yaml'
               examples:
                 cookie:
                   description: Represents the token which type is "cookie"
@@ -218,7 +218,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './http-api-json-schemas/request-from-user-payload.yaml'
+              $ref: './http-api-json-schemas/request-from-user-for-payload.yaml'
         required: false
       responses:
         201:
@@ -226,7 +226,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './http-api-json-schemas/request-from-user-payload.yaml'
+                $ref: './http-api-json-schemas/request-from-user-for-payload.yaml'
         401:
           $ref: '#/components/responses/e401NoToken'
         404:
@@ -309,7 +309,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: './http-api-json-schemas/group-serialized-public.yaml'
+                  $ref: './http-api-json-schemas/group-serialized-for-public.yaml'
     post:
       tags:
         - groups
@@ -318,14 +318,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './http-api-json-schemas/group-payload.yaml'
+              $ref: './http-api-json-schemas/group-for-payload.yaml'
       responses:
         201:
           description: The group created
           content:
             application/json:
               schema:
-                $ref: './http-api-json-schemas/group-serialized-public.yaml'
+                $ref: './http-api-json-schemas/group-serialized-for-public.yaml'
         401:
           $ref: '#/components/responses/e401NoToken'
         403:
@@ -346,8 +346,8 @@ paths:
             application/json:
               schema:
                 oneOf:
-                  - $ref: './http-api-json-schemas/group-serialized-public.yaml'
-                  - $ref: './http-api-json-schemas/group-serialized-admin.yaml'
+                  - $ref: './http-api-json-schemas/group-serialized-for-public.yaml'
+                  - $ref: './http-api-json-schemas/group-serialized-for-admin.yaml'
         404:
           $ref: '#/components/responses/e404NotFound'
     put:
@@ -360,7 +360,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './http-api-json-schemas/group-payload.yaml'
+              $ref: './http-api-json-schemas/group-for-payload.yaml'
       responses:
         201:
           description: Indicates the group has been created.
@@ -408,7 +408,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './http-api-json-schemas/membership-with-user-member.yaml'
+                $ref: './http-api-json-schemas/membership-with-user-for-member.yaml'
         401:
           $ref: '#/components/responses/e401NoToken'
         403:
@@ -429,7 +429,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './http-api-json-schemas/membership-payload.yaml'
+              $ref: './http-api-json-schemas/membership-for-payload.yaml'
       responses:
         201:
           description: Indicates the membership has been created.
@@ -478,7 +478,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './http-api-json-schemas/permission-with-item-member.yaml'
+                $ref: './http-api-json-schemas/permission-with-item-for-member.yaml'
         401:
           $ref: '#/components/responses/e401NoToken'
         403:
@@ -497,14 +497,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './http-api-json-schemas/permission-payload.yaml'
+              $ref: './http-api-json-schemas/permission-for-payload.yaml'
       responses:
         201:
           description: The permission granted to the group
           content:
             application/json:
               schema:
-                $ref: './http-api-json-schemas/permission-with-item-member.yaml'
+                $ref: './http-api-json-schemas/permission-with-item-for-member.yaml'
         401:
           $ref: '#/components/responses/e401NoToken'
         403:
@@ -566,14 +566,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './http-api-json-schemas/item-payload.yaml'
+              $ref: './http-api-json-schemas/item-for-payload.yaml'
       responses:
         201:
           description: The item created
           content:
             application/json:
               schema:
-                $ref: './http-api-json-schemas/item-serialized-public.yaml'
+                $ref: './http-api-json-schemas/item-serialized-for-public.yaml'
         401:
           $ref: '#/components/responses/e401NoToken'
         403:
@@ -613,7 +613,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './http-api-json-schemas/item-payload.yaml'
+              $ref: './http-api-json-schemas/item-for-payload.yaml'
       responses:
         201:
           description: Indicates the item has been created.
@@ -736,7 +736,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './http-api-json-schemas/item-payload.yaml'
+              $ref: './http-api-json-schemas/item-for-payload.yaml'
       responses:
         201:
           description: Indicates the item-type has been created.

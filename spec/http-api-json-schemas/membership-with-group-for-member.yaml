@@ -1,8 +1,10 @@
+$id: membership-with-group-for-member.yaml
+
 type: object
 
 properties:
   group:
-    $ref: group-serialized-public.yaml
+    $ref: group-serialized-for-public.yaml
   type:
     enum:
       - admin

@@ -1,8 +1,10 @@
+$id: item-with-owner.yaml
+
 allOf:
-  - $ref: item-serialized-public.yaml
+  - $ref: item-serialized-for-public.yaml
 
 type: object
 
 properties:
   owner:
-    $ref: group-serialized-public.yaml
+    $ref: group-serialized-for-public.yaml

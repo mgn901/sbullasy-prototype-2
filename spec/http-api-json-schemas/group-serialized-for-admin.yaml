@@ -1,3 +1,5 @@
+$id: group-serialized-for-admin.yaml
+
 type: object
 
 properties:

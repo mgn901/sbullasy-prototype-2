@@ -1,9 +1,9 @@
+$id: group-serialized-for-public.yaml
+
 type: object
 
 properties:
   id:
-    type: string
-  email:
     type: string
   name:
     type: string
@@ -11,17 +11,12 @@ properties:
     type: string
   createdAt:
     type: number
-  ipRegisteredFrom:
-    type: string
-  registrationExpiresAt:
-    type: number
-  verificationExpiresAt:
-    type: number
+  isAdmin:
+    type: boolean
 
 required:
   - id
-  - email
   - name
   - displayName
   - createdAt
-  - ipRegisteredFrom
+  - isAdmin

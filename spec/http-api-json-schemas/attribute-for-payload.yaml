@@ -1,3 +1,5 @@
+$id: attribute-for-payload.yaml
+
 type: object
 
 properties:

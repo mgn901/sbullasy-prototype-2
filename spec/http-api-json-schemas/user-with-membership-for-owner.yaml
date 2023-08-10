@@ -1,0 +1,15 @@
+$id: user-with-membership-for-owner.yaml
+
+allOf:
+  - $ref: user-serialized-for-owner.yaml
+
+type: object
+
+properties:
+  belongsTo:
+    type: array
+    items:
+      $ref: membership-with-group-for-member.yaml
+
+required:
+  - belongsTo

@@ -1,3 +1,5 @@
+$id: token-serialized-for-owner.yaml
+
 type: object
 
 properties:
@@ -13,8 +15,8 @@ properties:
     type: number
   permission:
     allOf:
-      - $ref: permission-with-group-member.yaml
-      - $ref: permission-with-item-member.yaml
+      - $ref: permission-with-group-for-member.yaml
+      - $ref: permission-with-item-for-member.yaml
 
 required:
   - id

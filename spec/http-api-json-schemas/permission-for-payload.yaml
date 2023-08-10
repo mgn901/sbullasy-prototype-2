@@ -1,3 +1,5 @@
+$id: permission-for-payload.yaml
+
 type: object
 
 properties:
@@ -9,11 +11,11 @@ properties:
       - write
   expiresAt:
     type: number
-  grantsTo:
-    $ref: group-serialized-public.yaml
+  targetTypeId:
+    type: string
 
 required:
   - id
   - type
   - expiresAt
-  - grantsTo
+  - targetTypeId

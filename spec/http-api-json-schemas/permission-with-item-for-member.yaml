@@ -1,3 +1,5 @@
+$id: permission-with-item-for-member.yaml
+
 type: object
 
 properties:
@@ -9,11 +11,11 @@ properties:
       - write
   expiresAt:
     type: number
-  targetTypeId:
-    type: string
+  targetType:
+    $ref: item-serialized-for-public.yaml
 
 required:
   - id
   - type
   - expiresAt
-  - targetTypeId
+  - targetType

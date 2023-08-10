@@ -1,8 +1,10 @@
+$id: membership-with-user-for-member.yaml
+
 type: object
 
 properties:
   user:
-    $ref: user-serialized-member.yaml
+    $ref: user-serialized-for-member.yaml
   type:
     enum:
       - admin

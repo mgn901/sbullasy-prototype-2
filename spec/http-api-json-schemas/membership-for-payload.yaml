@@ -1,3 +1,5 @@
+$id: membership-for-payload.yaml
+
 type: object
 
 properties:

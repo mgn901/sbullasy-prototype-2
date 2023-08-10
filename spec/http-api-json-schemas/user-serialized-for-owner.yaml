@@ -1,7 +1,11 @@
+$id: user-serialized-for-owner.yaml
+
 type: object
 
 properties:
   id:
+    type: string
+  email:
     type: string
   name:
     type: string
@@ -9,6 +13,8 @@ properties:
     type: string
   createdAt:
     type: number
+  ipRegisteredFrom:
+    type: string
   registrationExpiresAt:
     type: number
   verificationExpiresAt:
@@ -16,6 +22,8 @@ properties:
 
 required:
   - id
+  - email
   - name
   - displayName
   - createdAt
+  - ipRegisteredFrom

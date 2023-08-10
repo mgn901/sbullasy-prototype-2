@@ -1,5 +1,7 @@
+$id: item-with-attributes.yaml
+
 allOf:
-  - $ref: item-serialized-public.yaml
+  - $ref: item-serialized-for-public.yaml
 
 type: object
 
@@ -13,7 +15,7 @@ properties:
           - type: number
           - type: boolean
           # - $ref: '#'
-          - $ref: item-serialized-public.yaml
+          - $ref: item-serialized-for-public.yaml
       '.*\[\]':
         oneOf:
           - type: array
@@ -28,7 +30,7 @@ properties:
           - type: array
             items:
               # $ref: '#'
-              $ref: item-serialized-public.yaml
+              $ref: item-serialized-for-public.yaml
 
 required:
   - attributes
