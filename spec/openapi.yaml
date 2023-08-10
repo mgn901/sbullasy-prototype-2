@@ -47,28 +47,6 @@ paths:
           $ref: '#/components/responses/e403NotInAdminGroup'
       security:
         - cookie_auth: []
-    post:
-      tags:
-        - users
-      description: Register an user.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: './http-api-json-schemas/user-payload.yaml'
-      responses:
-        201:
-          description: The user created
-          content:
-            application/json:
-              schema:
-                $ref: './http-api-json-schemas/user-serialized-owner.yaml'
-        401:
-          $ref: '#/components/responses/e401NoToken'
-        403:
-          $ref: '#/components/responses/e403NotInAdminGroup'
-      security:
-        - cookie_auth: []
   /users/{userId}:
     get:
       tags:
@@ -132,13 +110,12 @@ paths:
           $ref: '#/components/responses/e404NotFound'
       security:
         - cookie_auth: []
-  /users/{userId}/belongsTo:
+  /users/me/belongsTo:
     get:
       tags:
         - users
       description: Get groups the user belongs to.
       parameters:
-        - $ref: '#/components/parameters/userId'
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/cursor'
@@ -155,18 +132,17 @@ paths:
         401:
           $ref: '#/components/responses/e401NoToken'
         403:
-          $ref: '#/components/responses/e403NotInAdminGroup'
+          $ref: '#/components/responses/e403NotVerified'
         404:
           $ref: '#/components/responses/e404NotFound'
       security:
         - cookie_auth: []
-  /users/{userId}/tokens:
+  /users/me/tokens:
     get:
       tags:
         - users
       description: Get tokens the user has.
       parameters:
-        - $ref: '#/components/parameters/userId'
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/cursor'
@@ -181,8 +157,6 @@ paths:
                 $ref: './http-api-json-schemas/token-serialized-owner.yaml'
         401:
           $ref: '#/components/responses/e401NoToken'
-        403:
-          $ref: '#/components/responses/e403NotInAdminGroup'
         404:
           $ref: '#/components/responses/e404NotFound'
       security:
@@ -213,17 +187,14 @@ paths:
                     type: 'cookie'
         401:
           $ref: '#/components/responses/e401NoToken'
-        403:
-          $ref: '#/components/responses/e403NotInAdminGroup'
         404:
           $ref: '#/components/responses/e404NotFound'
-  /users/{userId}/tokens/{tokenId}:
+  /users/me/tokens/{tokenId}:
     delete:
       tags:
         - users
       description: Delete a token.
       parameters:
-        - $ref: '#/components/parameters/userId'
         - name: tokenId
           in: path
           required: true
@@ -234,46 +205,21 @@ paths:
           description: Indicates the token has been deleted
         401:
           $ref: '#/components/responses/e401NoToken'
-        403:
-          $ref: '#/components/responses/e403NotInAdminGroup'
         404:
           $ref: '#/components/responses/e404NotFound'
       security:
         - cookie_auth: []
-  /users/{userId}/requests:
-    get:
-      tags:
-        - users
-      description: Get requests from the user.
-      parameters:
-        - $ref: '#/components/parameters/userId'
-        - $ref: '#/components/parameters/limit'
-        - $ref: '#/components/parameters/offset'
-        - $ref: '#/components/parameters/cursor'
-        - $ref: '#/components/parameters/order'
-      responses:
-        200:
-          description: Requests from the user
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: './http-api-json-schemas/request-from-user-serialized-owner.yaml'
-        401:
-          $ref: '#/components/responses/e401NoToken'
-        403:
-          $ref: '#/components/responses/e403NotInAdminGroup'
-        404:
-          $ref: '#/components/responses/e404NotFound'
-      security:
-        - cookie_auth: []
+  /users/me/requests:
     post:
       tags:
         - users
       description: Create request from the user.
-      parameters:
-        - $ref: '#/components/parameters/userId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: './http-api-json-schemas/request-from-user-payload.yaml'
+        required: false
       responses:
         201:
           description: The request created
@@ -283,17 +229,14 @@ paths:
                 $ref: './http-api-json-schemas/request-from-user-payload.yaml'
         401:
           $ref: '#/components/responses/e401NoToken'
-        403:
-          $ref: '#/components/responses/e403NotInAdminGroup'
         404:
           $ref: '#/components/responses/e404NotFound'
-  /users/{userId}/likes/{typeName}:
+  /users/me/likes/{typeName}:
     get:
       tags:
         - users
       description: Get items the user likes.
       parameters:
-        - $ref: '#/components/parameters/userId'
         - $ref: '#/components/parameters/typeName'
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/offset'
@@ -310,19 +253,16 @@ paths:
                   $ref: './http-api-json-schemas/item-with-owner.yaml'
         401:
           $ref: '#/components/responses/e401NoToken'
-        403:
-          $ref: '#/components/responses/e403NotInAdminGroup'
         404:
           $ref: '#/components/responses/e404NotFound'
       security:
         - cookie_auth: []
-  /users/{userId}/likes/{typeName}/{itemId}:
+  /users/me/likes/{typeName}/{itemId}:
     put:
       tags:
         - users
       description: Register an item as the user likes.
       parameters:
-        - $ref: '#/components/parameters/userId'
         - $ref: '#/components/parameters/typeName'
         - $ref: '#/components/parameters/itemId'
       responses:
@@ -330,8 +270,6 @@ paths:
           description: Indicates the item has been registered as the user likes.
         401:
           $ref: '#/components/responses/e401NoToken'
-        403:
-          $ref: '#/components/responses/e403NotInAdminGroup'
         404:
           $ref: '#/components/responses/e404NotFound'
       security:
@@ -349,8 +287,6 @@ paths:
           description: Indicates the item has been unregistered.
         401:
           $ref: '#/components/responses/e401NoToken'
-        403:
-          $ref: '#/components/responses/e403NotInAdminGroup'
         404:
           $ref: '#/components/responses/e404NotFound'
       security:
@@ -919,7 +855,7 @@ components:
         type: string
       required: true
     groupId:
-      name: itemId
+      name: groupId
       in: path
       schema:
         type: string
