@@ -16,9 +16,9 @@ model User {
   email                 String            @unique
   name                  String            @unique
   displayName           String
-  registeredAt          Int?
-  registrationExpiresAt Int?
-  verificationExpiresAt Int?
+  registeredAt          Float?
+  registrationExpiresAt Float?
+  verificationExpiresAt Float?
   belongsTo             Membership[]      @relation(name: "groupMember")
   bookmarks             Bookmark[]        @relation(name: "bookmarkOwner")
   tokens                Token[]           @relation(name: "tokenOwner")
@@ -33,7 +33,7 @@ model Group {
   id             String       @id
   name           String       @unique
   displayName    String
-  createdAt      Int
+  createdAt      Float
   isAdmin        Boolean
   invitationCode String       @unique
   members        Membership[] @relation(name: "userBelongsTo")
@@ -73,7 +73,7 @@ model Token {
   id           String      @id
   secret       String      @unique
   type         TokenType
-  expiresAt    Int
+  expiresAt    Float
   ownerId      String
   owner        User        @relation(name: "tokenOwner", fields: [ownerId], references: [id], onDelete: Cascade)
   permissionId String?
@@ -88,7 +88,7 @@ model RequestFromUser {
   id              String      @id
   secret          String      @unique
   email           String?
-  expiresAt       Int
+  expiresAt       Float
   type            RequestType
   requestedFromId String
   requestedFrom   User        @relation(name: "requestRequestedFrom", fields: [requestedFromId], references: [id], onDelete: Cascade)
@@ -100,7 +100,7 @@ model RequestFromUser {
 model Permission {
   id           String         @id
   type         PermissionType
-  expiresAt    Int
+  expiresAt    Float
   tokens       Token[]        @relation(name: "tokenPermission")
   grantsToId   String
   grantsTo     Group          @relation(name: "permissionGrantsTo", fields: [grantsToId], references: [id], onDelete: Cascade)
@@ -115,8 +115,8 @@ model Permission {
 model Item {
   id                    String       @id
   name                  String
-  createdAt             Int
-  updatedAt             Int
+  createdAt             Float
+  updatedAt             Float
   isPublic              Boolean
   ownerId               String?
   owner                 Group?       @relation(name: "itemOwner", fields: [ownerId], references: [id], onDelete: SetNull)
