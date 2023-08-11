@@ -1,4 +1,5 @@
 import { UnixTimeMillis, unixTimeMillisToDate } from '@mgn901/mgn901-utils-ts';
+import { createMyBearerToken } from '../interactors/users-tokens/createMyBearerToken.ts';
 import { createMyCookieToken } from '../interactors/users-tokens/createMyCookieToken.ts';
 import { usersMeTokensPost } from '../schemas/usersMeTokensPost.ts';
 import { TControllerFactory } from './TControllerFactory.ts';
@@ -10,8 +11,8 @@ export const usersMeTokensPostControllerFactory: TControllerFactory<typeof users
   method: 'post',
   url: '/users/me/tokens',
   handler: async (request, reply) => {
-    const { type, requestId, requestSecret } = request.body;
-    if (type === 'cookie' && requestId && requestSecret) {
+    const { type, requestId, requestSecret, permissionId } = request.body;
+    if (type === 'cookie') {
       const result = await createMyCookieToken({
         repository,
         query: { requestId, requestSecret },
@@ -27,7 +28,12 @@ export const usersMeTokensPostControllerFactory: TControllerFactory<typeof users
       return reply;
     }
 
-    // TODO: Bearer token
+    const result = await createMyBearerToken({
+      repository,
+      query: { permissionId },
+      tokenFromClient: getTokenByRequest(request),
+    });
+    await reply.status(201).send(result);
     return reply;
   },
 });

@@ -1,18 +1,26 @@
 $id: token-for-payload.yaml
 
-type: object
-
-properties:
-  type:
-    enum:
-      - cookie
-      - bearer
-  permissionId:
-    type: string
-  requestId:
-    type: string
-  requestSecret:
-    type: string
-
-required:
-  - type
+oneOf:
+  - type: object
+    properties:
+      type:
+        enum:
+          - cookie
+      requestId:
+        type: string
+      requestSecret:
+        type: string
+    required:
+      - type
+      - requestId
+      - requestSecret
+  - type: object
+    properties:
+      type:
+        enum:
+          - bearer
+      permissionId:
+        type: string
+    required:
+      - type
+      - permissionId
