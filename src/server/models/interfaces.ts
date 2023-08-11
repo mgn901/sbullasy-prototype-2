@@ -8,7 +8,7 @@ import {
   RequestFromUser,
   Token,
   User,
-} from '@prisma/client';
+} from './.prisma/client';
 
 export type IUser = User;
 export type IGroup = Group;

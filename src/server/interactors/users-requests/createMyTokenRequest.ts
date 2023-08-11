@@ -55,7 +55,11 @@ export const createMyTokenRequest = async (
     data: {
       requests: {
         create: {
-          ...request,
+          id: request.id,
+          secret: request.secret,
+          type: request.type,
+          email: request.email,
+          expiresAt: request.expiresAt,
         },
       },
     },
