@@ -27,6 +27,7 @@ module.exports = {
   rules: {
     'import/extensions': ['off'],
     'import/prefer-default-export': ['off'],
+    'import/no-relative-packages': ['off'],
     'react/function-component-definition': [
       'error',
       {
