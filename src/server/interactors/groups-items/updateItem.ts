@@ -7,6 +7,7 @@ import { IItemForPayload } from '../../schemas/IItemForPayload.ts';
 import { IInteractorOptions } from '../IInteractorOptions.ts';
 import { NotFoundError } from '../errors/NotFoundError.ts';
 import { checkTokenOrThrow } from '../utils/checkTokenOrThrow.ts';
+import { pick } from '../utils/pick.ts';
 
 export const updateItem = async (
   options: IInteractorOptions<{
@@ -79,8 +80,26 @@ export const updateItem = async (
   });
   const attributesToBeSavedForRepository = itemToBeSaved.attributes.map((attribute) => ({
     where: { id: attribute.id },
-    create: attribute,
-    update: attribute,
+    create: pick(attribute, [
+      'id',
+      'key',
+      'parentItemTypeId',
+      'showOnSummary',
+      'valueBoolean',
+      'valueItemId',
+      'valueNumber',
+      'valueString',
+    ]),
+    update: pick(attribute, [
+      'id',
+      'key',
+      'parentItemTypeId',
+      'showOnSummary',
+      'valueBoolean',
+      'valueItemId',
+      'valueNumber',
+      'valueString',
+    ]),
   }));
 
   const attributeIdsExists = itemExists.attributes.map((attribute) => attribute.id);
@@ -105,7 +124,18 @@ export const updateItem = async (
             updatedAt: now,
             attributes: {
               createMany: {
-                data: itemToBeSaved.attributes,
+                data: itemToBeSaved.attributes.map((attribute) =>
+                  pick(attribute, [
+                    'id',
+                    'key',
+                    'parentItemTypeId',
+                    'showOnSummary',
+                    'valueBoolean',
+                    'valueItemId',
+                    'valueNumber',
+                    'valueString',
+                  ]),
+                ),
               },
             },
           },

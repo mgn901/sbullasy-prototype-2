@@ -8,6 +8,7 @@ import { IInteractorOptions } from '../IInteractorOptions.ts';
 import { NotFoundError } from '../errors/NotFoundError.ts';
 import { checkTokenOrThrow } from '../utils/checkTokenOrThrow.ts';
 import { generateId } from '../utils/generateId.ts';
+import { pick } from '../utils/pick.ts';
 
 export const createItem = async (
   options: IInteractorOptions<{
@@ -62,7 +63,18 @@ export const createItem = async (
       ...itemToBeSavedSub,
       attributes: {
         createMany: {
-          data: itemToBeSaved.attributes,
+          data: itemToBeSaved.attributes.map((attribute) =>
+            pick(attribute, [
+              'id',
+              'key',
+              'parentItemTypeId',
+              'showOnSummary',
+              'valueBoolean',
+              'valueItemId',
+              'valueNumber',
+              'valueString',
+            ]),
+          ),
         },
       },
     },
