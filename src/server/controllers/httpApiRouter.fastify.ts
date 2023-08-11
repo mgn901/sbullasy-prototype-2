@@ -22,6 +22,7 @@ import { typesTypeIdDeleteControllerFactory } from './typesTypeIdDeleteControlle
 import { typesTypeIdPutControllerFactory } from './typesTypeIdPutControllerFactory.fastify.ts';
 import { usersGetControllerFactory } from './usersGetControllerFactory.fastify.ts';
 import { usersMeBelongsToGetControllerFactory } from './usersMeBelongsToGetControllerFactory.fastify.ts';
+import { usersMeChallengesRequestIdPutControllerFactory } from './usersMeChallengesRequestIdPutControllerFactory.fastify.ts';
 import { usersMeLikesTypeIdGetControllerFactory } from './usersMeLikesTypeIdGetControllerFactory.fastify.ts';
 import { usersMeLikesTypeIdItemIdDeleteControllerFactory } from './usersMeLikesTypeIdItemIdDeleteControllerFactory.fastify.ts';
 import { usersMeLikesTypeIdItemIdPutControllerFactory } from './usersMeLikesTypeIdItemIdPutControllerFactory.fastify.ts';
@@ -48,6 +49,7 @@ export const httpApiRouter: FastifyPluginAsync<IHttpApiRouterOptions> = async (
   instance.route(usersMeTokensPostControllerFactory(options));
   instance.route(usersMeTokensTokenIdDeleteControllerFactory(options));
   instance.route(usersMeRequestsPostControllerFactory(options));
+  instance.route(usersMeChallengesRequestIdPutControllerFactory(options));
   instance.route(usersMeLikesTypeIdGetControllerFactory(options));
   instance.route(usersMeLikesTypeIdItemIdPutControllerFactory(options));
   instance.route(usersMeLikesTypeIdItemIdDeleteControllerFactory(options));

@@ -1,0 +1,13 @@
+$id: challenge-for-payload.yaml
+
+type: object
+
+properties:
+  requestId:
+    type: string
+  requestSecret:
+    type: string
+
+required:
+  - requestId
+  - requestSecret

@@ -1,22 +1,21 @@
-import { dateToUnixTimeMillis } from '@mgn901/mgn901-utils-ts';
 import { itemToItemWithAttributes } from '../../converters/itemToItemWithAttributes.ts';
 import { IRequestFromUser } from '../../models/interfaces.ts';
+import { IChallengeForPayload } from '../../schemas/IChallengeForPayload.ts';
 import { IItemForPayload } from '../../schemas/IItemForPayload.ts';
-import { IRequestFromUserSerializedForOwner } from '../../schemas/IRequestFromUserSerializedForOwner.ts';
 import { IInteractorOptions } from '../IInteractorOptions.ts';
 import { InvalidRequestError } from '../errors/InvalidRequestError.ts';
+import { NotFoundError } from '../errors/NotFoundError.ts';
 import { checkTokenOrThrow } from '../utils/checkTokenOrThrow.ts';
-import { generateId } from '../utils/generateId.ts';
-import { generateShortToken } from '../utils/generateShortToken.ts';
 
-export const createMyVerificationRequest = async (
+export const updateAnswer = async (
   options: IInteractorOptions<{
-    email: string;
+    requestId: IRequestFromUser['id'];
+    value: IChallengeForPayload;
   }>,
-): Promise<Pick<IRequestFromUserSerializedForOwner, 'id' | 'email' | 'type'>> => {
+): Promise<void> => {
   const { repository, query, tokenFromClient } = options;
-  const { email } = query;
-  const now = dateToUnixTimeMillis(new Date());
+  const { requestId, value } = query;
+  const { requestSecret } = value;
 
   const token = await checkTokenOrThrow(
     repository,
@@ -27,8 +26,33 @@ export const createMyVerificationRequest = async (
   );
   const userId = token.ownerId;
 
+  const user = await repository.user.findUnique({
+    where: {
+      id: userId,
+    },
+    include: {
+      requests: {
+        where: {
+          id: requestId,
+        },
+      },
+    },
+  });
+  if (!user) {
+    throw new NotFoundError('The user you specified is not found.');
+  }
+  const request = user.requests[0];
+  if (!request) {
+    throw new NotFoundError('The request you specified is not found.');
+  }
+
+  if (request.secret !== requestSecret || !request.email) {
+    throw new InvalidRequestError('The request secret you specified is wrong.');
+  }
+
   // #region Find matched patterns (TODO: improve)
 
+  const { email } = request;
   const patternsAllowed = await repository.item.findMany({
     where: {
       typeId: 'instance-settings',
@@ -73,28 +97,18 @@ export const createMyVerificationRequest = async (
 
   // #endregion
 
-  if (!patternToBeUsed || !('expiresAt' in patternToBeUsed.attributes)) {
+  if (
+    !patternToBeUsed ||
+    !('expiresAt' in patternToBeUsed.attributes) ||
+    typeof patternToBeUsed.attributes.expiresAt !== 'number'
+  ) {
     throw new InvalidRequestError('You cannot verify yourself by the email address you specified.');
   }
-
-  const request: IRequestFromUser = {
-    id: generateId(),
-    secret: generateShortToken(),
-    email,
-    type: 'verification',
-    expiresAt: now + 2 * 60 * 1000,
-    requestedFromId: userId,
-  };
 
   await repository.user.update({
     where: { id: userId },
     data: {
-      requests: {
-        create: request,
-      },
+      verificationExpiresAt: patternToBeUsed.attributes.expiresAt,
     },
   });
-
-  const { id, type } = request;
-  return { id, email, type };
 };

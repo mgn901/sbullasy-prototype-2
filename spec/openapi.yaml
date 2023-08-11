@@ -226,6 +226,25 @@ paths:
           $ref: '#/components/responses/e401NoToken'
         404:
           $ref: '#/components/responses/e404NotFound'
+  /users/me/challenges/{requestId}:
+    put:
+      tags:
+        - users
+      description: Answer to a challenge.
+      parameters:
+        - $ref: '#/components/parameters/requestId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: './http-api-json-schemas/challenge-for-payload.yaml'
+      responses:
+        204:
+          description: Indicates the challenge has been admitted.
+        401:
+          $ref: '#/components/responses/e401NoToken'
+        403:
+          $ref: '#/components/responses/e403WrongChallenge'
   /users/me/likes/{typeId}:
     get:
       tags:
@@ -790,6 +809,12 @@ components:
         application/json:
           schema:
             $ref: './http-api-json-schemas/error.yaml'
+    e403WrongChallenge:
+      description: Indicates the client sent a challenge with wrong answer.
+      content:
+        application/json:
+          schema:
+            $ref: './http-api-json-schemas/error.yaml'
     e404NotFound:
       description: Indicates the resource is not found. Returned only if the client has appropriate token and permission.
       content:
@@ -867,6 +892,12 @@ components:
       required: true
     permissionId:
       name: permissionId
+      in: path
+      schema:
+        type: string
+      required: true
+    requestId:
+      name: requestId
       in: path
       schema:
         type: string
