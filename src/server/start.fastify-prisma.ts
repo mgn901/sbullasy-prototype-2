@@ -29,6 +29,14 @@ export const start = async () => {
     password: envDict.SBULLASY_APP_SMTP_PASSWORD,
   });
 
+  await startInteractor({
+    repository,
+    emailClient,
+    query: {
+      adminUserEmail: envDict.SBULLASY_APP_ADMIN_EMAIL,
+    },
+  });
+
   const instanceOptions: FastifyHttpOptions<Server> = {
     logger: true,
   };
