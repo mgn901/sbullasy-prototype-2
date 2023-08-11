@@ -7,16 +7,7 @@ import { convertQueryToPrismaSelectSubset } from '../utils/convertQueryToPrismaS
 
 export const findUsers = async (
   options: IInteractorOptions<
-    IInteractorQuery<
-      | ['id', 'asc']
-      | ['id', 'desc']
-      | ['email', 'asc']
-      | ['email', 'desc']
-      | ['name', 'asc']
-      | ['name', 'desc']
-      | ['createdAt', 'asc']
-      | ['createdAt', 'desc']
-    >
+    IInteractorQuery<'id_asc' | 'id_desc' | 'email_asc' | 'email_desc' | 'name_asc' | 'name_desc'>
   >,
 ): Promise<IUserSerializedForOwner[]> => {
   const { repository, query, tokenFromClient } = options;

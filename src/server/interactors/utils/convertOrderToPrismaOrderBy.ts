@@ -1,3 +1,4 @@
-export const convertOrderToPrismaOrderBy = <T extends string, U extends string>(
-  order: readonly [T, U],
-) => ({ [order[0]]: order[1] });
+export const convertOrderToPrismaOrderBy = <T extends `${string}_${'asc' | 'desc'}`>(order: T) => {
+  const [key, value] = order.split('_');
+  return { [key]: value };
+};

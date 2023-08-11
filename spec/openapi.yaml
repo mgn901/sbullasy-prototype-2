@@ -142,11 +142,6 @@ paths:
       tags:
         - users
       description: Get tokens the user has.
-      parameters:
-        - $ref: '#/components/parameters/limit'
-        - $ref: '#/components/parameters/offset'
-        - $ref: '#/components/parameters/cursor'
-        - $ref: '#/components/parameters/order'
       responses:
         200:
           description: Tokens the user has
@@ -231,17 +226,17 @@ paths:
           $ref: '#/components/responses/e401NoToken'
         404:
           $ref: '#/components/responses/e404NotFound'
-  /users/me/likes/{typeName}:
+  /users/me/likes/{typeId}:
     get:
       tags:
         - users
       description: Get items the user likes.
       parameters:
-        - $ref: '#/components/parameters/typeName'
+        - $ref: '#/components/parameters/typeId'
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/cursor'
-        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/orderForItem'
       responses:
         200:
           description: Items the user likes
@@ -257,13 +252,13 @@ paths:
           $ref: '#/components/responses/e404NotFound'
       security:
         - cookie_auth: []
-  /users/me/likes/{typeName}/{itemId}:
+  /users/me/likes/{typeId}/{itemId}:
     put:
       tags:
         - users
       description: Register an item as the user likes.
       parameters:
-        - $ref: '#/components/parameters/typeName'
+        - $ref: '#/components/parameters/typeId'
         - $ref: '#/components/parameters/itemId'
       responses:
         201:
@@ -280,7 +275,7 @@ paths:
       description: Unregister an item as the user don't likes.
       parameters:
         - $ref: '#/components/parameters/userId'
-        - $ref: '#/components/parameters/typeName'
+        - $ref: '#/components/parameters/typeId'
         - $ref: '#/components/parameters/itemId'
       responses:
         204:
@@ -332,7 +327,7 @@ paths:
           $ref: '#/components/responses/e403NotVerified'
       security:
         - cookie_auth: []
-  /groups/{groupId}/:
+  /groups/{groupId}:
     get:
       tags:
         - groups
@@ -408,7 +403,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './http-api-json-schemas/membership-with-user-for-member.yaml'
+                type: array
+                items:
+                  $ref: './http-api-json-schemas/membership-with-user-for-member.yaml'
         401:
           $ref: '#/components/responses/e401NoToken'
         403:
@@ -468,17 +465,15 @@ paths:
       description: Get permissions the group has.
       parameters:
         - $ref: '#/components/parameters/groupId'
-        - $ref: '#/components/parameters/limit'
-        - $ref: '#/components/parameters/offset'
-        - $ref: '#/components/parameters/cursor'
-        - $ref: '#/components/parameters/order'
       responses:
         200:
           description: Permissions the group has
           content:
             application/json:
               schema:
-                $ref: './http-api-json-schemas/permission-with-item-for-member.yaml'
+                type: array
+                items:
+                  $ref: './http-api-json-schemas/permission-with-item-for-member.yaml'
         401:
           $ref: '#/components/responses/e401NoToken'
         403:
@@ -532,18 +527,21 @@ paths:
           $ref: '#/components/responses/e404NotFound'
       security:
         - cookie_auth: []
-  /groups/{groupId}/{typeName}:
+  /groups/{groupId}/{typeId}:
     get:
       tags:
         - groups
       description: Get items the group owns.
       parameters:
         - $ref: '#/components/parameters/groupId'
-        - $ref: '#/components/parameters/typeName'
+        - $ref: '#/components/parameters/typeId'
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/cursor'
-        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/orderForItem'
+        - $ref: '#/components/parameters/calendarKey'
+        - $ref: '#/components/parameters/calendarBefore'
+        - $ref: '#/components/parameters/calendarAfter'
       responses:
         200:
           description: Items the group owns
@@ -561,7 +559,7 @@ paths:
       description: Create an item as the group.
       parameters:
         - $ref: '#/components/parameters/groupId'
-        - $ref: '#/components/parameters/typeName'
+        - $ref: '#/components/parameters/typeId'
       requestBody:
         content:
           application/json:
@@ -583,14 +581,14 @@ paths:
       security:
         - cookie_auth: []
         - bearer_auth: []
-  /groups/{groupId}/{typeName}/{itemId}:
+  /groups/{groupId}/{typeId}/{itemId}:
     get:
       tags:
         - groups
       description: Get an item the group owns.
       parameters:
-        - $ref: '#/components/parameters/userId'
-        - $ref: '#/components/parameters/typeName'
+        - $ref: '#/components/parameters/groupId'
+        - $ref: '#/components/parameters/typeId'
         - $ref: '#/components/parameters/itemId'
       responses:
         200:
@@ -607,7 +605,7 @@ paths:
       description: Update an item the group owns.
       parameters:
         - $ref: '#/components/parameters/groupId'
-        - $ref: '#/components/parameters/typeName'
+        - $ref: '#/components/parameters/typeId'
         - $ref: '#/components/parameters/itemId'
       requestBody:
         content:
@@ -634,7 +632,7 @@ paths:
       description: Delete an item the group owns.
       parameters:
         - $ref: '#/components/parameters/groupId'
-        - $ref: '#/components/parameters/typeName'
+        - $ref: '#/components/parameters/typeId'
         - $ref: '#/components/parameters/itemId'
       responses:
         204:
@@ -648,35 +646,40 @@ paths:
       security:
         - cookie_auth: []
         - bearer_auth: []
-  /{typeName}:
+  /{typeId}:
     get:
       tags:
         - items
       description: Get items registered in the Sbullasy instance.
       parameters:
-        - $ref: '#/components/parameters/typeName'
+        - $ref: '#/components/parameters/typeId'
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/cursor'
-        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/orderForItem'
+        - $ref: '#/components/parameters/calendarKey'
+        - $ref: '#/components/parameters/calendarBefore'
+        - $ref: '#/components/parameters/calendarAfter'
       responses:
         200:
           description: Items to be returned
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: './http-api-json-schemas/item-with-owner.yaml'
-                  - $ref: './http-api-json-schemas/item-with-attributes.yaml'
+                type: array
+                items:
+                  allOf:
+                    - $ref: './http-api-json-schemas/item-with-owner.yaml'
+                    - $ref: './http-api-json-schemas/item-with-attributes.yaml'
         404:
           $ref: '#/components/responses/e404NotFound'
-  /{typeName}/{itemId}:
+  /{typeId}/{itemId}:
     get:
       tags:
         - items
       description: Get an item.
       parameters:
-        - $ref: '#/components/parameters/typeName'
+        - $ref: '#/components/parameters/typeId'
         - $ref: '#/components/parameters/itemId'
       responses:
         200:
@@ -689,16 +692,11 @@ paths:
                   - $ref: './http-api-json-schemas/item-with-attributes.yaml'
         404:
           $ref: '#/components/responses/e404NotFound'
-  /types/:
+  /types:
     get:
       tags:
         - types
       description: Get available item-types in the Sbullasy instance.
-      parameters:
-        - $ref: '#/components/parameters/limit'
-        - $ref: '#/components/parameters/offset'
-        - $ref: '#/components/parameters/cursor'
-        - $ref: '#/components/parameters/order'
       responses:
         200:
           description: Item-types to be returned
@@ -710,28 +708,13 @@ paths:
                   $ref: './http-api-json-schemas/item-with-attributes.yaml'
         404:
           $ref: '#/components/responses/e404NotFound'
-  /types/{typeName}:
-    get:
-      tags:
-        - types
-      description: Get an item-type.
-      parameters:
-        - $ref: '#/components/parameters/typeName'
-      responses:
-        200:
-          description: The item-type to be returned
-          content:
-            application/json:
-              schema:
-                $ref: './http-api-json-schemas/item-with-attributes.yaml'
-        404:
-          $ref: '#/components/responses/e404NotFound'
+  /types/{typeId}:
     put:
       tags:
         - types
       description: Create or update an item-type.
       parameters:
-        - $ref: '#/components/parameters/typeName'
+        - $ref: '#/components/parameters/typeId'
       requestBody:
         content:
           application/json:
@@ -753,7 +736,7 @@ paths:
         - types
       description: Delete an item-type.
       parameters:
-        - $ref: '#/components/parameters/typeName'
+        - $ref: '#/components/parameters/typeId'
       responses:
         204:
           description: Indicates the item-type has been deleted.
@@ -843,11 +826,33 @@ components:
       in: query
       schema:
         type: string
-      examples:
-        id_asc:
-          value: id_asc
-        id_desc:
-          value: id_desc
+        enum:
+          - id_asc
+          - id_desc
+          - name_asc
+          - name_desc
+    orderForItem:
+      name: order
+      in: query
+      schema:
+        type: string
+        enum:
+          - updatedAt_desc
+    calendarKey:
+      name: calendarKey
+      in: query
+      schema:
+        type: string
+    calendarBefore:
+      name: calendarBefore
+      in: query
+      schema:
+        type: number
+    calendarAfter:
+      name: calendarBefore
+      in: query
+      schema:
+        type: number
     userId:
       name: userId
       in: path
@@ -861,7 +866,7 @@ components:
         type: string
       required: true
     permissionId:
-      name: itemId
+      name: permissionId
       in: path
       schema:
         type: string
@@ -872,8 +877,8 @@ components:
       schema:
         type: string
       required: true
-    typeName:
-      name: typeName
+    typeId:
+      name: typeId
       in: path
       schema:
         type: string

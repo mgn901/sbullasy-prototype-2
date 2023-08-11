@@ -3,15 +3,17 @@ import { itemToItemWithOwner } from '../../converters/itemToItemWithOwner.ts';
 import { IItem } from '../../models/interfaces.ts';
 import { IItemWithAttributes } from '../../schemas/IItemWithAttributes.ts';
 import { IItemWithOwner } from '../../schemas/IItemWithOwner.ts';
+import { IInteractorCalendarQuery } from '../IInteractorCalendarQuery.ts';
 import { IInteractorOptions } from '../IInteractorOptions.ts';
 import { IInteractorQuery } from '../IInteractorQuery.ts';
+import { convertCalendarQueryToSelectSubset } from '../utils/convertCalendarQueryToSelectSubset.ts';
 import { convertQueryToPrismaSelectSubset } from '../utils/convertQueryToPrismaSelectSubset.ts';
 
 export const findItems = async (
   options: IInteractorOptions<
     {
       typeId: NonNullable<IItem['typeId']>;
-    } & IInteractorQuery
+    } & (IInteractorQuery<'updatedAt_desc'> | IInteractorCalendarQuery)
   >,
 ): Promise<(IItemWithOwner & IItemWithAttributes)[]> => {
   const { repository, query } = options;
@@ -21,6 +23,7 @@ export const findItems = async (
     where: {
       typeId,
       isPublic: true,
+      ...('calendarKey' in query ? convertCalendarQueryToSelectSubset(query) : {}),
     },
     include: {
       owner: true,

@@ -1,11 +1,12 @@
 import { membershipToMembershipWithGroupForMember } from '../../converters/membershipToMembershipWithGroupForMember.ts';
 import { IMembershipWithGroupForMember } from '../../schemas/IMembershipWithGroupForMember.ts';
 import { IInteractorOptions } from '../IInteractorOptions.ts';
+import { IInteractorQuery } from '../IInteractorQuery.ts';
 import { NotFoundError } from '../errors/NotFoundError.ts';
 import { checkTokenOrThrow } from '../utils/checkTokenOrThrow.ts';
 
-export const findMemberships = async (
-  options: IInteractorOptions<{}>,
+export const findMyMemberships = async (
+  options: IInteractorOptions<IInteractorQuery<'id_asc' | 'id_desc' | 'name_asc' | 'name_desc'>>,
 ): Promise<IMembershipWithGroupForMember[]> => {
   const { repository, tokenFromClient } = options;
 

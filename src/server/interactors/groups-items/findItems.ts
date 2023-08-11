@@ -1,11 +1,13 @@
 import { itemToItemWithAttributes } from '../../converters/itemToItemWithAttributes.ts';
 import { IGroup, IItem } from '../../models/interfaces.ts';
 import { IItemWithAttributes } from '../../schemas/IItemWithAttributes.ts';
+import { IInteractorCalendarQuery } from '../IInteractorCalendarQuery.ts';
 import { IInteractorOptions } from '../IInteractorOptions.ts';
 import { IInteractorQuery } from '../IInteractorQuery.ts';
 import { InvalidTokenError } from '../errors/InvalidTokenError.ts';
 import { NotFoundError } from '../errors/NotFoundError.ts';
 import { checkTokenOrThrow } from '../utils/checkTokenOrThrow.ts';
+import { convertCalendarQueryToSelectSubset } from '../utils/convertCalendarQueryToSelectSubset.ts';
 import { convertQueryToPrismaSelectSubset } from '../utils/convertQueryToPrismaSelectSubset.ts';
 
 export const findItems = async (
@@ -13,7 +15,7 @@ export const findItems = async (
     {
       groupId: IGroup['id'];
       typeId: NonNullable<IItem['typeId']>;
-    } & IInteractorQuery
+    } & (IInteractorQuery<'updatedAt_desc'> | IInteractorCalendarQuery)
   >,
 ): Promise<IItemWithAttributes[]> => {
   const { repository, query, tokenFromClient } = options;
@@ -42,6 +44,9 @@ export const findItems = async (
   const group = await repository.group.findUnique({
     where: {
       id: groupId,
+      items: {
+        every: { ...('calendarKey' in query ? convertCalendarQueryToSelectSubset(query) : {}) },
+      },
     },
     include: {
       items: {

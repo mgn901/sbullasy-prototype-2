@@ -2,13 +2,16 @@ import { membershipToMembershipWithUserForMember } from '../../converters/member
 import { IGroup } from '../../models/interfaces.ts';
 import { IMembershipWithUserForMember } from '../../schemas/IMembershipWithUserForMember.ts';
 import { IInteractorOptions } from '../IInteractorOptions.ts';
+import { IInteractorQuery } from '../IInteractorQuery.ts';
 import { NotFoundError } from '../errors/NotFoundError.ts';
 import { checkTokenOrThrow } from '../utils/checkTokenOrThrow.ts';
 
 export const findMemberships = async (
-  options: IInteractorOptions<{
-    groupId: IGroup['id'];
-  }>,
+  options: IInteractorOptions<
+    {
+      groupId: IGroup['id'];
+    } & IInteractorQuery<'id_asc' | 'id_desc' | 'name_asc' | 'name_desc'>
+  >,
 ): Promise<IMembershipWithUserForMember[]> => {
   const { repository, query, tokenFromClient } = options;
   const { groupId } = query;

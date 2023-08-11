@@ -5,7 +5,7 @@ import { checkTokenOrThrow } from '../utils/checkTokenOrThrow.ts';
 
 export const deleteUser = async (
   options: IInteractorOptions<{
-    id: IUser['id'];
+    userId: IUser['id'];
   }>,
 ): Promise<void> => {
   const { repository, query, tokenFromClient } = options;
@@ -21,7 +21,7 @@ export const deleteUser = async (
 
   const { count } = await repository.user.deleteMany({
     where: {
-      id: query.id,
+      id: query.userId,
     },
   });
 

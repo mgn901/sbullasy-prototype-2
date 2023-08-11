@@ -1,4 +1,6 @@
-export interface IInteractorQuery<O extends [string, 'asc' | 'desc'] = [string, 'asc' | 'desc']> {
+export interface IInteractorQuery<
+  O extends `${string}_${'asc' | 'desc'}` = `${string}_${'asc' | 'desc'}`,
+> {
   limit?: number;
   offset?: number;
   cursor?: string;

@@ -2,7 +2,7 @@ import { IInteractorQuery } from '../IInteractorQuery';
 import { convertOrderToPrismaOrderBy } from './convertOrderToPrismaOrderBy';
 
 export const convertQueryToPrismaSelectSubset = <
-  O extends [string, 'asc' | 'desc'] = [string, 'asc' | 'desc'],
+  O extends `${string}_${'asc' | 'desc'}` = `${string}_${'asc' | 'desc'}`,
 >(
   query: IInteractorQuery<O>,
 ) => ({

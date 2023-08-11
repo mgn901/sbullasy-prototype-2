@@ -9,10 +9,8 @@ import { NotFoundError } from '../errors/NotFoundError.ts';
 import { checkTokenOrThrow } from '../utils/checkTokenOrThrow.ts';
 import { convertQueryToPrismaSelectSubset } from '../utils/convertQueryToPrismaSelectSubset.ts';
 
-export const findBookmarks = async (
-  options: IInteractorOptions<
-    { typeId: IItem['typeId'] } & IInteractorQuery<['updatedAt', 'desc']>
-  >,
+export const findMyBookmarks = async (
+  options: IInteractorOptions<{ typeId: IItem['typeId'] } & IInteractorQuery<'updatedAt_desc'>>,
 ): Promise<(IItemWithOwner & IItemWithAttributes)[]> => {
   const { repository, query, tokenFromClient } = options;
   const { typeId } = query;

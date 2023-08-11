@@ -2,7 +2,7 @@ import { IItem } from '../../models/interfaces.ts';
 import { IInteractorOptions } from '../IInteractorOptions.ts';
 import { checkTokenOrThrow } from '../utils/checkTokenOrThrow.ts';
 
-export const deleteBookmark = async (
+export const deleteMyBookmark = async (
   options: IInteractorOptions<{
     typeId: IItem['typeId'];
     itemId: IItem['id'];

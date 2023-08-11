@@ -9,11 +9,11 @@ import { generateId } from '../utils/generateId.ts';
 export const createPermission = async (
   options: IInteractorOptions<{
     groupId: IGroup['id'];
-    permission: IPermissionForPayload;
+    value: IPermissionForPayload;
   }>,
 ): Promise<IPermissionWithItemForMember> => {
   const { repository, query, tokenFromClient } = options;
-  const { groupId, permission } = query;
+  const { groupId, value: permission } = query;
 
   await checkTokenOrThrow(
     repository,

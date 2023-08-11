@@ -69,7 +69,7 @@ export const updateItem = async (
     throw new NotFoundError('The item you specified is not found.');
   }
 
-  const updatedAt = dateToUnixTimeMillis(new Date());
+  const now = dateToUnixTimeMillis(new Date());
 
   const itemToBeSaved = itemForPayloadToItem({
     item: value,
@@ -95,13 +95,23 @@ export const updateItem = async (
     where: { id: groupId },
     data: {
       items: {
-        update: {
+        upsert: {
           where: {
             id: itemId,
           },
-          data: {
+          create: {
             ...itemToBeSaved,
-            updatedAt,
+            createdAt: now,
+            updatedAt: now,
+            attributes: {
+              createMany: {
+                data: itemToBeSaved.attributes,
+              },
+            },
+          },
+          update: {
+            ...itemToBeSaved,
+            updatedAt: now,
             attributes: {
               upsert: attributesToBeSavedForRepository,
               deleteMany: idsToBeDeletedForRepository,

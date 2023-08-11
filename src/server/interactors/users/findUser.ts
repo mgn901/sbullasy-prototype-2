@@ -5,7 +5,7 @@ import { NotFoundError } from '../errors/NotFoundError.ts';
 import { checkTokenOrThrow } from '../utils/checkTokenOrThrow.ts';
 
 export const findUser = async (
-  options: IInteractorOptions<{ id: string }>,
+  options: IInteractorOptions<{ userId: string }>,
 ): Promise<IUserSerializedForOwner> => {
   const { repository, query, tokenFromClient } = options;
 
@@ -20,7 +20,7 @@ export const findUser = async (
 
   const user = await repository.user.findUnique({
     where: {
-      id: query.id,
+      id: query.userId,
     },
   });
 

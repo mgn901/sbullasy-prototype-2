@@ -2,7 +2,7 @@ import { IToken } from '../../models/interfaces.ts';
 import { IInteractorOptions } from '../IInteractorOptions.ts';
 import { checkTokenOrThrow } from '../utils/checkTokenOrThrow.ts';
 
-export const deleteMyCookieToken = async (
+export const deleteMyToken = async (
   options: IInteractorOptions<{
     tokenId: IToken['id'];
   }>,
