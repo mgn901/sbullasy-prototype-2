@@ -1,5 +1,5 @@
 import { dateToUnixTimeMillis } from '@mgn901/mgn901-utils-ts';
-import { IGroup, IUser } from '../models/interfaces.ts';
+import { IGroup, IItem, IUser } from '../models/interfaces.ts';
 import { IInteractorOptions } from './IInteractorOptions.ts';
 import { generateId } from './utils/generateId.ts';
 import { generateLongToken } from './utils/generateLongToken.ts';
@@ -11,9 +11,31 @@ export const startInteractor = async (
 ) => {
   const { repository, query } = options;
   const { adminUserEmail } = query;
+  const now = dateToUnixTimeMillis(new Date());
+
+  const rootExists = await repository.item.findUnique({
+    where: {
+      id: 'root',
+    },
+  });
+  if (rootExists) {
+    return;
+  }
+
+  const rootItem: IItem = {
+    id: 'root',
+    name: 'root',
+    createdAt: now,
+    updatedAt: now,
+    isPublic: true,
+    ownerId: null,
+    typeId: null,
+  };
+  await repository.item.create({
+    data: rootItem,
+  });
 
   const adminUserId = generateId();
-  const now = dateToUnixTimeMillis(new Date());
   const user: IUser = {
     id: adminUserId,
     email: adminUserEmail,
