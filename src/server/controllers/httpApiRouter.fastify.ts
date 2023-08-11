@@ -1,0 +1,74 @@
+import { FastifyPluginAsync, FastifySchema } from 'fastify';
+import { TControllerFactory } from './TControllerFactory.ts';
+import { groupsGetControllerFactory } from './groupsGetControllerFactory.fastify.ts';
+import { groupsGroupIdDeleteControllerFactory } from './groupsGroupIdDeleteControllerFactory.fastify.ts';
+import { groupsGroupIdGetControllerFactory } from './groupsGroupIdGetControllerFactory.fastify.ts';
+import { groupsGroupIdMembersGetControllerFactory } from './groupsGroupIdMembersGetControllerFactory.fastify.ts';
+import { groupsGroupIdMembersUserIdDeleteControllerFactory } from './groupsGroupIdMembersUserIdDeleteControllerFactory.fastify.ts';
+import { groupsGroupIdMembersUserIdPutControllerFactory } from './groupsGroupIdMembersUserIdPutControllerFactory.fastify.ts';
+import { groupsGroupIdPermissionsGetControllerFactory } from './groupsGroupIdPermissionsGetControllerFactory.fastify.ts';
+import { groupsGroupIdPermissionsPostControllerFactory } from './groupsGroupIdPermissionsPostControllerFactory.fastify.ts';
+import { groupsGroupIdPutControllerFactory } from './groupsGroupIdPutControllerFactory.fastify.ts';
+import { groupsGroupIdTypeIdGetControllerFactory } from './groupsGroupIdTypeIdGetControllerFactory.fastify.ts';
+import { groupsGroupIdTypeIdItemIdDeleteControllerFactory } from './groupsGroupIdTypeIdItemIdDeleteControllerFactory.fastify.ts';
+import { groupsGroupIdTypeIdItemIdGetControllerFactory } from './groupsGroupIdTypeIdItemIdGetControllerFactory.fastify.ts';
+import { groupsGroupIdTypeIdItemIdPutControllerFactory } from './groupsGroupIdTypeIdItemIdPutControllerFactory.fastify.ts';
+import { groupsGroupIdTypeIdPostControllerFactory } from './groupsGroupIdTypeIdPostControllerFactory.fastify.ts';
+import { groupsPostControllerFactory } from './groupsPostControllerFactory.fastify.ts';
+import { typeIdGetControllerFactory } from './typeIdGetControllerFactory.fastify.ts';
+import { typeIdItemIdGetControllerFactory } from './typeIdItemIdGetControllerFactory.fastify.ts';
+import { typesGetControllerFactory } from './typesGetControllerFactory.fastify.ts';
+import { typesTypeIdDeleteControllerFactory } from './typesTypeIdDeleteControllerFactory.fastify.ts';
+import { typesTypeIdPutControllerFactory } from './typesTypeIdPutControllerFactory.fastify.ts';
+import { usersGetControllerFactory } from './usersGetControllerFactory.fastify.ts';
+import { usersMeBelongsToGetControllerFactory } from './usersMeBelongsToGetControllerFactory.fastify.ts';
+import { usersMeLikesTypeIdGetControllerFactory } from './usersMeLikesTypeIdGetControllerFactory.fastify.ts';
+import { usersMeLikesTypeIdItemIdDeleteControllerFactory } from './usersMeLikesTypeIdItemIdDeleteControllerFactory.fastify.ts';
+import { usersMeLikesTypeIdItemIdPutControllerFactory } from './usersMeLikesTypeIdItemIdPutControllerFactory.fastify.ts';
+import { usersMeRequestsPostControllerFactory } from './usersMeRequestsPostControllerFactory.fastify.ts';
+import { usersMeTokensGetControllerFactory } from './usersMeTokensGetControllerFactory.fastify.ts';
+import { usersMeTokensPostControllerFactory } from './usersMeTokensPostControllerFactory.fastify.ts';
+import { usersMeTokensTokenIdDeleteControllerFactory } from './usersMeTokensTokenIdDeleteControllerFactory.fastify.ts';
+import { usersUserIdDeleteControllerFactory } from './usersUserIdDeleteControllerFactory.fastify.ts';
+import { usersUserIdGetControllerFactory } from './usersUserIdGetControllerFactory.fastify.ts';
+import { usersUserIdPutControllerFactory } from './usersUserIdPutControllerFactory.fastify.ts';
+
+export type IHttpApiRouterOptions = Parameters<TControllerFactory<FastifySchema>>[0];
+
+export const httpApiRouter: FastifyPluginAsync<IHttpApiRouterOptions> = async (
+  instance,
+  options,
+) => {
+  instance.route(usersGetControllerFactory(options));
+  instance.route(usersUserIdGetControllerFactory(options));
+  instance.route(usersUserIdPutControllerFactory(options));
+  instance.route(usersUserIdDeleteControllerFactory(options));
+  instance.route(usersMeBelongsToGetControllerFactory(options));
+  instance.route(usersMeTokensGetControllerFactory(options));
+  instance.route(usersMeTokensPostControllerFactory(options));
+  instance.route(usersMeTokensTokenIdDeleteControllerFactory(options));
+  instance.route(usersMeRequestsPostControllerFactory(options));
+  instance.route(usersMeLikesTypeIdGetControllerFactory(options));
+  instance.route(usersMeLikesTypeIdItemIdPutControllerFactory(options));
+  instance.route(usersMeLikesTypeIdItemIdDeleteControllerFactory(options));
+  instance.route(groupsGetControllerFactory(options));
+  instance.route(groupsPostControllerFactory(options));
+  instance.route(groupsGroupIdGetControllerFactory(options));
+  instance.route(groupsGroupIdPutControllerFactory(options));
+  instance.route(groupsGroupIdDeleteControllerFactory(options));
+  instance.route(groupsGroupIdMembersGetControllerFactory(options));
+  instance.route(groupsGroupIdMembersUserIdPutControllerFactory(options));
+  instance.route(groupsGroupIdMembersUserIdDeleteControllerFactory(options));
+  instance.route(groupsGroupIdPermissionsGetControllerFactory(options));
+  instance.route(groupsGroupIdPermissionsPostControllerFactory(options));
+  instance.route(groupsGroupIdTypeIdGetControllerFactory(options));
+  instance.route(groupsGroupIdTypeIdPostControllerFactory(options));
+  instance.route(groupsGroupIdTypeIdItemIdGetControllerFactory(options));
+  instance.route(groupsGroupIdTypeIdItemIdPutControllerFactory(options));
+  instance.route(groupsGroupIdTypeIdItemIdDeleteControllerFactory(options));
+  instance.route(typeIdGetControllerFactory(options));
+  instance.route(typeIdItemIdGetControllerFactory(options));
+  instance.route(typesGetControllerFactory(options));
+  instance.route(typesTypeIdPutControllerFactory(options));
+  instance.route(typesTypeIdDeleteControllerFactory(options));
+};
