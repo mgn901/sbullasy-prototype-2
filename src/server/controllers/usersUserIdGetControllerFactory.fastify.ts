@@ -6,6 +6,7 @@ import { getTokenByRequest } from './utils/getTokenByRequest.fastify.ts';
 
 export const usersUserIdGetControllerFactory: TControllerFactory<typeof usersUserIdGet> = ({
   repository,
+  emailClient,
 }) => ({
   method: 'get',
   url: '/users/:userId',
@@ -15,12 +16,14 @@ export const usersUserIdGetControllerFactory: TControllerFactory<typeof usersUse
       if (userId === 'me') {
         return findMe({
           repository,
+          emailClient,
           query: request.query,
           tokenFromClient: getTokenByRequest(request),
         });
       }
       return findUser({
         repository,
+        emailClient,
         query: { userId },
         tokenFromClient: getTokenByRequest(request),
       });

@@ -7,6 +7,7 @@ import { getTokenByRequest } from './utils/getTokenByRequest.fastify.ts';
 
 export const usersMeTokensPostControllerFactory: TControllerFactory<typeof usersMeTokensPost> = ({
   repository,
+  emailClient,
 }) => ({
   method: 'post',
   url: '/users/me/tokens',
@@ -15,6 +16,7 @@ export const usersMeTokensPostControllerFactory: TControllerFactory<typeof users
     if (type === 'cookie') {
       const result = await createMyCookieToken({
         repository,
+        emailClient,
         query: { requestId, requestSecret },
         tokenFromClient: getTokenByRequest(request),
       });
@@ -30,6 +32,7 @@ export const usersMeTokensPostControllerFactory: TControllerFactory<typeof users
 
     const result = await createMyBearerToken({
       repository,
+      emailClient,
       query: { permissionId },
       tokenFromClient: getTokenByRequest(request),
     });

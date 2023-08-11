@@ -5,6 +5,7 @@ import { getTokenByRequest } from './utils/getTokenByRequest.fastify.ts';
 
 export const typesTypeIdDeleteControllerFactory: TControllerFactory<typeof typesTypeIdDelete> = ({
   repository,
+  emailClient,
 }) => ({
   method: 'delete',
   url: '/types/:typeId',
@@ -12,6 +13,7 @@ export const typesTypeIdDeleteControllerFactory: TControllerFactory<typeof types
     const { typeId } = request.params;
     await deleteType({
       repository,
+      emailClient,
       query: { typeId },
       tokenFromClient: getTokenByRequest(request),
     });

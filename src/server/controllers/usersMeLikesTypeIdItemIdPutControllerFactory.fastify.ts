@@ -5,12 +5,13 @@ import { getTokenByRequest } from './utils/getTokenByRequest.fastify.ts';
 
 export const usersMeLikesTypeIdItemIdPutControllerFactory: TControllerFactory<
   typeof usersMeLikesTypeIdItemIdPut
-> = ({ repository }) => ({
+> = ({ repository, emailClient }) => ({
   method: 'put',
   url: '/users/me/likes/:typeId/:itemId',
   handler: async (request, reply) => {
     await createMyBookmark({
       repository,
+      emailClient,
       query: request.params,
       tokenFromClient: getTokenByRequest(request),
     });

@@ -5,7 +5,7 @@ import { getTokenByRequest } from './utils/getTokenByRequest.fastify.ts';
 
 export const usersMeChallengesRequestIdPutControllerFactory: TControllerFactory<
   typeof usersMeChallengesRequestIdPut
-> = ({ repository }) => ({
+> = ({ repository, emailClient }) => ({
   method: 'put',
   url: '/users/me/challenges/:requestId',
   handler: async (request, reply) => {
@@ -13,6 +13,7 @@ export const usersMeChallengesRequestIdPutControllerFactory: TControllerFactory<
     const value = request.body;
     await updateAnswer({
       repository,
+      emailClient,
       query: { requestId, value },
       tokenFromClient: getTokenByRequest(request),
     });

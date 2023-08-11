@@ -5,13 +5,14 @@ import { getTokenByRequest } from './utils/getTokenByRequest.fastify.ts';
 
 export const groupsGroupIdDeleteControllerFactory: TControllerFactory<
   typeof groupsGroupIdDelete
-> = ({ repository }) => ({
+> = ({ repository, emailClient }) => ({
   method: 'delete',
   url: '/groups/:groupId',
   handler: async (request, reply) => {
     const { groupId } = request.params;
     await deleteGroup({
       repository,
+      emailClient,
       query: { groupId },
       tokenFromClient: getTokenByRequest(request),
     });

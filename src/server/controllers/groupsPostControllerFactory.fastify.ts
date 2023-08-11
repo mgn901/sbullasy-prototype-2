@@ -5,6 +5,7 @@ import { getTokenByRequest } from './utils/getTokenByRequest.fastify.ts';
 
 export const groupsPostControllerFactory: TControllerFactory<typeof groupsPost> = ({
   repository,
+  emailClient,
 }) => ({
   method: 'post',
   url: '/groups',
@@ -12,6 +13,7 @@ export const groupsPostControllerFactory: TControllerFactory<typeof groupsPost> 
     const value = request.body;
     const result = await createGroup({
       repository,
+      emailClient,
       query: { value },
       tokenFromClient: getTokenByRequest(request),
     });

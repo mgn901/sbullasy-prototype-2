@@ -5,12 +5,13 @@ import { getTokenByRequest } from './utils/getTokenByRequest.fastify.ts';
 
 export const usersMeBelongsToGetControllerFactory: TControllerFactory<
   typeof usersMeBelongsToGet
-> = ({ repository }) => ({
+> = ({ repository, emailClient }) => ({
   method: 'get',
   url: '/users/me/belongsTo',
   handler: async (request, reply) => {
     const result = await findMyMemberships({
       repository,
+      emailClient,
       query: request.query,
       tokenFromClient: getTokenByRequest(request),
     });

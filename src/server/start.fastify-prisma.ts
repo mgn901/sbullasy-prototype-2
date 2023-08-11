@@ -9,6 +9,7 @@ import fastify, { FastifyHttpOptions, FastifyListenOptions } from 'fastify';
 import { httpApiRouter } from './controllers/httpApiRouter.fastify.ts';
 import { httpStaticRouter } from './controllers/httpStaticRouter.fastify.ts';
 import { envLoader } from './envLoader.ts';
+import { EmailClient } from './email-client/EmailCliet.nodemailer.ts';
 
 export const start = async () => {
   const envDict = envLoader(process.env);
@@ -19,6 +20,13 @@ export const start = async () => {
         url: envDict.SBULLASY_APP_DB_URL,
       },
     },
+  });
+
+  const emailClient = new EmailClient({
+    host: envDict.SBULLASY_APP_SMTP_HOST,
+    port: Number(envDict.SBULLASY_APP_SMTP_PORT),
+    userEmail: envDict.SBULLASY_APP_SMTP_USEREMAIL,
+    password: envDict.SBULLASY_APP_SMTP_PASSWORD,
   });
 
   const instanceOptions: FastifyHttpOptions<Server> = {
@@ -48,7 +56,7 @@ export const start = async () => {
     prefix: '/',
     etag: true,
   });
-  await instance.register(httpApiRouter, { repository, prefix: '/api/v1' });
+  await instance.register(httpApiRouter, { repository, emailClient, prefix: '/api/v1' });
 
   try {
     await instance.listen(listenOptions);

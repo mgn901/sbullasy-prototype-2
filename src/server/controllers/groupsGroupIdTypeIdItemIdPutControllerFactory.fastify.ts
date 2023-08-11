@@ -5,7 +5,7 @@ import { getTokenByRequest } from './utils/getTokenByRequest.fastify.ts';
 
 export const groupsGroupIdTypeIdItemIdPutControllerFactory: TControllerFactory<
   typeof groupsGroupIdTypeIdItemIdPut
-> = ({ repository }) => ({
+> = ({ repository, emailClient }) => ({
   method: 'put',
   url: '/groups/:groupId/:typeId/:itemId',
   handler: async (request, reply) => {
@@ -13,6 +13,7 @@ export const groupsGroupIdTypeIdItemIdPutControllerFactory: TControllerFactory<
     const value = request.body;
     await updateItem({
       repository,
+      emailClient,
       query: { groupId, typeId, itemId, value },
       tokenFromClient: getTokenByRequest(request),
     });

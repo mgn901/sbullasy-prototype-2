@@ -6,7 +6,7 @@ import { getTokenByRequest } from './utils/getTokenByRequest.fastify.ts';
 
 export const usersMeRequestsPostControllerFactory: TControllerFactory<
   typeof usersMeRequestsPost
-> = ({ repository }) => ({
+> = ({ repository, emailClient }) => ({
   method: 'post',
   url: '/users/me/requests',
   handler: async (request, reply) => {
@@ -15,12 +15,14 @@ export const usersMeRequestsPostControllerFactory: TControllerFactory<
       if (type === 'token') {
         return createMyTokenRequest({
           repository,
+          emailClient,
           query: { email },
           tokenFromClient: getTokenByRequest(request),
         });
       }
       return createMyVerificationRequest({
         repository,
+        emailClient,
         query: { email },
         tokenFromClient: getTokenByRequest(request),
       });

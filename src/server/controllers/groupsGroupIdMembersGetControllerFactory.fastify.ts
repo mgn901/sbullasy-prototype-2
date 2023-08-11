@@ -5,13 +5,14 @@ import { getTokenByRequest } from './utils/getTokenByRequest.fastify.ts';
 
 export const groupsGroupIdMembersGetControllerFactory: TControllerFactory<
   typeof groupsGroupIdMembersGet
-> = ({ repository }) => ({
+> = ({ repository, emailClient }) => ({
   method: 'get',
   url: '/groups/:groupId/members',
   handler: async (request, reply) => {
     const { groupId } = request.params;
     const result = await findMemberships({
       repository,
+      emailClient,
       query: { groupId, ...request.query },
       tokenFromClient: getTokenByRequest(request),
     });

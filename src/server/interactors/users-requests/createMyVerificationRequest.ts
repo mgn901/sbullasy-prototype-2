@@ -8,13 +8,14 @@ import { InvalidRequestError } from '../errors/InvalidRequestError.ts';
 import { checkTokenOrThrow } from '../utils/checkTokenOrThrow.ts';
 import { generateId } from '../utils/generateId.ts';
 import { generateShortToken } from '../utils/generateShortToken.ts';
+import { createEmailForVerification } from '../utils/createEmailForVerification.ts';
 
 export const createMyVerificationRequest = async (
   options: IInteractorOptions<{
     email: string;
   }>,
 ): Promise<Pick<IRequestFromUserSerializedForOwner, 'id' | 'email' | 'type'>> => {
-  const { repository, query, tokenFromClient } = options;
+  const { repository, emailClient, query, tokenFromClient } = options;
   const { email } = query;
   const now = dateToUnixTimeMillis(new Date());
 
@@ -77,9 +78,10 @@ export const createMyVerificationRequest = async (
     throw new InvalidRequestError('You cannot verify yourself by the email address you specified.');
   }
 
+  const secret = generateShortToken();
   const request: IRequestFromUser = {
     id: generateId(),
-    secret: generateShortToken(),
+    secret,
     email,
     type: 'verification',
     expiresAt: now + 2 * 60 * 1000,
@@ -94,6 +96,9 @@ export const createMyVerificationRequest = async (
       },
     },
   });
+
+  const emailMessage = createEmailForVerification(email, secret);
+  emailClient.send(emailMessage);
 
   const { id, type } = request;
   return { id, email, type };

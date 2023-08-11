@@ -2,6 +2,8 @@ import { dateToUnixTimeMillis } from '@mgn901/mgn901-utils-ts';
 import { IRequestFromUser, IUser } from '../../models/interfaces.ts';
 import { IRequestFromUserSerializedForOwner } from '../../schemas/IRequestFromUserSerializedForOwner.ts';
 import { IInteractorOptions } from '../IInteractorOptions.ts';
+import { createEmailForLogin } from '../utils/createEmailForLogin.ts';
+import { createEmailForRegistration } from '../utils/createEmailForRegistration.ts';
 import { generateId } from '../utils/generateId.ts';
 import { generateShortToken } from '../utils/generateShortToken.ts';
 
@@ -10,7 +12,7 @@ export const createMyTokenRequest = async (
     email: IUser['email'];
   }>,
 ): Promise<Pick<IRequestFromUserSerializedForOwner, 'id' | 'email' | 'type'>> => {
-  const { repository, query } = options;
+  const { repository, emailClient, query } = options;
   const { email } = query;
   const now = dateToUnixTimeMillis(new Date());
 
@@ -38,9 +40,10 @@ export const createMyTokenRequest = async (
   })();
   const userId = user.id;
 
+  const secret = generateShortToken();
   const request: IRequestFromUser = {
     id: generateId(),
-    secret: generateShortToken(),
+    secret,
     type: 'token',
     email: null,
     requestedFromId: userId,
@@ -57,6 +60,14 @@ export const createMyTokenRequest = async (
       },
     },
   });
+
+  const emailMessage = (() => {
+    if (user.registeredAt === null) {
+      return createEmailForRegistration(email, secret);
+    }
+    return createEmailForLogin(email, secret);
+  })();
+  emailClient.send(emailMessage);
 
   const { id, type } = request;
   return { id, email, type };

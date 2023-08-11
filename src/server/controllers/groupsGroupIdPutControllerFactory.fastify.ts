@@ -5,6 +5,7 @@ import { getTokenByRequest } from './utils/getTokenByRequest.fastify.ts';
 
 export const groupsGroupIdPutControllerFactory: TControllerFactory<typeof groupsGroupIdPut> = ({
   repository,
+  emailClient,
 }) => ({
   method: 'put',
   url: '/groups/:groupId',
@@ -13,6 +14,7 @@ export const groupsGroupIdPutControllerFactory: TControllerFactory<typeof groups
     const value = request.body;
     await updateGroup({
       repository,
+      emailClient,
       query: { groupId, value },
       tokenFromClient: getTokenByRequest(request),
     });

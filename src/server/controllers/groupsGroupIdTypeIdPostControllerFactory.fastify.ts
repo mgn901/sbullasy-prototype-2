@@ -5,7 +5,7 @@ import { getTokenByRequest } from './utils/getTokenByRequest.fastify.ts';
 
 export const groupsGroupIdTypeIdPostControllerFactory: TControllerFactory<
   typeof groupsGroupIdTypeIdPost
-> = ({ repository }) => ({
+> = ({ repository, emailClient }) => ({
   method: 'post',
   url: '/groups/:groupId/:typeId',
   handler: async (request, reply) => {
@@ -13,6 +13,7 @@ export const groupsGroupIdTypeIdPostControllerFactory: TControllerFactory<
     const value = request.body;
     const result = await createItem({
       repository,
+      emailClient,
       query: { groupId, typeId, value },
       tokenFromClient: getTokenByRequest(request),
     });

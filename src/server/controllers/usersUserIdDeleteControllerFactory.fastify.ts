@@ -6,6 +6,7 @@ import { getTokenByRequest } from './utils/getTokenByRequest.fastify.ts';
 
 export const usersUserIdDeleteControllerFactory: TControllerFactory<typeof usersUserIdDelete> = ({
   repository,
+  emailClient,
 }) => ({
   method: 'delete',
   url: '/users/:userId',
@@ -14,12 +15,14 @@ export const usersUserIdDeleteControllerFactory: TControllerFactory<typeof users
     if (userId === 'me') {
       await deleteMe({
         repository,
+        emailClient,
         query: request.query,
         tokenFromClient: getTokenByRequest(request),
       });
     } else {
       await deleteUser({
         repository,
+        emailClient,
         query: { userId },
         tokenFromClient: getTokenByRequest(request),
       });

@@ -6,7 +6,7 @@ import { getTokenByRequest } from './utils/getTokenByRequest.fastify.ts';
 
 export const groupsGroupIdMembersUserIdPutControllerFactory: TControllerFactory<
   typeof groupsGroupIdMembersUserIdPut
-> = ({ repository }) => ({
+> = ({ repository, emailClient }) => ({
   method: 'put',
   url: '/groups/:groupId/members/:userId',
   handler: async (request, reply) => {
@@ -16,6 +16,7 @@ export const groupsGroupIdMembersUserIdPutControllerFactory: TControllerFactory<
     if (invitationCode) {
       await createMembership({
         repository,
+        emailClient,
         query: { invitationCode },
         tokenFromClient: getTokenByRequest(request),
       });
@@ -25,6 +26,7 @@ export const groupsGroupIdMembersUserIdPutControllerFactory: TControllerFactory<
 
     await updateMembership({
       repository,
+      emailClient,
       query: { userId, groupId, type },
       tokenFromClient: getTokenByRequest(request),
     });

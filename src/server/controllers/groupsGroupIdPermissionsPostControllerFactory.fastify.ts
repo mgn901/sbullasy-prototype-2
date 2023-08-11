@@ -5,7 +5,7 @@ import { getTokenByRequest } from './utils/getTokenByRequest.fastify.ts';
 
 export const groupsGroupIdPermissionsPostControllerFactory: TControllerFactory<
   typeof groupsGroupIdPermissionsPost
-> = ({ repository }) => ({
+> = ({ repository, emailClient }) => ({
   method: 'post',
   url: '/groups/:groupId/permissions',
   handler: async (request, reply) => {
@@ -13,6 +13,7 @@ export const groupsGroupIdPermissionsPostControllerFactory: TControllerFactory<
     const value = request.body;
     const result = await createPermission({
       repository,
+      emailClient,
       query: { groupId, value },
       tokenFromClient: getTokenByRequest(request),
     });

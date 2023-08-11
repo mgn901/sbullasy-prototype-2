@@ -5,6 +5,7 @@ import { getTokenByRequest } from './utils/getTokenByRequest.fastify.ts';
 
 export const typesTypeIdPutControllerFactory: TControllerFactory<typeof typesTypeIdPut> = ({
   repository,
+  emailClient,
 }) => ({
   method: 'put',
   url: '/types/:typeId',
@@ -13,6 +14,7 @@ export const typesTypeIdPutControllerFactory: TControllerFactory<typeof typesTyp
     const value = request.body;
     await updateType({
       repository,
+      emailClient,
       query: { typeId, value },
       tokenFromClient: getTokenByRequest(request),
     });
