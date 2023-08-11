@@ -4,14 +4,18 @@ import { fileURLToPath } from 'url';
 import fastifyCookie, { FastifyCookieOptions } from '@fastify/cookie';
 import { fastifyEtag } from '@fastify/etag';
 import { fastifyHelmet, FastifyHelmetOptions } from '@fastify/helmet';
-import { PrismaClient } from '@prisma/client';
+import { config } from 'dotenv';
 import fastify, { FastifyHttpOptions, FastifyListenOptions } from 'fastify';
 import { httpApiRouter } from './controllers/httpApiRouter.fastify.ts';
 import { httpStaticRouter } from './controllers/httpStaticRouter.fastify.ts';
-import { envLoader } from './envLoader.ts';
 import { EmailClient } from './email-client/EmailCliet.nodemailer.ts';
+import { envLoader } from './envLoader.ts';
+import { startInteractor } from './interactors/startInteractor.ts';
+
+const { PrismaClient } = await import('./prisma-client');
 
 export const start = async () => {
+  config();
   const envDict = envLoader(process.env);
 
   const repository = new PrismaClient({

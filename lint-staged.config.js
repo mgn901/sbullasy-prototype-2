@@ -3,6 +3,6 @@ export default {
     () => 'pnpm run generate-schemas',
     () => 'tsc -p tsconfig.json --noEmit',
     'jest --passWithNoTests',
-    'pnpm run lint',
+    () => 'pnpm run lint',
   ],
 };

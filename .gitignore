@@ -133,3 +133,4 @@ dist
 development
 production
 src/server/schemas/
+src/server/prisma-client/

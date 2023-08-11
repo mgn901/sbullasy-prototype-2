@@ -22,6 +22,7 @@ module.exports = {
     sourceType: 'module',
     project: 'tsconfig.json',
   },
+  ignorePatterns: ["src/server/prisma-client"],
   plugins: ['@typescript-eslint'],
   rules: {
     'import/extensions': ['off'],

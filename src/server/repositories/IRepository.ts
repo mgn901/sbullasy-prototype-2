@@ -1,3 +1,3 @@
-import { PrismaClient } from '@prisma/client';
+const { PrismaClient } = await import('../prisma-client');
 
-export type IRepository = PrismaClient;
+export type IRepository = InstanceType<typeof PrismaClient>;
