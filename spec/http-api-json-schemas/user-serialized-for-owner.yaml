@@ -11,10 +11,8 @@ properties:
     type: string
   displayName:
     type: string
-  createdAt:
+  registeredAt:
     type: number
-  ipRegisteredFrom:
-    type: string
   registrationExpiresAt:
     type: number
   verificationExpiresAt:
@@ -25,5 +23,3 @@ required:
   - email
   - name
   - displayName
-  - createdAt
-  - ipRegisteredFrom

@@ -9,7 +9,7 @@ properties:
     type: string
   displayName:
     type: string
-  createdAt:
+  registeredAt:
     type: number
   registrationExpiresAt:
     type: number
@@ -20,4 +20,3 @@ required:
   - id
   - name
   - displayName
-  - createdAt
